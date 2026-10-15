@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://universotreinamentosbrasil.com.br/sitemap.xml

@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Empresas e Instituições | Universo Treinamentos Brasil</title>
+<meta name="description" content="Treinamentos profissionais para empresas, prefeituras e instituições.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://universotreinamentosbrasil.com.br/empresas.html">
+<meta property="og:title" content="Empresas e Instituições | Universo Treinamentos Brasil">
+<meta property="og:description" content="Treinamentos profissionais para empresas, prefeituras e instituições.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<style>
+
+:root{
+  --black:#0b0b0d;
+  --black-2:#17191d;
+  --white:#ffffff;
+  --off:#f5f8fb;
+  --blue:#7fc9ff;
+  --blue-strong:#4daef2;
+  --blue-soft:#eaf6ff;
+  --green:#25a55f;
+  --green-soft:#eaf8f0;
+  --yellow:#f3c84b;
+  --yellow-soft:#fff8df;
+  --text:#15171a;
+  --muted:#66717d;
+  --border:#dfe7ee;
+  --shadow:0 18px 50px rgba(0,0,0,.08);
+  --radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--off);
+  color:var(--text);
+  line-height:1.55;
+}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+button,input,textarea,select{font:inherit}
+.container{width:min(1180px,calc(100% - 34px));margin:auto}
+
+.topbar{
+  background:var(--black);
+  color:#d8e9f6;
+  padding:9px 14px;
+  text-align:center;
+  font-size:.88rem;
+  letter-spacing:.01em;
+}
+.header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,255,255,.95);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+.nav{
+  min-height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+.brand{display:flex;align-items:center;gap:13px;font-weight:950;color:var(--black)}
+.logo{
+  width:48px;height:48px;border-radius:14px;
+  display:grid;place-items:center;
+  background:var(--black);
+  color:var(--blue);
+  border:2px solid var(--blue);
+  font-weight:1000;
+  box-shadow:0 8px 20px rgba(0,0,0,.10)
+}
+.brand small{display:block;color:var(--muted);font-size:.72rem;letter-spacing:.035em}
+.links{display:flex;gap:18px;align-items:center;font-weight:850;color:#2b343c}
+.links a:hover{color:#0b7fc8}
+.links .nav-cta{
+  background:var(--black);color:white;padding:11px 16px;border-radius:12px;
+  border:1px solid var(--black);
+}
+.links .nav-cta:hover{background:#23262b;color:white}
+.menu{
+  display:none;border:1px solid var(--border);background:white;color:var(--black);
+  border-radius:10px;padding:9px 12px;font-weight:900;cursor:pointer
+}
+
+.hero{
+  padding:82px 0 62px;
+  background:
+    radial-gradient(circle at 82% 12%,rgba(127,201,255,.45),transparent 30%),
+    linear-gradient(180deg,#fff 0%,#f5f8fb 100%);
+}
+.hero-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:42px;align-items:center}
+.eyebrow{
+  display:inline-flex;
+  padding:7px 11px;
+  border-radius:999px;
+  background:var(--black);
+  color:var(--blue);
+  font-size:.79rem;
+  font-weight:950;
+  letter-spacing:.065em;
+  text-transform:uppercase;
+}
+.hero h1{
+  font-size:clamp(2.55rem,5.5vw,5.15rem);
+  line-height:.97;
+  letter-spacing:-.055em;
+  margin:18px 0 18px;
+  color:var(--black);
+}
+.hero h1 span{color:#1598e8}
+.hero p{max-width:780px;color:var(--muted);font-size:1.14rem}
+.actions{display:flex;flex-wrap:wrap;gap:11px;margin-top:25px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:50px;padding:0 18px;border-radius:13px;
+  border:1px solid transparent;
+  font-weight:950;cursor:pointer;
+  transition:.18s ease;
+}
+.btn:hover{transform:translateY(-1px);filter:brightness(.98)}
+.btn-black{background:var(--black);color:white}
+.btn-blue{background:var(--blue-strong);color:#06121a}
+.btn-white{background:white;border-color:var(--border);color:var(--black)}
+.btn-green{background:var(--green);color:white}
+.hero-card,.card,.panel,.form{
+  background:white;border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:0 8px 30px rgba(0,0,0,.045)
+}
+.hero-card{padding:24px;box-shadow:var(--shadow)}
+.hero-card h3{margin-top:0}
+.checks{list-style:none;padding:0;margin:0;display:grid;gap:13px}
+.checks li{display:flex;gap:10px;align-items:flex-start;color:#35414c}
+.check{
+  width:26px;height:26px;border-radius:50%;
+  display:grid;place-items:center;flex:0 0 auto;
+  background:var(--green-soft);color:var(--green);font-weight:1000;
+}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:23px}
+.kpi{background:white;border:1px solid var(--border);border-radius:16px;padding:15px;text-align:center}
+.kpi strong{display:block;color:var(--black);font-size:1.26rem}
+.kpi span{color:var(--muted);font-size:.86rem}
+
+.section{padding:72px 0}
+.section.white{background:white}
+.section.dark{background:var(--black);color:white}
+.section.dark .head p{color:#c4d0da}
+.head{max-width:860px;margin-bottom:30px}
+.head h2{font-size:clamp(2rem,3.4vw,3.1rem);line-height:1.06;letter-spacing:-.03em;margin:0 0 10px}
+.head p{margin:0;color:var(--muted);font-size:1.04rem}
+
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.card{padding:21px}
+.card h3{margin:0 0 8px;color:var(--black)}
+.card p{margin:0 0 13px;color:var(--muted)}
+.card.dark-card{background:#15181c;border-color:#252a30;color:white}
+.card.dark-card h3{color:white}
+.card.dark-card p{color:#bec8d1}
+
+.tag{
+  display:inline-block;padding:6px 9px;border-radius:999px;
+  background:var(--blue-soft);color:#0f72b3;font-size:.77rem;font-weight:950;margin-bottom:9px
+}
+.tag.green{background:var(--green-soft);color:var(--green)}
+.tag.yellow{background:var(--yellow-soft);color:#8c6700}
+.tag.black{background:var(--black);color:white}
+
+.soft{
+  background:#eef8ff;border:1px solid #cde9fb;border-radius:18px;padding:22px
+}
+.good{
+  background:var(--green-soft);border:1px solid #bfe6ce;border-radius:17px;padding:18px;color:#17623d
+}
+.warn{
+  background:var(--yellow-soft);border:1px solid #ead28c;border-radius:17px;padding:18px;color:#6f5200
+}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.bands{display:flex;flex-wrap:wrap;gap:8px}
+.band{
+  padding:8px 11px;border-radius:999px;background:white;border:1px solid var(--border);
+  color:#33414c;font-weight:850
+}
+.dark .band{background:#121519;border-color:#2b333b;color:#dfeaf2}
+
+.steps{counter-reset:st;display:grid;grid-template-columns:repeat(5,1fr);gap:13px}
+.step{background:white;border:1px solid var(--border);border-radius:16px;padding:17px;color:var(--text)}
+.step:before{
+  counter-increment:st;content:counter(st);
+  width:34px;height:34px;border-radius:50%;
+  display:grid;place-items:center;
+  background:var(--black);color:var(--blue);font-weight:1000;margin-bottom:10px
+}
+.page-hero{
+  padding:58px 0 46px;
+  background:linear-gradient(180deg,#fff,#f5f8fb);
+  border-bottom:1px solid var(--border)
+}
+.page-hero h1{font-size:clamp(2.25rem,4.6vw,3.9rem);margin:0 0 9px;letter-spacing:-.04em}
+.page-hero p{max-width:860px;color:var(--muted)}
+.breadcrumb{color:#118ed8;font-weight:900;font-size:.9rem;margin-bottom:12px}
+
+.form{padding:24px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+label{display:block;font-size:.9rem;color:#36444f;font-weight:850;margin-bottom:6px}
+input,textarea,select{
+  width:100%;border:1px solid #c9d7e1;border-radius:12px;padding:13px;background:white;color:var(--text)
+}
+textarea{min-height:130px;resize:vertical}
+.full{grid-column:1/-1}
+.help{font-size:.83rem;color:var(--muted)}
+.validator{display:grid;grid-template-columns:1fr auto;gap:10px}
+.result{display:none;margin-top:15px}
+.result.show{display:block}
+
+.table{overflow:auto;border:1px solid var(--border);border-radius:16px}
+table{width:100%;border-collapse:collapse;background:white}
+th,td{padding:14px 15px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+th{background:var(--black);color:white}
+tr:last-child td{border-bottom:none}
+
+.gallery-placeholder{
+  border:2px dashed #b8d4e8;border-radius:16px;min-height:180px;
+  display:grid;place-items:center;text-align:center;padding:18px;
+  color:#647889;background:#f8fcff
+}
+.cta{
+  background:linear-gradient(135deg,var(--black),#1b1f24);
+  color:white;border-radius:26px;padding:32px;
+  display:flex;align-items:center;justify-content:space-between;gap:22px;
+  border:1px solid #292d33
+}
+.cta p{color:#ccd6df;max-width:700px}
+.footer{background:#08090b;color:#d9e1e7;padding:46px 0 25px}
+.footer-grid{display:grid;grid-template-columns:1.2fr .8fr .8fr .8fr;gap:24px}
+.footer h4{color:white;margin-top:0}
+.footer a{color:#b7ddf8}
+.footer small{color:#98a7b3}
+.hr{height:1px;background:#2a3036;margin:25px 0}
+.legal{font-size:.84rem;color:#75838e}
+
+.badge-line{
+  display:flex;gap:8px;flex-wrap:wrap;margin-top:12px
+}
+.status{font-size:.74rem;font-weight:1000;text-transform:uppercase;letter-spacing:.06em}
+.status.ready{color:var(--green)}
+.status.plan{color:#9d7400}
+
+@media(max-width:980px){
+  .links{
+    display:none;position:absolute;top:74px;left:17px;right:17px;
+    flex-direction:column;align-items:stretch;background:white;
+    border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:var(--shadow)
+  }
+  .links.open{display:flex}
+  .menu{display:block}
+  .hero-grid,.split{grid-template-columns:1fr}
+  .grid-4,.grid-3{grid-template-columns:1fr 1fr}
+  .steps{grid-template-columns:1fr 1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:640px){
+  .container{width:min(100% - 24px,1180px)}
+  .hero{padding-top:52px}
+  .grid-4,.grid-3,.grid-2,.form-grid,.steps,.footer-grid{grid-template-columns:1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+  .cta{flex-direction:column;align-items:flex-start}
+  .brand small{display:none}
+  .validator{grid-template-columns:1fr}
+}
+
+</style>
+</head>
+<body>
+
+<div class="topbar">Treinamentos presenciais para empresas, prefeituras e instituições • Rede nacional em estruturação</div>
+<header class="header">
+  <div class="container nav">
+    <a class="brand" href="index.html">
+      <span class="logo">UT</span>
+      <span>Universo Treinamentos Brasil<small>Capacitação profissional em rede nacional</small></span>
+    </a>
+    <button class="menu" type="button">MENU</button>
+    <nav class="links">
+      <a href="index.html">Início</a>
+      <a href="cursos.html">Cursos</a>
+      <a href="empresas.html">Empresas</a>
+      <a href="instrutores.html">Instrutores</a>
+      <a href="certificados.html">Certificados</a>
+      <a href="depoimentos.html">Depoimentos</a>
+      <a href="sobre.html">Sobre</a>
+      <a class="nav-cta" href="contato.html#proposta">Solicitar proposta</a>
+    </nav>
+  </div>
+</header>
+
+
+<main>
+<section class="page-hero"><div class="container">
+<div class="breadcrumb"><a href="index.html">Início</a> / Empresas e Instituições</div>
+<h1>Treinamentos para empresas, prefeituras e instituições</h1>
+<p>Uma única operação comercial para organizar treinamento, instrutor, material, documentação e certificação.</p>
+</div></section>
+
+<section class="section"><div class="container">
+<div class="steps">
+  <div class="step"><strong>Necessidade</strong><p>Cliente informa cidade, equipe, área e objetivo.</p></div>
+  <div class="step"><strong>Estruturação</strong><p>O Universo define escopo, formato e requisitos.</p></div>
+  <div class="step"><strong>Instrutor</strong><p>Selecionamos parceiro adequado à região e ao tema.</p></div>
+  <div class="step"><strong>Execução</strong><p>O treinamento ocorre presencialmente conforme o padrão definido.</p></div>
+  <div class="step"><strong>Conclusão</strong><p>Documentação, certificados e fechamento do serviço.</p></div>
+</div>
+</div></section>
+
+<section class="section white" id="publico"><div class="container grid-3">
+<article class="card"><h3>Empresas e indústrias</h3><p>Capacitação in company, atualização técnica, segurança, manutenção e operação.</p></article>
+<article class="card"><h3>Prefeituras</h3><p>Capacitação de equipes, servidores e projetos de qualificação profissional.</p></article>
+<article class="card"><h3>Instituições e associações</h3><p>Turmas contratadas para públicos específicos, conforme escopo e viabilidade.</p></article>
+</div></section>
+
+<section class="section"><div class="container split">
+<div class="soft"><h3>Contratação formal</h3><p>A operação comercial será realizada pela empresa responsável pelo Universo Treinamentos Brasil, com emissão fiscal conforme a natureza do serviço e a cobertura cadastral aplicável.</p><p>CNPJ: <span data-cnpj>CNPJ a configurar</span></p></div>
+<div class="soft"><h3>Condições negociáveis</h3><p>Número de participantes, cidade, logística, materiais, carga horária e formato podem ser ajustados conforme a necessidade do contratante.</p></div>
+</div></section>
+
+<section class="section white"><div class="container cta">
+<div><h2>Conte o que sua equipe precisa aprender</h2><p>O Universo avalia curso, requisitos e disponibilidade regional de instrutor.</p></div>
+<a class="btn btn-blue" href="contato.html#proposta">SOLICITAR PROPOSTA</a>
+</div></section>
+</main>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h4>Universo Treinamentos Brasil</h4>
+        <p>Plataforma nacional de treinamentos profissionais presenciais, com rede de instrutores parceiros qualificados.</p>
+        <small>Contratação por pessoa jurídica e emissão fiscal conforme o serviço contratado e a cobertura cadastral aplicável.</small>
+      </div>
+      <div>
+        <h4>Contratantes</h4>
+        <p><a href="empresas.html">Empresas e indústrias</a></p>
+        <p><a href="empresas.html#publico">Prefeituras e instituições</a></p>
+        <p><a href="contato.html#proposta">Solicitar proposta</a></p>
+      </div>
+      <div>
+        <h4>Instrutores</h4>
+        <p><a href="instrutores.html">Seja um parceiro</a></p>
+        <p><a href="formacao-instrutores.html">Formação de Instrutores</a></p>
+        <p><a href="instrutores.html#cadastro">Enviar currículo</a></p>
+      </div>
+      <div>
+        <h4>Confiança</h4>
+        <p><a href="certificados.html">Validar certificado</a></p>
+        <p><a href="depoimentos.html">Depoimentos</a></p>
+        <p><span data-email>E-mail a configurar</span></p>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <small>© <span data-year></span> Universo Treinamentos Brasil. Todos os direitos reservados.</small>
+    <p class="legal">Estrutura em desenvolvimento. Cursos regulamentados somente serão comercializados após validação dos requisitos legais, técnicos, fiscais e documentais aplicáveis.</p>
+  </div>
+</footer>
+<script>
+
+const CONFIG = {
+  domain: "universotreinamentosbrasil.com.br",
+  whatsapp: "", // preencher depois: 55DDDNUMERO
+  email: "",    // preencher depois
+  cnpj: "",     // preencher depois
+};
+
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+
+const menu = $(".menu");
+const links = $(".links");
+if(menu && links){
+  menu.addEventListener("click",()=>links.classList.toggle("open"));
+  $$(".links a").forEach(a=>a.addEventListener("click",()=>links.classList.remove("open")));
+}
+
+function wa(message){
+  if(!CONFIG.whatsapp) return null;
+  return `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(message)}`;
+}
+
+$$("[data-wa]").forEach(el=>{
+  el.addEventListener("click",e=>{
+    const link=wa("Olá! Gostaria de informações sobre os treinamentos do Universo Treinamentos Brasil.");
+    if(!link){
+      e.preventDefault();
+      alert("WhatsApp ainda não configurado. Preencha CONFIG.whatsapp em assets/app.js.");
+    }else{
+      e.preventDefault();
+      window.open(link,"_blank","noopener");
+    }
+  });
+});
+
+$$("[data-email]").forEach(el=>el.textContent=CONFIG.email || "E-mail a configurar");
+$$("[data-cnpj]").forEach(el=>el.textContent=CONFIG.cnpj || "CNPJ a configurar");
+$$("[data-year]").forEach(el=>el.textContent=new Date().getFullYear());
+
+function collect(form){
+  return Object.fromEntries(new FormData(form).entries());
+}
+
+const quoteForm=$("#quote-form");
+if(quoteForm){
+  quoteForm.addEventListener("submit",e=>{
+    e.preventDefault();
+    const d=collect(quoteForm);
+    const msg=[
+      "Olá! Gostaria de solicitar uma proposta do Universo Treinamentos Brasil.",
+      "",
+      `Nome: ${d.nome||""}`,
+      `Empresa/Instituição: ${d.empresa||""}`,
+      `Cidade/UF: ${d.cidade||""}`,
+      `Telefone: ${d.telefone||""}`,
+      `E-mail: ${d.email||""}`,
+      `Curso/Área: ${d.curso||""}`,
+      `Participantes: ${d.participantes||""}`,
+      `Necessidade: ${d.mensagem||""}`
+    ].join("\n");
+    const link=wa(msg);
+    if(link){ window.open(link,"_blank","noopener"); return; }
+    if(CONFIG.email){
+      location.href=`mailto:${CONFIG.email}?subject=${encodeURIComponent("Solicitação de proposta - Universo Treinamentos Brasil")}&body=${encodeURIComponent(msg)}`;
+      return;
+    }
+    alert("Formulário pronto. Falta conectar WhatsApp, e-mail ou backend.");
+  });
+}
+
+const partnerForm=$("#partner-form");
+if(partnerForm){
+  partnerForm.addEventListener("submit",e=>{
+    e.preventDefault();
+    alert("Pré-cadastro estruturado. Na versão pública, será conectado ao banco de dados e upload de documentos.");
+  });
+}
+
+const testimonialForm=$("#testimonial-form");
+if(testimonialForm){
+  testimonialForm.addEventListener("submit",e=>{
+    e.preventDefault();
+    alert("Envio estruturado. Todo depoimento seguirá para moderação e autorização antes de ser publicado.");
+  });
+}
+
+const certForm=$("#cert-form");
+if(certForm){
+  certForm.addEventListener("submit",e=>{
+    e.preventDefault();
+    const code=$("#cert-code").value.trim().toUpperCase();
+    const box=$("#cert-result");
+    box.classList.add("show");
+    if(code==="UT-DEMO-0001"){
+      box.className="result show good";
+      box.innerHTML=`
+        <strong>Certificado válido</strong>
+        <p><b>Participante:</b> Exemplo de Aluno</p>
+        <p><b>Curso:</b> Instalações Elétricas de Baixa Tensão</p>
+        <p><b>Carga horária:</b> 32 horas</p>
+        <p><b>Código:</b> UT-DEMO-0001</p>
+        <p><b>Status:</b> válido</p>`;
+    }else{
+      box.className="result show warn";
+      box.innerHTML="<strong>Validação real ainda não conectada.</strong><p>Esta versão é demonstrativa. Para testar a interface, use <b>UT-DEMO-0001</b>.</p>";
+    }
+  });
+}
+
+</script>
+
+</body>
+</html>
