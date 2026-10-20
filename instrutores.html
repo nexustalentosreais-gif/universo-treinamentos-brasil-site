@@ -393,7 +393,7 @@ tr:last-child td{border-bottom:none}
 </form>
 </form>
 <div>
-<div class="soft"><h3>Banco nacional de instrutores</h3><p>O sistema futuro deverá permitir filtros por cidade, estado, raio de atendimento, cursos habilitados, experiência, avaliações internas, disponibilidade e validade documental.</p></div>
+<div class="soft"><h3>Banco Nacional de Instrutores UTB</h3><p>Após concluir a Formação de Instrutores UTB e ser aprovado, o profissional poderá integrar nossa rede nacional e ser considerado para oportunidades de treinamento compatíveis com sua formação, experiência, disponibilidade e região de atuação.</p></div>
 <div class="soft" style="margin-top:14px">
 <h3>Quando você for chamado para um curso</h3>
 <p>O Universo mantém a relação comercial com o cliente, fornece o material didático e o padrão do treinamento e organiza a documentação e a certificação aplicável.</p>
@@ -519,7 +519,9 @@ if(partnerForm){
     alert("O envio online do cadastro está em implantação. Para concluir seu cadastro neste momento, entre em contato com a UTB."); 
   });
 }
-
+window.addEventListener("pageshow",()=>{
+  if(partnerForm) partnerForm.reset();
+});
 const testimonialForm=$("#testimonial-form");
 if(testimonialForm){
   testimonialForm.addEventListener("submit",e=>{
