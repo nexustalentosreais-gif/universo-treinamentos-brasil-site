@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administração de Instrutores | UTB</title>
+
+  <style>
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:#f4f7f9;
+      color:#17212b;
+    }
+    .container{
+      width:min(1100px,94%);
+      margin:30px auto;
+    }
+    .card{
+      background:#fff;
+      border:1px solid #dce5eb;
+      border-radius:16px;
+      padding:24px;
+      margin-bottom:20px;
+    }
+    h1,h2{margin-top:0}
+    input,select,button{
+      width:100%;
+      padding:13px;
+      margin:6px 0 14px;
+      border-radius:10px;
+      border:1px solid #cbd5dc;
+      font-size:16px;
+    }
+    button{
+      background:#08090a;
+      color:#fff;
+      font-weight:bold;
+      cursor:pointer;
+    }
+    button.secundario{
+      background:#5d6872;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:15px;
+    }
+    .instrutor{
+      border-top:1px solid #ddd;
+      padding:20px 0;
+    }
+    .instrutor:first-child{
+      border-top:0;
+    }
+    .campo{
+      margin:8px 0;
+    }
+    .campo strong{
+      display:block;
+    }
+    .acoes{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:15px;
+      margin-top:15px;
+    }
+    .oculto{display:none}
+    .erro{color:#b00020;font-weight:bold}
+    .sucesso{color:#08752f;font-weight:bold}
+    @media(max-width:700px){
+      .grid,.acoes{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div id="loginBox" class="card">
+    <h1>Administração UTB</h1>
+    <p>Banco Nacional de Instrutores</p>
+
+    <label>E-mail</label>
+    <input id="email" type="email">
+
+    <label>Senha</label>
+    <input id="senha" type="password">
+
+    <button id="entrar">ENTRAR</button>
+
+    <div id="loginMsg"></div>
+  </div>
+
+  <div id="painel" class="oculto">
+
+    <div class="card">
+      <h1>Cadastros de Instrutores</h1>
+      <button id="atualizar">ATUALIZAR LISTA</button>
+      <button id="sair" class="secundario">SAIR</button>
+    </div>
+
+    <div id="lista" class="card">
+      Carregando...
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+const SUPABASE_URL = "https://xkxlgmmssvllcmhymibj.supabase.co";
+const SUPABASE_KEY = "sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV";
+
+let accessToken = sessionStorage.getItem("utb_access_token") || "";
+
+const loginBox = document.getElementById("loginBox");
+const painel = document.getElementById("painel");
+const lista = document.getElementById("lista");
+const loginMsg = document.getElementById("loginMsg");
+
+async function entrar(){
+
+  loginMsg.textContent = "Entrando...";
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("senha").value;
+
+  try{
+
+    const resposta = await fetch(
+      `${SUPABASE_URL}/auth/v1/token?grant_type=password`,
+      {
+        method:"POST",
+        headers:{
+          "apikey":SUPABASE_KEY,
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          email,
+          password
+        })
+      }
+    );
+
+    const dados = await resposta.json();
+
+    if(!resposta.ok){
+      throw new Error(dados.error_description || dados.msg || "Login inválido");
+    }
+
+    accessToken = dados.access_token;
+    sessionStorage.setItem("utb_access_token", accessToken);
+
+    loginBox.classList.add("oculto");
+    painel.classList.remove("oculto");
+
+    await carregarCadastros();
+
+  }catch(erro){
+    loginMsg.innerHTML = `<p class="erro">${erro.message}</p>`;
+  }
+}
+
+async function carregarCadastros(){
+
+  lista.innerHTML = "Carregando cadastros...";
+
+  try{
+
+    const resposta = await fetch(
+      `${SUPABASE_URL}/rest/v1/cadastros_instrutores?select=*&order=criado_em.desc`,
+      {
+        headers:{
+          "apikey":SUPABASE_KEY,
+          "Authorization":`Bearer ${accessToken}`
+        }
+      }
+    );
+
+    if(resposta.status === 401){
+      sair();
+      return;
+    }
+
+    if(!resposta.ok){
+      throw new Error("Não foi possível carregar os cadastros.");
+    }
+
+    const cadastros = await resposta.json();
+
+    if(cadastros.length === 0){
+      lista.innerHTML = "<p>Nenhum cadastro encontrado.</p>";
+      return;
+    }
+
+    lista.innerHTML = "";
+
+    cadastros.forEach(c => {
+
+      const bloco = document.createElement("div");
+      bloco.className = "instrutor";
+
+      bloco.innerHTML = `
+        <h2>${esc(c.nome_completo)}</h2>
+
+        <div class="grid">
+
+          <div class="campo">
+            <strong>Cidade / UF</strong>
+            ${esc(c.cidade_uf)}
+          </div>
+
+          <div class="campo">
+            <strong>Telefone / WhatsApp</strong>
+            ${esc(c.telefone_whatsapp)}
+          </div>
+
+          <div class="campo">
+            <strong>E-mail</strong>
+            ${esc(c.email)}
+          </div>
+
+          <div class="campo">
+            <strong>Área / Cursos</strong>
+            ${esc(c.area_cursos)}
+          </div>
+
+          <div class="campo">
+            <strong>Anos de experiência</strong>
+            ${esc(c.anos_experiencia)}
+          </div>
+
+          <div class="campo">
+            <strong>Empresa atual</strong>
+            ${esc(c.empresa_atual)}
+          </div>
+
+          <div class="campo">
+            <strong>Disponibilidade para viagens</strong>
+            ${esc(c.disponibilidade_viagens)}
+          </div>
+
+        </div>
+
+        <div class="campo">
+          <strong>Experiência profissional</strong>
+          ${esc(c.experiencia_profissional)}
+        </div>
+
+        <div class="campo">
+          <strong>Formação / Qualificações</strong>
+          ${esc(c.formacao_qualificacoes)}
+        </div>
+
+        <div class="campo">
+          <strong>Experiência como instrutor</strong>
+          ${esc(c.experiencia_instrutor)}
+        </div>
+
+        <div class="acoes">
+
+          <div>
+            <label><strong>Status do cadastro</strong></label>
+            <select id="status_${c.id}">
+              <option value="pendente">Pendente</option>
+              <option value="aprovado">Aprovado</option>
+              <option value="reprovado">Reprovado</option>
+            </select>
+          </div>
+
+          <div>
+            <label><strong>Formação UTB</strong></label>
+            <select id="formacao_${c.id}">
+              <option value="nao_avaliado">Não avaliado</option>
+              <option value="nao_necessaria">Não necessária</option>
+              <option value="convidado">Convidado</option>
+              <option value="em_formacao">Em formação</option>
+              <option value="aprovado_na_formacao">Aprovado na formação</option>
+              <option value="reprovado_na_formacao">Reprovado na formação</option>
+            </select>
+          </div>
+
+        </div>
+
+        <button onclick="salvar('${c.id}')">
+          SALVAR DECISÃO
+        </button>
+
+        <div id="msg_${c.id}"></div>
+      `;
+
+      lista.appendChild(bloco);
+
+      document.getElementById(`status_${c.id}`).value =
+        c.status || "pendente";
+
+      document.getElementById(`formacao_${c.id}`).value =
+        c.formacao_utb_status || "nao_avaliado";
+
+    });
+
+  }catch(erro){
+    lista.innerHTML = `<p class="erro">${erro.message}</p>`;
+  }
+}
+
+async function salvar(id){
+
+  const status =
+    document.getElementById(`status_${id}`).value;
+
+  const formacao_utb_status =
+    document.getElementById(`formacao_${id}`).value;
+
+  const msg =
+    document.getElementById(`msg_${id}`);
+
+  msg.textContent = "Salvando...";
+
+  try{
+
+    const resposta = await fetch(
+      `${SUPABASE_URL}/rest/v1/cadastros_instrutores?id=eq.${id}`,
+      {
+        method:"PATCH",
+        headers:{
+          "apikey":SUPABASE_KEY,
+          "Authorization":`Bearer ${accessToken}`,
+          "Content-Type":"application/json",
+          "Prefer":"return=minimal"
+        },
+        body:JSON.stringify({
+          status,
+          formacao_utb_status
+        })
+      }
+    );
+
+    if(!resposta.ok){
+      throw new Error("Não foi possível salvar.");
+    }
+
+    msg.innerHTML =
+      '<p class="sucesso">Decisão salva com sucesso.</p>';
+
+  }catch(erro){
+
+    msg.innerHTML =
+      `<p class="erro">${erro.message}</p>`;
+
+  }
+}
+
+function sair(){
+
+  sessionStorage.removeItem("utb_access_token");
+  accessToken = "";
+
+  painel.classList.add("oculto");
+  loginBox.classList.remove("oculto");
+
+}
+
+function esc(valor){
+
+  const div = document.createElement("div");
+  div.textContent = valor || "";
+  return div.innerHTML;
+
+}
+
+document.getElementById("entrar")
+  .addEventListener("click", entrar);
+
+document.getElementById("atualizar")
+  .addEventListener("click", carregarCadastros);
+
+document.getElementById("sair")
+  .addEventListener("click", sair);
+
+if(accessToken){
+  loginBox.classList.add("oculto");
+  painel.classList.remove("oculto");
+  carregarCadastros();
+}
+
+</script>
+
+</body>
+</html>
