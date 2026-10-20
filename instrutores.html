@@ -387,7 +387,7 @@ tr:last-child td{border-bottom:none}
 <div class="full"><label>Experiência profissional / onde já trabalhou (opcional)</label><textarea name="historico_profissional" placeholder="Informe empresas, funções ou atividades mais importantes da sua experiência profissional"></textarea></div>
 <div class="full"><label>Formação / qualificações</label><textarea name="formacao"></textarea></div>
 <div class="full"><label>Experiência como instrutor</label><textarea name="didatica"></textarea></div>
-<div class="full"><label>Você tem interesse em participar GRATUITAMENTE da Formação de Instrutores do Universo Treinamentos Brasil - UTB?</label><select name="interesse_formacao_utb" required><option value="">Selecione uma opção</option><option value="sim">Sim, tenho interesse</option><option value="ja_conclui">Já concluí a Formação de Instrutores UTB</option></select></div>  
+  
 <div class="full"><button class="btn btn-black" type="submit">ENVIAR CADASTRO GRATUITO</button></div>
 </div>
 </form>
@@ -395,10 +395,7 @@ tr:last-child td{border-bottom:none}
 <div class="soft">
   <h3>Banco Nacional de Instrutores UTB</h3>
   <p>
-    Após concluir a Formação de Instrutores UTB e ser aprovado, o profissional
-    poderá integrar nossa rede nacional e ser considerado para oportunidades de
-    treinamento compatíveis com sua formação, experiência, disponibilidade e
-    região de atuação.
+    Após o cadastro, a UTB analisará o perfil, a experiência profissional e a experiência como instrutor. Profissionais já qualificados e com experiência comprovada poderão ser aprovados diretamente para o Banco Nacional de Instrutores UTB. Quando necessário, a UTB poderá convidar o candidato para participar gratuitamente da Formação de Instrutores UTB como etapa de qualificação para ingresso no banco.
   </p>
 </div>
 <div class="soft" style="margin-top:14px">
@@ -541,9 +538,8 @@ if(partnerForm){
       disponibilidade_viagens: dados.get("viagens") || "",
       experiencia_profissional: dados.get("historico_profissional") || "",
       formacao_qualificacoes: dados.get("formacao") || "",
-      experiencia_instrutor: dados.get("didatica") || "",
-      interesse_formacao_utb: dados.get("interesse_formacao_utb") || ""
-    };
+      experiencia_instrutor: dados.get("didatica") || ""
+      };
 
     try{
       const resposta = await fetch(
