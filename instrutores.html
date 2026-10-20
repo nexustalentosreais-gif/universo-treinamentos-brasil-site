@@ -391,9 +391,16 @@ tr:last-child td{border-bottom:none}
 <div class="full"><button class="btn btn-black" type="submit">ENVIAR CADASTRO GRATUITO</button></div>
 </div>
 </form>
-</form>
 <div>
-<div class="soft"><h3>Banco Nacional de Instrutores UTB</h3><p>Após concluir a Formação de Instrutores UTB e ser aprovado, o profissional poderá integrar nossa rede nacional e ser considerado para oportunidades de treinamento compatíveis com sua formação, experiência, disponibilidade e região de atuação.</p></div>
+<div class="soft">
+  <h3>Banco Nacional de Instrutores UTB</h3>
+  <p>
+    Após concluir a Formação de Instrutores UTB e ser aprovado, o profissional
+    poderá integrar nossa rede nacional e ser considerado para oportunidades de
+    treinamento compatíveis com sua formação, experiência, disponibilidade e
+    região de atuação.
+  </p>
+</div>
 <div class="soft" style="margin-top:14px">
 <h3>Quando você for chamado para um curso</h3>
 <p>O Universo mantém a relação comercial com o cliente, fornece o material didático e o padrão do treinamento e organiza a documentação e a certificação aplicável.</p>
@@ -512,14 +519,61 @@ if(quoteForm){
   });
 }
 
+const SUPABASE_URL = "https://xkxlgmmssvllcmhymibj.supabase.co";
+const SUPABASE_KEY = "sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV";
+
 const partnerForm=$("#partner-form");
+
 if(partnerForm){
-  partnerForm.addEventListener("submit",e=>{
+  partnerForm.addEventListener("submit", async e=>{
     e.preventDefault();
-    alert("O envio online do cadastro está em implantação. Para concluir seu cadastro neste momento, entre em contato com a UTB."); 
+
+    const dados = new FormData(partnerForm);
+
+    const cadastro = {
+      nome_completo: dados.get("nome") || "",
+      cidade_uf: dados.get("cidade") || "",
+      telefone_whatsapp: dados.get("telefone") || "",
+      email: dados.get("email") || "",
+      area_cursos: dados.get("area") || "",
+      anos_experiencia: dados.get("experiencia") || "",
+      empresa_atual: dados.get("empresa_atual") || "",
+      disponibilidade_viagens: dados.get("viagens") || "",
+      experiencia_profissional: dados.get("historico_profissional") || "",
+      formacao_qualificacoes: dados.get("formacao") || "",
+      experiencia_instrutor: dados.get("didatica") || "",
+      interesse_formacao_utb: dados.get("interesse_formacao_utb") || ""
+    };
+
+    try{
+      const resposta = await fetch(
+        `${SUPABASE_URL}/rest/v1/cadastros_instrutores`,
+        {
+          method: "POST",
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Content-Type": "application/json",
+            "Prefer": "return=minimal"
+          },
+          body: JSON.stringify(cadastro)
+        }
+      );
+
+      if(!resposta.ok){
+        throw new Error("Falha ao gravar cadastro");
+      }
+
+      alert("Cadastro enviado com sucesso! A UTB analisará suas informações.");
+      partnerForm.reset();
+
+    }catch(erro){
+      console.error(erro);
+      alert("Não foi possível enviar o cadastro. Tente novamente.");
+    }
   });
 }
-window.addEventListener("pageshow",()=>{
+
+  window.addEventListener("pageshow",()=>{
   if(partnerForm) partnerForm.reset();
 });
 const testimonialForm=$("#testimonial-form");
