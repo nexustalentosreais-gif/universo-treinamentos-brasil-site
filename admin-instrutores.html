@@ -98,47 +98,45 @@
 
   <div id="painel" class="oculto">
 
-    <div class="card">
+<div class="card">
   <h1>Cadastros de Instrutores</h1>
 
-  <div class="grid">
-    <div>
-      <label>Buscar por nome, e-mail ou cidade</label>
-      <input id="filtroBusca" type="text" placeholder="Digite para pesquisar">
-    </div>
+  <div>
+    <label>Buscar por nome, e-mail ou cidade</label>
+    <input id="filtroBusca" type="text" placeholder="Digite para pesquisar">
+  </div>
 
-    <div>
-      <label>Status do cadastro</label>
-      <select id="filtroStatus">
-        <option value="">Todos</option>
-        <option value="pendente">Pendente</option>
-        <option value="aprovado">Aprovado</option>
-        <option value="reprovado">Reprovado</option>
-      </select>
-    </div>
+  <div style="margin-top:12px;">
+    <label>Status do cadastro</label>
+    <select id="filtroStatus">
+      <option value="">Todos</option>
+      <option value="pendente">Pendente</option>
+      <option value="aprovado">Aprovado</option>
+      <option value="reprovado">Reprovado</option>
+    </select>
+  </div>
 
-    <div>
-      <label>Formação UTB</label>
-      <select id="filtroFormacao">
-        <option value="">Todas</option>
-        <option value="nao_avaliado">Não avaliado</option>
-        <option value="nao_necessaria">Não necessária</option>
-        <option value="convidado">Convidado</option>
-        <option value="em_formacao">Em formação</option>
-        <option value="aprovado_na_formacao">Aprovado na formação</option>
-        <option value="reprovado_na_formacao">Reprovado na formação</option>
-      </select>
-    </div>
+  <div style="margin-top:12px;">
+    <label>Formação UTB</label>
+    <select id="filtroFormacao">
+      <option value="">Todas</option>
+      <option value="nao_avaliado">Não avaliado</option>
+      <option value="nao_necessaria">Não necessária</option>
+      <option value="convidado">Convidado</option>
+      <option value="em_formacao">Em formação</option>
+      <option value="aprovado_na_formacao">Aprovado na formação</option>
+      <option value="reprovado_na_formacao">Reprovado na formação</option>
+    </select>
+  </div>
 
-    <div>
-      <label>Data inicial</label>
-      <input id="filtroDataInicial" type="date">
-    </div>
+  <div style="margin-top:12px;">
+    <label>Data inicial</label>
+    <input id="filtroDataInicial" type="date">
+  </div>
 
-    <div>
-      <label>Data final</label>
-      <input id="filtroDataFinal" type="date">
-    </div>
+  <div style="margin-top:12px;">
+    <label>Data final</label>
+    <input id="filtroDataFinal" type="date">
   </div>
 
   <button id="filtrar">FILTRAR</button>
