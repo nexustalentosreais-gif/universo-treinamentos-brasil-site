@@ -640,7 +640,8 @@ for (const arquivo of documentos) {
 
     }catch(erro){
       console.error(erro);
-      alert("Não foi possível enviar o cadastro. Tente novamente.");
+      alert("Erro: " + erro.message);
+
     }
   });
 }
