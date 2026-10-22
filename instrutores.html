@@ -387,7 +387,17 @@ tr:last-child td{border-bottom:none}
 <div class="full"><label>Experiência profissional / onde já trabalhou (opcional)</label><textarea name="historico_profissional" placeholder="Informe empresas, funções ou atividades mais importantes da sua experiência profissional"></textarea></div>
 <div class="full"><label>Formação / qualificações</label><textarea name="formacao"></textarea></div>
 <div class="full"><label>Experiência como instrutor</label><textarea name="didatica"></textarea></div>
-  
+
+<div class="full">
+  <label>Currículo</label>
+  <input type="file" id="curriculoInstrutor" accept=".pdf,.jpg,.jpeg,.png,.heic,.heif">
+</div>
+
+<div class="full">
+  <label>Diplomas / certificados</label>
+  <input type="file" id="documentosInstrutor" accept=".pdf,.jpg,.jpeg,.png,.heic,.heif" multiple>
+</div>
+
 <div class="full"><button class="btn btn-black" type="submit">ENVIAR CADASTRO GRATUITO</button></div>
 </div>
 </form>
@@ -519,6 +529,49 @@ if(quoteForm){
 const SUPABASE_URL = "https://xkxlgmmssvllcmhymibj.supabase.co";
 const SUPABASE_KEY = "sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV";
 
+  async function enviarDocumentoInstrutor(file, tipoDocumento, cadastroInstrutorId, email) {
+  const autorizacao = await fetch(
+    `${SUPABASE_URL}/functions/v1/gerar-upload-instrutor`,
+    {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": `Bearer ${SUPABASE_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        cadastro_instrutor_id: cadastroInstrutorId,
+        email: email,
+        tipo_documento: tipoDocumento,
+        nome_arquivo: file.name,
+        mime_type: file.type,
+        tamanho_bytes: file.size
+      })
+    }
+  );
+
+  if (!autorizacao.ok) {
+    throw new Error("Falha ao autorizar documento");
+  }
+
+  const upload = await autorizacao.json();
+
+  const formDataUpload = new FormData();
+  formDataUpload.append("cacheControl", "3600");
+  formDataUpload.append("", file);
+
+  const envio = await fetch(upload.signedUrl, {
+    method: "PUT",
+    headers: {
+      "x-upsert": "false"
+    },
+    body: formDataUpload
+  });
+
+  if (!envio.ok) {
+    throw new Error("Falha ao enviar documento");
+  }
+}
 const partnerForm=$("#partner-form");
 
 if(partnerForm){
@@ -549,7 +602,7 @@ if(partnerForm){
           headers: {
             "apikey": SUPABASE_KEY,
             "Content-Type": "application/json",
-            "Prefer": "return=minimal"
+            "Prefer": "return=representation"
           },
           body: JSON.stringify(cadastro)
         }
@@ -558,7 +611,9 @@ if(partnerForm){
       if(!resposta.ok){
         throw new Error("Falha ao gravar cadastro");
       }
-
+const [instrutorCriado] = await resposta.json();
+const cadastroInstrutorId = instrutorCriado.id;
+      
       alert("Cadastro enviado com sucesso! A UTB analisará suas informações.");
       partnerForm.reset();
 
