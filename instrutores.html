@@ -613,7 +613,28 @@ if(partnerForm){
       }
 const [instrutorCriado] = await resposta.json();
 const cadastroInstrutorId = instrutorCriado.id;
-      
+
+      const curriculo = document.getElementById("curriculoInstrutor").files[0];
+
+if (curriculo) {
+  await enviarDocumentoInstrutor(
+    curriculo,
+    "curriculo",
+    cadastroInstrutorId,
+    cadastro.email
+  );
+}
+
+const documentos = document.getElementById("documentosInstrutor").files;
+
+for (const arquivo of documentos) {
+  await enviarDocumentoInstrutor(
+    arquivo,
+    "diploma_certificado",
+    cadastroInstrutorId,
+    cadastro.email
+  );
+}
       alert("Cadastro enviado com sucesso! A UTB analisará suas informações.");
       partnerForm.reset();
 
