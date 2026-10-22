@@ -579,8 +579,10 @@ if(partnerForm){
     e.preventDefault();
 
     const dados = new FormData(partnerForm);
+    const cadastroInstrutorId = crypto.randomUUID();
 
     const cadastro = {
+      id: cadastroInstrutorId, 
       nome_completo: dados.get("nome") || "",
       cidade_uf: dados.get("cidade") || "",
       telefone_whatsapp: dados.get("telefone") || "",
@@ -602,7 +604,7 @@ if(partnerForm){
           headers: {
             "apikey": SUPABASE_KEY,
             "Content-Type": "application/json",
-            "Prefer": "return=representation"
+            "Prefer": "return=minimal"
           },
           body: JSON.stringify(cadastro)
         }
@@ -611,8 +613,6 @@ if(partnerForm){
       if(!resposta.ok){
         throw new Error("Falha ao gravar cadastro");
       }
-const [instrutorCriado] = await resposta.json();
-const cadastroInstrutorId = instrutorCriado.id;
 
       const curriculo = document.getElementById("curriculoInstrutor").files[0];
 
