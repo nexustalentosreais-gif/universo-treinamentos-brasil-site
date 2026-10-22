@@ -549,10 +549,10 @@ const SUPABASE_KEY = "sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV";
       })
     }
   );
-
-  if (!autorizacao.ok) {
-    throw new Error("Falha ao autorizar documento");
-  }
+if (!autorizacao.ok) {
+  const detalhe = await autorizacao.text();
+  throw new Error(`Falha ao autorizar documento (${autorizacao.status}): ${detalhe}`);
+}
 
   const upload = await autorizacao.json();
 
