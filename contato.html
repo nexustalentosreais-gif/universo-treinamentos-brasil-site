@@ -358,19 +358,90 @@ tr:last-child td{border-bottom:none}
 
 <section class="section" id="proposta"><div class="container split">
 <form class="form" id="quote-form">
-<h2 style="margin-top:0">Dados do contratante</h2>
-<div class="form-grid">
-<div><label>Nome</label><input name="nome" required></div>
-<div><label>Empresa / Instituição</label><input name="empresa" required></div>
-<div><label>Cidade / UF</label><input name="cidade" required></div>
-<div><label>Telefone / WhatsApp</label><input name="telefone"></div>
-<div><label>E-mail</label><input type="email" name="email"></div>
-<div><label>Quantidade de participantes</label><input name="participantes" placeholder="Ex.: 12"></div>
-<div class="full"><label>Curso ou área desejada</label><input name="curso" placeholder="Ex.: NR-10, eletricidade predial, comercil, industrial, curso personalizado"></div>
-<div class="full"><label>O que a equipe precisa aprender?</label><textarea name="mensagem"></textarea></div>
-<div class="full"><button class="btn btn-black" type="submit">ENVIAR SOLICITAÇÃO</button></div>
-</div>
-<p class="help">Na versão final, o formulário será conectado ao WhatsApp, e-mail e/ou CRM do Universo.</p>
+
+  <h2 style="margin-top:0">Dados do contratante</h2>
+
+  <div class="form-grid">
+
+    <div>
+      <label>Nome do responsável</label>
+      <input name="nome" required>
+    </div>
+
+    <div>
+      <label>Empresa / Instituição</label>
+      <input name="empresa" required>
+    </div>
+
+    <div>
+      <label>CNPJ (opcional)</label>
+      <input name="cnpj">
+    </div>
+
+    <div>
+      <label>Cidade / UF</label>
+      <input name="cidade" required>
+    </div>
+
+    <div>
+      <label>Telefone / WhatsApp</label>
+      <input name="telefone" required>
+    </div>
+
+    <div>
+      <label>E-mail</label>
+      <input type="email" name="email" required>
+    </div>
+
+    <div>
+      <label>Quantidade de participantes</label>
+      <input
+        type="number"
+        name="participantes"
+        min="1"
+        placeholder="Ex.: 12"
+      >
+    </div>
+
+    <div>
+      <label>Data preferencial (opcional)</label>
+      <input
+        type="date"
+        name="data_preferencial"
+      >
+    </div>
+
+    <div class="full">
+      <label>Curso ou área desejada</label>
+      <input
+        name="curso"
+        required
+        placeholder="Ex.: NR-10, eletricidade predial, energia solar"
+      >
+    </div>
+
+    <div class="full">
+      <label>O que a equipe precisa aprender?</label>
+      <textarea
+        name="mensagem"
+      ></textarea>
+    </div>
+
+    <div class="full">
+      <button
+        class="btn btn-black"
+        type="submit"
+      >
+        ENVIAR SOLICITAÇÃO
+      </button>
+    </div>
+
+  </div>
+
+  <p class="help">
+    Sua solicitação será enviada diretamente para a equipe da Universo Treinamentos Brasil.
+  </p>
+
 </form>
 
 <div>
