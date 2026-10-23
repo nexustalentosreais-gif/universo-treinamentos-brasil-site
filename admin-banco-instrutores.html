@@ -457,6 +457,24 @@
         document.getElementById(
           "ordenarExperiencia"
         ).value;
+      
+const existeFiltro =
+  nome ||
+  cidade ||
+  curso ||
+  experienciaMinima > 0 ||
+  viagens ||
+  ordenar;
+
+if(!existeFiltro){
+
+  document.getElementById("resumo").textContent =
+    "Use os filtros acima para localizar um instrutor ativo.";
+
+  document.getElementById("listaInstrutores").innerHTML = "";
+
+  return;
+}
 
 
       let resultado =
