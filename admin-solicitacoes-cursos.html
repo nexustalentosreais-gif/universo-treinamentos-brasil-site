@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Solicitações de Cursos | Administração UTB</title>
+
+  <style>
+
+    *{
+      box-sizing:border-box;
+    }
+
+    body{
+      margin:0;
+      font-family:Arial,Helvetica,sans-serif;
+      background:#f5f7fb;
+      color:#172033;
+    }
+
+    .topo{
+      background:#0b1f44;
+      color:#fff;
+      padding:18px 24px;
+    }
+
+    .topo-interno{
+      max-width:1400px;
+      margin:auto;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:15px;
+      flex-wrap:wrap;
+    }
+
+    .topo h1{
+      margin:0;
+      font-size:24px;
+    }
+
+    .topo p{
+      margin:5px 0 0;
+      opacity:.8;
+    }
+
+    .acoes-topo{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    button,
+    .botao{
+      border:0;
+      border-radius:10px;
+      padding:12px 16px;
+      font-weight:700;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .botao-claro{
+      background:#fff;
+      color:#0b1f44;
+    }
+
+    .botao-escuro{
+      background:#202b40;
+      color:#fff;
+    }
+
+    main{
+      max-width:1400px;
+      margin:30px auto;
+      padding:0 20px 50px;
+    }
+
+    .cabecalho h2{
+      margin:0 0 8px;
+      font-size:32px;
+    }
+
+    .cabecalho p{
+      margin:0;
+      color:#5d687c;
+    }
+
+    .filtros{
+      margin-top:24px;
+      background:#e8f1ff;
+      border:1px solid #cad9f0;
+      border-radius:16px;
+      padding:20px;
+    }
+
+    .filtros-grid{
+      display:grid;
+      grid-template-columns:
+        repeat(auto-fit,minmax(190px,1fr));
+      gap:12px;
+    }
+
+    input,
+    select,
+    textarea{
+      width:100%;
+      border:1px solid #c6cfdd;
+      border-radius:9px;
+      padding:11px 12px;
+      font-size:14px;
+      background:#fff;
+    }
+
+    .resumo{
+      margin:22px 0 15px;
+      font-weight:700;
+    }
+
+    .lista{
+      display:grid;
+      gap:18px;
+    }
+
+    .card{
+      background:#fff;
+      border:1px solid #dce3ee;
+      border-radius:16px;
+      padding:22px;
+      box-shadow:0 6px 18px rgba(0,0,0,.05);
+    }
+
+    .card-topo{
+      display:flex;
+      justify-content:space-between;
+      gap:15px;
+      flex-wrap:wrap;
+      margin-bottom:15px;
+    }
+
+    .card h3{
+      margin:0 0 5px;
+      color:#0b1f44;
+    }
+
+    .status-tag{
+      display:inline-block;
+      border-radius:999px;
+      padding:6px 10px;
+      background:#eef3fa;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .dados{
+      display:grid;
+      grid-template-columns:
+        repeat(auto-fit,minmax(240px,1fr));
+      gap:8px 20px;
+    }
+
+    .dados p{
+      margin:5px 0;
+      line-height:1.45;
+    }
+
+    .observacoes{
+      margin-top:15px;
+      background:#f8fafc;
+      border-radius:10px;
+      padding:14px;
+    }
+
+    .gestao{
+      margin-top:18px;
+      padding-top:18px;
+      border-top:1px solid #e3e8ef;
+      display:grid;
+      grid-template-columns:
+        minmax(180px,1fr)
+        minmax(220px,2fr)
+        auto;
+      gap:12px;
+      align-items:end;
+    }
+
+    .gestao label{
+      display:block;
+      font-weight:700;
+      margin-bottom:6px;
+    }
+
+    .salvar{
+      background:#0b1f44;
+      color:#fff;
+      min-height:43px;
+    }
+
+    .mensagem{
+      background:#fff;
+      border:1px solid #dce3ee;
+      border-radius:12px;
+      padding:20px;
+    }
+
+    .erro{
+      color:#a32424;
+      font-weight:700;
+    }
+
+    @media(max-width:800px){
+
+      .gestao{
+        grid-template-columns:1fr;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <header class="topo">
+
+    <div class="topo-interno">
+
+      <div>
+        <h1>Solicitações de Cursos UTB</h1>
+        <p>Área restrita à administração</p>
+      </div>
+
+      <div class="acoes-topo">
+
+        <a
+          href="admin-instrutores.html"
+          class="botao botao-claro"
+        >
+          INSTRUTORES
+        </a>
+
+        <a
+          href="admin-banco-instrutores.html"
+          class="botao botao-claro"
+        >
+          BANCO DE INSTRUTORES
+        </a>
+
+        <button
+          id="btnSair"
+          class="botao botao-escuro"
+          type="button"
+        >
+          SAIR
+        </button>
+
+      </div>
+
+    </div>
+
+  </header>
+
+  <main>
+
+    <div class="cabecalho">
+
+      <h2>Pedidos recebidos</h2>
+
+      <p>
+        Consulte solicitações, acompanhe o andamento
+        e defina o instrutor responsável.
+      </p>
+
+    </div>
+
+    <section class="filtros">
+
+      <div class="filtros-grid">
+
+        <input
+          id="filtroEmpresa"
+          type="text"
+          placeholder="Empresa / instituição"
+        >
+
+        <input
+          id="filtroCurso"
+          type="text"
+          placeholder="Curso"
+        >
+
+        <input
+          id="filtroCidade"
+          type="text"
+          placeholder="Cidade / UF"
+        >
+
+        <select id="filtroStatus">
+
+          <option value="">
+            Todos os status
+          </option>
+
+          <option value="nova">
+            Nova
+          </option>
+
+          <option value="em_analise">
+            Em análise
+          </option>
+
+          <option value="aguardando_instrutor">
+            Aguardando instrutor
+          </option>
+
+          <option value="instrutor_definido">
+            Instrutor definido
+          </option>
+
+          <option value="proposta_enviada">
+            Proposta enviada
+          </option>
+
+          <option value="aprovada">
+            Aprovada
+          </option>
+
+          <option value="em_execucao">
+            Em execução
+          </option>
+
+          <option value="concluida">
+            Concluída
+          </option>
+
+          <option value="cancelada">
+            Cancelada
+          </option>
+
+        </select>
+
+      </div>
+
+    </section>
+
+    <div
+      id="resumo"
+      class="resumo"
+    >
+      Carregando solicitações...
+    </div>
+
+    <div
+      id="lista"
+      class="lista"
+    ></div>
+
+  </main>
+
+
+  <script>
+
+    /*
+      COPIAR OS MESMOS VALORES DE:
+      admin-instrutores.html
+      ou admin-banco-instrutores.html
+    */
+
+    const SUPABASE_URL =
+      "https://xkxlgmmssvllcmhymibj.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV";
+
+
+    let solicitacoes = [];
+    let instrutores = [];
+
+
+    function escapar(valor){
+
+      const div =
+        document.createElement("div");
+
+      div.textContent =
+        valor ?? "";
+
+      return div.innerHTML;
+
+    }
+
+
+    function normalizar(valor){
+
+      return String(valor || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g,"");
+
+    }
+
+
+    function nomeStatus(status){
+
+      const nomes = {
+
+        nova:
+          "Nova",
+
+        em_analise:
+          "Em análise",
+
+        aguardando_instrutor:
+          "Aguardando instrutor",
+
+        instrutor_definido:
+          "Instrutor definido",
+
+        proposta_enviada:
+          "Proposta enviada",
+
+        aprovada:
+          "Aprovada",
+
+        em_execucao:
+          "Em execução",
+
+        concluida:
+          "Concluída",
+
+        cancelada:
+          "Cancelada"
+
+      };
+
+      return nomes[status] || status;
+
+    }
+
+
+    function formatarData(valor){
+
+      if(!valor){
+        return "-";
+      }
+
+      const data =
+        new Date(valor);
+
+      if(
+        Number.isNaN(
+          data.getTime()
+        )
+      ){
+        return valor;
+      }
+
+      return data.toLocaleDateString(
+        "pt-BR"
+      );
+
+    }
+
+
+    function opcoesInstrutores(
+      instrutorAtual
+    ){
+
+      let html =
+        `<option value="">
+          Nenhum instrutor definido
+        </option>`;
+
+      instrutores.forEach(i => {
+
+        const selecionado =
+          i.id === instrutorAtual
+            ? "selected"
+            : "";
+
+        html += `
+          <option
+            value="${escapar(i.id)}"
+            ${selecionado}
+          >
+            ${escapar(i.nome_completo)}
+            — ${escapar(i.cidade_uf || "")}
+            — ${escapar(i.area_cursos || "")}
+          </option>
+        `;
+
+      });
+
+      return html;
+
+    }
+
+
+    function renderizar(){
+
+      const empresa =
+        normalizar(
+          document.getElementById(
+            "filtroEmpresa"
+          ).value
+        );
+
+      const curso =
+        normalizar(
+          document.getElementById(
+            "filtroCurso"
+          ).value
+        );
+
+      const cidade =
+        normalizar(
+          document.getElementById(
+            "filtroCidade"
+          ).value
+        );
+
+      const status =
+        document.getElementById(
+          "filtroStatus"
+        ).value;
+
+
+      const resultado =
+        solicitacoes.filter(s => {
+
+          return (
+            normalizar(
+              s.empresa
+            ).includes(empresa)
+            &&
+            normalizar(
+              s.curso
+            ).includes(curso)
+            &&
+            normalizar(
+              s.cidade_uf
+            ).includes(cidade)
+            &&
+            (
+              !status ||
+              s.status === status
+            )
+          );
+
+        });
+
+
+      document.getElementById(
+        "resumo"
+      ).textContent =
+        `${resultado.length} solicitação(ões) encontrada(s)`;
+
+
+      const lista =
+        document.getElementById(
+          "lista"
+        );
+
+
+      if(resultado.length === 0){
+
+        lista.innerHTML = `
+          <div class="mensagem">
+            Nenhuma solicitação encontrada.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      lista.innerHTML =
+        resultado.map(s => `
+
+          <article class="card">
+
+            <div class="card-topo">
+
+              <div>
+
+                <h3>
+                  ${escapar(s.empresa)}
+                </h3>
+
+                <div class="status-tag">
+                  ${escapar(nomeStatus(s.status))}
+                </div>
+
+              </div>
+
+              <div>
+                Recebida em:
+                <strong>
+                  ${escapar(
+                    formatarData(
+                      s.criado_em
+                    )
+                  )}
+                </strong>
+              </div>
+
+            </div>
+
+
+            <div class="dados">
+
+              <p>
+                <strong>Responsável:</strong>
+                ${escapar(s.responsavel)}
+              </p>
+
+              <p>
+                <strong>CNPJ:</strong>
+                ${escapar(s.cnpj || "-")}
+              </p>
+
+              <p>
+                <strong>E-mail:</strong>
+                ${escapar(s.email)}
+              </p>
+
+              <p>
+                <strong>Telefone / WhatsApp:</strong>
+                ${escapar(
+                  s.telefone_whatsapp
+                )}
+              </p>
+
+              <p>
+                <strong>Curso:</strong>
+                ${escapar(s.curso)}
+              </p>
+
+              <p>
+                <strong>Cidade / UF:</strong>
+                ${escapar(s.cidade_uf)}
+              </p>
+
+              <p>
+                <strong>Participantes:</strong>
+                ${escapar(
+                  s.quantidade_participantes
+                  ?? "-"
+                )}
+              </p>
+
+              <p>
+                <strong>Data preferencial:</strong>
+                ${escapar(
+                  formatarData(
+                    s.data_preferencial
+                  )
+                )}
+              </p>
+
+            </div>
+
+
+            <div class="observacoes">
+
+              <strong>
+                Necessidade informada:
+              </strong>
+
+              <div>
+                ${escapar(
+                  s.observacoes || "-"
+                )}
+              </div>
+
+            </div>
+
+
+            <div class="gestao">
+
+              <div>
+
+                <label>
+                  Status
+                </label>
+
+                <select
+                  id="status-${s.id}"
+                >
+
+                  <option
+                    value="nova"
+                    ${s.status === "nova"
+                      ? "selected"
+                      : ""}
+                  >
+                    Nova
+                  </option>
+
+                  <option
+                    value="em_analise"
+                    ${s.status === "em_analise"
+                      ? "selected"
+                      : ""}
+                  >
+                    Em análise
+                  </option>
+
+                  <option
+                    value="aguardando_instrutor"
+                    ${s.status === "aguardando_instrutor"
+                      ? "selected"
+                      : ""}
+                  >
+                    Aguardando instrutor
+                  </option>
+
+                  <option
+                    value="instrutor_definido"
+                    ${s.status === "instrutor_definido"
+                      ? "selected"
+                      : ""}
+                  >
+                    Instrutor definido
+                  </option>
+
+                  <option
+                    value="proposta_enviada"
+                    ${s.status === "proposta_enviada"
+                      ? "selected"
+                      : ""}
+                  >
+                    Proposta enviada
+                  </option>
+
+                  <option
+                    value="aprovada"
+                    ${s.status === "aprovada"
+                      ? "selected"
+                      : ""}
+                  >
+                    Aprovada
+                  </option>
+
+                  <option
+                    value="em_execucao"
+                    ${s.status === "em_execucao"
+                      ? "selected"
+                      : ""}
+                  >
+                    Em execução
+                  </option>
+
+                  <option
+                    value="concluida"
+                    ${s.status === "concluida"
+                      ? "selected"
+                      : ""}
+                  >
+                    Concluída
+                  </option>
+
+                  <option
+                    value="cancelada"
+                    ${s.status === "cancelada"
+                      ? "selected"
+                      : ""}
+                  >
+                    Cancelada
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <div>
+
+                <label>
+                  Instrutor UTB
+                </label>
+
+                <select
+                  id="instrutor-${s.id}"
+                >
+                  ${opcoesInstrutores(
+                    s.instrutor_id
+                  )}
+                </select>
+
+              </div>
+
+
+              <button
+                class="salvar"
+                type="button"
+                onclick="salvarSolicitacao('${s.id}')"
+              >
+                SALVAR
+              </button>
+
+            </div>
+
+          </article>
+
+        `).join("");
+
+    }
+
+
+    async function carregarTudo(){
+
+      const token =
+        sessionStorage.getItem(
+          "utb_access_token"
+        );
+
+
+      if(!token){
+
+        window.location.href =
+          "admin-instrutores.html";
+
+        return;
+
+      }
+
+
+      try{
+
+        const [
+          respostaSolicitacoes,
+          respostaInstrutores
+        ] = await Promise.all([
+
+          fetch(
+            `${SUPABASE_URL}/functions/v1/admin-solicitacoes-cursos`,
+            {
+              headers:{
+                "apikey":
+                  SUPABASE_KEY,
+
+                "Authorization":
+                  `Bearer ${token}`
+              }
+            }
+          ),
+
+          fetch(
+            `${SUPABASE_URL}/functions/v1/listar-instrutores-ativos`,
+            {
+              headers:{
+                "apikey":
+                  SUPABASE_KEY,
+
+                "Authorization":
+                  `Bearer ${token}`
+              }
+            }
+          )
+
+        ]);
+
+
+        if(
+          respostaSolicitacoes.status === 401 ||
+          respostaSolicitacoes.status === 403 ||
+          respostaInstrutores.status === 401 ||
+          respostaInstrutores.status === 403
+        ){
+
+          sessionStorage.removeItem(
+            "utb_access_token"
+          );
+
+          window.location.href =
+            "admin-instrutores.html";
+
+          return;
+
+        }
+
+
+        const dadosSolicitacoes =
+          await respostaSolicitacoes.json();
+
+        const dadosInstrutores =
+          await respostaInstrutores.json();
+
+
+        if(!respostaSolicitacoes.ok){
+
+          throw new Error(
+            dadosSolicitacoes.error ||
+            "Erro ao carregar solicitações."
+          );
+
+        }
+
+
+        if(!respostaInstrutores.ok){
+
+          throw new Error(
+            dadosInstrutores.error ||
+            "Erro ao carregar instrutores."
+          );
+
+        }
+
+
+        solicitacoes =
+          dadosSolicitacoes.solicitacoes || [];
+
+        instrutores =
+          dadosInstrutores.instrutores || [];
+
+
+        renderizar();
+
+
+      }catch(erro){
+
+        document.getElementById(
+          "resumo"
+        ).innerHTML =
+          `<span class="erro">
+            ${escapar(erro.message)}
+          </span>`;
+
+      }
+
+    }
+
+
+    async function salvarSolicitacao(id){
+
+      const token =
+        sessionStorage.getItem(
+          "utb_access_token"
+        );
+
+      const status =
+        document.getElementById(
+          `status-${id}`
+        ).value;
+
+      const instrutorId =
+        document.getElementById(
+          `instrutor-${id}`
+        ).value || null;
+
+
+      try{
+
+        const resposta =
+          await fetch(
+            `${SUPABASE_URL}/functions/v1/admin-solicitacoes-cursos`,
+            {
+              method:"PATCH",
+
+              headers:{
+                "Content-Type":
+                  "application/json",
+
+                "apikey":
+                  SUPABASE_KEY,
+
+                "Authorization":
+                  `Bearer ${token}`
+              },
+
+              body:JSON.stringify({
+                id,
+                status,
+                instrutor_id:
+                  instrutorId
+              })
+            }
+          );
+
+
+        const dados =
+          await resposta.json();
+
+
+        if(!resposta.ok){
+
+          throw new Error(
+            dados.error ||
+            "Não foi possível salvar."
+          );
+
+        }
+
+
+        alert(
+          "Solicitação atualizada com sucesso."
+        );
+
+
+        const indice =
+          solicitacoes.findIndex(
+            s => s.id === id
+          );
+
+
+        if(indice >= 0){
+
+          solicitacoes[indice] =
+            dados.solicitacao;
+
+        }
+
+
+        renderizar();
+
+
+      }catch(erro){
+
+        alert(
+          "Erro: " +
+          erro.message
+        );
+
+      }
+
+    }
+
+
+    [
+      "filtroEmpresa",
+      "filtroCurso",
+      "filtroCidade",
+      "filtroStatus"
+    ].forEach(id => {
+
+      const campo =
+        document.getElementById(id);
+
+      campo.addEventListener(
+        "input",
+        renderizar
+      );
+
+      campo.addEventListener(
+        "change",
+        renderizar
+      );
+
+    });
+
+
+    document
+      .getElementById(
+        "btnSair"
+      )
+      .addEventListener(
+        "click",
+        () => {
+
+          sessionStorage.removeItem(
+            "utb_access_token"
+          );
+
+          window.location.href =
+            "admin-instrutores.html";
+
+        }
+      );
+
+
+    carregarTudo();
+
+  </script>
+
+</body>
+</html>
