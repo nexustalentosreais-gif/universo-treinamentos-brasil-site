@@ -423,6 +423,52 @@ tr:last-child td{border-bottom:none}
       <p>Profissionais ativos e aprovados pela Universo Treinamentos Brasil.</p>
     </div>
 
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:22px 0;">
+
+  <input
+    id="filtroNomeInstrutor"
+    type="text"
+    placeholder="Nome do instrutor"
+  >
+
+  <input
+    id="filtroCidadeInstrutor"
+    type="text"
+    placeholder="Cidade / UF"
+  >
+
+  <input
+    id="filtroCursoInstrutor"
+    type="text"
+    placeholder="Área ou curso"
+  >
+
+  <select id="filtroExperienciaInstrutor">
+    <option value="">Experiência mínima</option>
+    <option value="5">5 anos ou mais</option>
+    <option value="10">10 anos ou mais</option>
+    <option value="15">15 anos ou mais</option>
+    <option value="20">20 anos ou mais</option>
+  </select>
+
+  <select id="filtroViagensInstrutor">
+    <option value="">Viagens: todos</option>
+    <option value="sim">Disponível para viagens</option>
+    <option value="nao">Não disponível</option>
+  </select>
+
+  <select id="ordenarExperienciaInstrutor">
+    <option value="">Ordenar experiência</option>
+    <option value="maior">Maior experiência</option>
+    <option value="menor">Menor experiência</option>
+  </select>
+
+  <button type="button" id="limparFiltrosInstrutores">
+    LIMPAR FILTROS
+  </button>
+
+</div>
+    
     <div id="lista-instrutores-ativos" class="grid-3">
       <p>Carregando instrutores...</p>
     </div>
@@ -735,6 +781,108 @@ if(certForm){
     }
   });
 }
+  let todosInstrutoresAtivos = [];
+
+function numeroExperiencia(valor){
+  const numero = parseInt(valor, 10);
+  return Number.isNaN(numero) ? 0 : numero;
+}
+
+function normalizarTexto(valor){
+  return String(valor || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function aplicarFiltrosInstrutores(){
+
+  const lista = document.getElementById("lista-instrutores-ativos");
+
+  const nome = normalizarTexto(
+    document.getElementById("filtroNomeInstrutor").value
+  );
+
+  const cidade = normalizarTexto(
+    document.getElementById("filtroCidadeInstrutor").value
+  );
+
+  const curso = normalizarTexto(
+    document.getElementById("filtroCursoInstrutor").value
+  );
+
+  const experienciaMinima =
+    Number(document.getElementById("filtroExperienciaInstrutor").value || 0);
+
+  const viagens =
+    document.getElementById("filtroViagensInstrutor").value;
+
+  const ordenar =
+    document.getElementById("ordenarExperienciaInstrutor").value;
+
+  let resultado = todosInstrutoresAtivos.filter(i => {
+
+    const correspondeNome =
+      normalizarTexto(i.nome_completo).includes(nome);
+
+    const correspondeCidade =
+      normalizarTexto(i.cidade_uf).includes(cidade);
+
+    const correspondeCurso =
+      normalizarTexto(i.area_cursos).includes(curso);
+
+    const correspondeExperiencia =
+      numeroExperiencia(i.anos_experiencia) >= experienciaMinima;
+
+    let correspondeViagens = true;
+
+    if(viagens){
+      correspondeViagens =
+        normalizarTexto(i.disponibilidade_viagens) === viagens;
+    }
+
+    return (
+      correspondeNome &&
+      correspondeCidade &&
+      correspondeCurso &&
+      correspondeExperiencia &&
+      correspondeViagens
+    );
+  });
+
+  if(ordenar === "maior"){
+    resultado.sort(
+      (a,b) =>
+        numeroExperiencia(b.anos_experiencia) -
+        numeroExperiencia(a.anos_experiencia)
+    );
+  }
+
+  if(ordenar === "menor"){
+    resultado.sort(
+      (a,b) =>
+        numeroExperiencia(a.anos_experiencia) -
+        numeroExperiencia(b.anos_experiencia)
+    );
+  }
+
+  if(resultado.length === 0){
+    lista.innerHTML =
+      "<p>Nenhum instrutor encontrado com esses filtros.</p>";
+    return;
+  }
+
+  lista.innerHTML = resultado.map(i => `
+    <article class="card">
+      <h3>${i.nome_completo || ""}</h3>
+      <p><strong>Cidade / UF:</strong> ${i.cidade_uf || "-"}</p>
+      <p><strong>Área / Cursos:</strong> ${i.area_cursos || "-"}</p>
+      <p><strong>Experiência:</strong> ${i.anos_experiencia || "-"}</p>
+      <p><strong>Disponibilidade para viagens:</strong> ${i.disponibilidade_viagens || "-"}</p>
+      <p><strong>Formação / Qualificações:</strong> ${i.formacao_qualificacoes || "-"}</p>
+    </article>
+  `).join("");
+}
   async function carregarInstrutoresAtivos(){
 
   const lista = document.getElementById("lista-instrutores-ativos");
@@ -761,6 +909,7 @@ if(certForm){
     }
 
     const instrutores = dados.instrutores || [];
+    todosInstrutoresAtivos = instrutores;
 
     if(instrutores.length === 0){
       lista.innerHTML =
@@ -768,37 +917,7 @@ if(certForm){
       return;
     }
 
-    lista.innerHTML = instrutores.map(i => `
-      <article class="card">
-        <h3>${i.nome_completo || ""}</h3>
-
-        <p>
-          <strong>Cidade / UF:</strong>
-          ${i.cidade_uf || "-"}
-        </p>
-
-        <p>
-          <strong>Área / Cursos:</strong>
-          ${i.area_cursos || "-"}
-        </p>
-
-        <p>
-          <strong>Experiência:</strong>
-          ${i.anos_experiencia || "-"}
-        </p>
-
-        <p>
-          <strong>Disponibilidade para viagens:</strong>
-          ${i.disponibilidade_viagens || "-"}
-        </p>
-
-        <p>
-          <strong>Formação / Qualificações:</strong>
-          ${i.formacao_qualificacoes || "-"}
-        </p>
-      </article>
-    `).join("");
-
+aplicarFiltrosInstrutores();
   }catch(erro){
 
     lista.innerHTML =
@@ -806,6 +925,38 @@ if(certForm){
 
   }
 }
+
+[
+  "filtroNomeInstrutor",
+  "filtroCidadeInstrutor",
+  "filtroCursoInstrutor",
+  "filtroExperienciaInstrutor",
+  "filtroViagensInstrutor",
+  "ordenarExperienciaInstrutor"
+].forEach(id => {
+
+  const campo = document.getElementById(id);
+
+  if(campo){
+    campo.addEventListener("input", aplicarFiltrosInstrutores);
+    campo.addEventListener("change", aplicarFiltrosInstrutores);
+  }
+
+});
+
+document
+  .getElementById("limparFiltrosInstrutores")
+  ?.addEventListener("click", () => {
+
+    document.getElementById("filtroNomeInstrutor").value = "";
+    document.getElementById("filtroCidadeInstrutor").value = "";
+    document.getElementById("filtroCursoInstrutor").value = "";
+    document.getElementById("filtroExperienciaInstrutor").value = "";
+    document.getElementById("filtroViagensInstrutor").value = "";
+    document.getElementById("ordenarExperienciaInstrutor").value = "";
+
+    aplicarFiltrosInstrutores();
+  });
 
 carregarInstrutoresAtivos();
 
