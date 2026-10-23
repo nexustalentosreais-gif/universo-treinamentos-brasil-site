@@ -411,6 +411,10 @@ async function entrar(){
         <button onclick="salvar('${c.id}')">
           SALVAR DECISÃO
         </button>
+        
+<button onclick="verDocumentos('${c.id}')">
+  VER DOCUMENTOS
+</button>
 
         <div id="msg_${c.id}"></div>
       `;
@@ -529,7 +533,61 @@ async function salvar(id){
 
   }
 }
+async function verDocumentos(id){
 
+  const msg = document.getElementById(`msg_${id}`);
+
+  msg.textContent = "Carregando documentos...";
+
+  try{
+
+    const resposta = await fetch(
+      `${SUPABASE_URL}/functions/v1/listar-documentos-instrutor`,
+      {
+        method:"POST",
+        headers:{
+          "apikey":SUPABASE_KEY,
+          "Authorization":`Bearer ${accessToken}`,
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          cadastro_instrutor_id:id
+        })
+      }
+    );
+
+    const dados = await resposta.json();
+
+    if(!resposta.ok){
+      throw new Error(
+        dados.error || "Não foi possível carregar os documentos."
+      );
+    }
+
+    const documentos = dados.documentos || [];
+
+    if(documentos.length === 0){
+      msg.innerHTML = "<p>Nenhum documento enviado.</p>";
+      return;
+    }
+
+    msg.innerHTML = documentos.map(doc => `
+      <p>
+        <strong>${doc.tipo_documento}</strong> —
+        ${doc.nome_arquivo}
+        ${doc.url
+          ? `<a href="${doc.url}" target="_blank">ABRIR DOCUMENTO</a>`
+          : "Arquivo indisponível"}
+      </p>
+    `).join("");
+
+  }catch(erro){
+
+    msg.innerHTML =
+      `<p class="erro">${erro.message}</p>`;
+
+  }
+}
 function sair(){
 
   sessionStorage.removeItem("utb_access_token");
