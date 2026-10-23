@@ -316,7 +316,85 @@ tr:last-child td{border-bottom:none}
   .brand small{display:none}
   .validator{grid-template-columns:1fr}
 }
+.filtros-box{
+  background:#eef4ff;
+  border:1px solid #d6e2ff;
+  border-radius:18px;
+  padding:22px;
+  margin:24px 0 28px;
+}
 
+.filtros-box h3{
+  margin:0 0 8px 0;
+  color:#0b1f44;
+}
+
+.filtros-box p{
+  margin:0 0 18px 0;
+  color:#4b587c;
+}
+
+.filtros-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+  gap:14px;
+  align-items:end;
+}
+
+.filtros-grid input,
+.filtros-grid select{
+  width:100%;
+  height:52px;
+  padding:0 16px;
+  border:1px solid #cfd8ea;
+  border-radius:12px;
+  background:#ffffff;
+  color:#0b1f44;
+  font-size:16px;
+  box-sizing:border-box;
+}
+
+.filtros-grid input::placeholder{
+  color:#6b7280;
+}
+
+.filtros-acoes{
+  margin-top:14px;
+}
+
+.btn-filtro-limpar{
+  height:46px;
+  padding:0 18px;
+  border:none;
+  border-radius:12px;
+  background:#0b1f44;
+  color:#ffffff;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.btn-filtro-limpar:hover{
+  opacity:0.92;
+}
+
+#lista-instrutores-ativos .card{
+  background:#ffffff;
+  border:1px solid #d9e1ef;
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 8px 24px rgba(11,31,68,0.06);
+}
+
+#lista-instrutores-ativos .card h3{
+  margin-top:0;
+  margin-bottom:12px;
+  color:#0b1f44;
+}
+
+#lista-instrutores-ativos .card p{
+  margin:10px 0;
+  color:#334155;
+}
 </style>
 </head>
 <body>
@@ -422,53 +500,66 @@ tr:last-child td{border-bottom:none}
       <h2>Banco de Instrutores UTB</h2>
       <p>Profissionais ativos e aprovados pela Universo Treinamentos Brasil.</p>
     </div>
+<div class="filtros-box">
 
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:22px 0;">
+  <h3>Filtrar instrutores</h3>
+  <p>Pesquise por nome, cidade, curso, experiência e disponibilidade para viagens.</p>
 
-  <input
-    id="filtroNomeInstrutor"
-    type="text"
-    placeholder="Nome do instrutor"
-  >
+  <div class="filtros-grid">
 
-  <input
-    id="filtroCidadeInstrutor"
-    type="text"
-    placeholder="Cidade / UF"
-  >
+    <input
+      id="filtroNomeInstrutor"
+      type="text"
+      placeholder="Nome do instrutor"
+    >
 
-  <input
-    id="filtroCursoInstrutor"
-    type="text"
-    placeholder="Área ou curso"
-  >
+    <input
+      id="filtroCidadeInstrutor"
+      type="text"
+      placeholder="Cidade / UF"
+    >
 
-  <select id="filtroExperienciaInstrutor">
-    <option value="">Experiência mínima</option>
-    <option value="5">5 anos ou mais</option>
-    <option value="10">10 anos ou mais</option>
-    <option value="15">15 anos ou mais</option>
-    <option value="20">20 anos ou mais</option>
-  </select>
+    <input
+      id="filtroCursoInstrutor"
+      type="text"
+      placeholder="Área ou curso"
+    >
 
-  <select id="filtroViagensInstrutor">
-    <option value="">Viagens: todos</option>
-    <option value="sim">Disponível para viagens</option>
-    <option value="nao">Não disponível</option>
-  </select>
+    <select id="filtroExperienciaInstrutor">
+      <option value="">Experiência mínima</option>
+      <option value="1">1 ano ou mais</option>
+      <option value="3">3 anos ou mais</option>
+      <option value="5">5 anos ou mais</option>
+      <option value="10">10 anos ou mais</option>
+      <option value="15">15 anos ou mais</option>
+      <option value="20">20 anos ou mais</option>
+    </select>
 
-  <select id="ordenarExperienciaInstrutor">
-    <option value="">Ordenar experiência</option>
-    <option value="maior">Maior experiência</option>
-    <option value="menor">Menor experiência</option>
-  </select>
+    <select id="filtroViagensInstrutor">
+      <option value="">Viagens: todos</option>
+      <option value="sim">Disponível para viagens</option>
+      <option value="nao">Não disponível</option>
+    </select>
 
-  <button type="button" id="limparFiltrosInstrutores">
-    LIMPAR FILTROS
-  </button>
+    <select id="ordenarExperienciaInstrutor">
+      <option value="">Ordenar experiência</option>
+      <option value="maior">Maior experiência</option>
+      <option value="menor">Menor experiência</option>
+    </select>
 
-</div>
-    
+  </div>
+
+  <div class="filtros-acoes">
+    <button
+      type="button"
+      id="limparFiltrosInstrutores"
+      class="btn-filtro-limpar"
+    >
+      LIMPAR FILTROS
+    </button>
+  </div>
+
+</div>    
     <div id="lista-instrutores-ativos" class="grid-3">
       <p>Carregando instrutores...</p>
     </div>
