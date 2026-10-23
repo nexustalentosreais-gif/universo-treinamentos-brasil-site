@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Administração UTB | Universo Treinamentos Brasil</title>
+
+  <style>
+
+    *{
+      box-sizing:border-box;
+    }
+
+    body{
+      margin:0;
+      font-family:Arial,Helvetica,sans-serif;
+      background:#f4f7fb;
+      color:#172033;
+    }
+
+    header{
+      background:#0b1f44;
+      color:white;
+      padding:22px;
+    }
+
+    .topo{
+      max-width:1200px;
+      margin:auto;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+      flex-wrap:wrap;
+    }
+
+    .marca h1{
+      margin:0;
+      font-size:25px;
+    }
+
+    .marca p{
+      margin:5px 0 0;
+      opacity:.8;
+    }
+
+    .sair{
+      background:#ffffff;
+      color:#0b1f44;
+      border:0;
+      border-radius:10px;
+      padding:11px 18px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    main{
+      max-width:1200px;
+      margin:40px auto;
+      padding:0 20px 50px;
+    }
+
+    .titulo{
+      margin-bottom:28px;
+    }
+
+    .titulo h2{
+      margin:0 0 8px;
+      font-size:32px;
+    }
+
+    .titulo p{
+      margin:0;
+      color:#687386;
+      font-size:16px;
+    }
+
+    .grade{
+      display:grid;
+
+      grid-template-columns:
+        repeat(auto-fit,minmax(260px,1fr));
+
+      gap:20px;
+    }
+
+    .card{
+      background:white;
+      border:1px solid #dce3ee;
+      border-radius:17px;
+      padding:26px;
+      min-height:210px;
+
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+
+      box-shadow:
+        0 6px 18px rgba(0,0,0,.05);
+    }
+
+    .card h3{
+      margin:0 0 12px;
+      color:#0b1f44;
+      font-size:22px;
+    }
+
+    .card p{
+      margin:0 0 22px;
+      color:#5f697a;
+      line-height:1.5;
+    }
+
+    .botao{
+      background:#0b1f44;
+      color:white;
+      border:0;
+      border-radius:10px;
+      padding:13px 16px;
+      font-weight:bold;
+      cursor:pointer;
+      width:100%;
+      font-size:14px;
+    }
+
+    .botao:hover{
+      background:#17396f;
+    }
+
+    .futuro{
+      border-style:dashed;
+      opacity:.65;
+    }
+
+    .futuro .botao{
+      background:#8b95a5;
+      cursor:not-allowed;
+    }
+
+    .rodape-info{
+      margin-top:35px;
+      padding:18px;
+      background:#e8f1ff;
+      border-radius:12px;
+      color:#33445e;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<header>
+
+  <div class="topo">
+
+    <div class="marca">
+
+      <h1>
+        Administração UTB
+      </h1>
+
+      <p>
+        Universo Treinamentos Brasil
+      </p>
+
+    </div>
+
+    <button
+      class="sair"
+      id="btnSair"
+      type="button"
+    >
+      SAIR
+    </button>
+
+  </div>
+
+</header>
+
+
+<main>
+
+  <section class="titulo">
+
+    <h2>
+      Painel Administrativo
+    </h2>
+
+    <p>
+      Escolha abaixo a área que deseja administrar.
+    </p>
+
+  </section>
+
+
+  <section class="grade">
+
+
+    <!-- SOLICITAÇÕES -->
+
+    <div class="card">
+
+      <div>
+
+        <h3>
+          Solicitações de Cursos
+        </h3>
+
+        <p>
+          Consulte empresas interessadas,
+          acompanhe pedidos, altere status
+          e defina instrutores.
+        </p>
+
+      </div>
+
+      <button
+        class="botao"
+        type="button"
+        onclick="abrirPagina(
+          'admin-solicitacoes-cursos.html'
+        )"
+      >
+        ABRIR SOLICITAÇÕES
+      </button>
+
+    </div>
+
+
+    <!-- INSTRUTORES -->
+
+    <div class="card">
+
+      <div>
+
+        <h3>
+          Instrutores
+        </h3>
+
+        <p>
+          Analise novos cadastros,
+          documentação, formação UTB
+          e situação dos candidatos.
+        </p>
+
+      </div>
+
+      <button
+        class="botao"
+        type="button"
+        onclick="abrirPagina(
+          'admin-instrutores.html'
+        )"
+      >
+        ABRIR INSTRUTORES
+      </button>
+
+    </div>
+
+
+    <!-- BANCO DE INSTRUTORES -->
+
+    <div class="card">
+
+      <div>
+
+        <h3>
+          Banco de Instrutores
+        </h3>
+
+        <p>
+          Consulte apenas instrutores ativos
+          e pesquise por cidade, curso,
+          experiência e disponibilidade.
+        </p>
+
+      </div>
+
+      <button
+        class="botao"
+        type="button"
+        onclick="abrirPagina(
+          'admin-banco-instrutores.html'
+        )"
+      >
+        ABRIR BANCO
+      </button>
+
+    </div>
+
+
+    <!-- ESPAÇO FUTURO -->
+
+    <div class="card futuro">
+
+      <div>
+
+        <h3>
+          Novos Módulos
+        </h3>
+
+        <p>
+          Área preparada para receber
+          propostas comerciais, cursos,
+          certificados, empresas
+          e outros controles UTB.
+        </p>
+
+      </div>
+
+      <button
+        class="botao"
+        type="button"
+        disabled
+      >
+        EM BREVE
+      </button>
+
+    </div>
+
+
+  </section>
+
+
+  <div class="rodape-info">
+
+    Painel central da administração da
+    Universo Treinamentos Brasil.
+
+  </div>
+
+</main>
+
+
+<script>
+
+  const token =
+    sessionStorage.getItem(
+      "utb_access_token"
+    );
+
+
+  if(!token){
+
+    window.location.href =
+      "admin-instrutores.html";
+
+  }
+
+
+  function abrirPagina(pagina){
+
+    window.location.href =
+      pagina;
+
+  }
+
+
+  document
+    .getElementById(
+      "btnSair"
+    )
+    .addEventListener(
+      "click",
+      () => {
+
+        sessionStorage.removeItem(
+          "utb_access_token"
+        );
+
+        window.location.href =
+          "admin-instrutores.html";
+
+      }
+    );
+
+</script>
+
+</body>
+</html>
