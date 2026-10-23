@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Banco de Instrutores | Administração UTB</title>
+
+  <style>
+
+    *{
+      box-sizing:border-box;
+    }
+
+    body{
+      margin:0;
+      font-family:Arial,Helvetica,sans-serif;
+      background:#f5f7fb;
+      color:#172033;
+    }
+
+    .topo{
+      background:#0b1f44;
+      color:#fff;
+      padding:18px 24px;
+    }
+
+    .topo-interno{
+      max-width:1300px;
+      margin:auto;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:15px;
+      flex-wrap:wrap;
+    }
+
+    .topo h1{
+      margin:0;
+      font-size:24px;
+    }
+
+    .topo p{
+      margin:5px 0 0;
+      opacity:.8;
+    }
+
+    .acoes-topo{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    button,
+    .botao{
+      border:0;
+      border-radius:10px;
+      padding:12px 18px;
+      font-weight:700;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .botao-claro{
+      background:#fff;
+      color:#0b1f44;
+    }
+
+    .botao-sair{
+      background:#202b40;
+      color:#fff;
+    }
+
+    main{
+      max-width:1300px;
+      margin:30px auto;
+      padding:0 20px 50px;
+    }
+
+    .cabecalho{
+      margin-bottom:22px;
+    }
+
+    .cabecalho h2{
+      margin:0 0 8px;
+      font-size:32px;
+    }
+
+    .cabecalho p{
+      margin:0;
+      color:#5d687c;
+    }
+
+    .filtros-box{
+      background:#e8f1ff;
+      border:1px solid #cbdaf2;
+      border-radius:18px;
+      padding:22px;
+      margin-bottom:24px;
+    }
+
+    .filtros-box h3{
+      margin:0 0 8px;
+    }
+
+    .filtros-box p{
+      margin:0 0 18px;
+      color:#4e5d75;
+    }
+
+    .filtros-grid{
+      display:grid;
+      grid-template-columns:
+        repeat(auto-fit,minmax(190px,1fr));
+      gap:14px;
+    }
+
+    .filtros-grid input,
+    .filtros-grid select{
+      width:100%;
+      height:50px;
+      border:1px solid #c5cfdf;
+      border-radius:11px;
+      padding:0 14px;
+      background:#fff;
+      color:#172033;
+      font-size:15px;
+    }
+
+    .filtros-acoes{
+      margin-top:15px;
+    }
+
+    #limparFiltros{
+      background:#0b1f44;
+      color:#fff;
+    }
+
+    .resumo{
+      margin:18px 0;
+      font-weight:700;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:
+        repeat(auto-fit,minmax(300px,1fr));
+      gap:18px;
+    }
+
+    .card{
+      background:#fff;
+      border:1px solid #dce3ee;
+      border-radius:16px;
+      padding:22px;
+      box-shadow:0 7px 22px rgba(0,0,0,.05);
+    }
+
+    .card h3{
+      margin:0 0 16px;
+      font-size:22px;
+      color:#0b1f44;
+    }
+
+    .card p{
+      margin:9px 0;
+      line-height:1.45;
+    }
+
+    .card strong{
+      color:#172033;
+    }
+
+    .contato{
+      margin-top:16px;
+      padding-top:14px;
+      border-top:1px solid #e2e7ef;
+    }
+
+    .status{
+      display:inline-block;
+      background:#e8f7ed;
+      color:#176b36;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:700;
+      font-size:13px;
+      margin-bottom:12px;
+    }
+
+    .mensagem{
+      background:#fff;
+      border:1px solid #dce3ee;
+      border-radius:14px;
+      padding:20px;
+    }
+
+    .erro{
+      color:#a32424;
+      font-weight:700;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <header class="topo">
+
+    <div class="topo-interno">
+
+      <div>
+        <h1>Banco de Instrutores Ativos UTB</h1>
+        <p>Área restrita à administração</p>
+      </div>
+
+      <div class="acoes-topo">
+
+        <a
+          href="admin-instrutores.html"
+          class="botao botao-claro"
+        >
+          ADMINISTRAÇÃO DE INSTRUTORES
+        </a>
+
+        <button
+          type="button"
+          class="botao botao-sair"
+          id="btnSair"
+        >
+          SAIR
+        </button>
+
+      </div>
+
+    </div>
+
+  </header>
+
+  <main>
+
+    <div class="cabecalho">
+
+      <h2>Pesquisar instrutores ativos</h2>
+
+      <p>
+        Localize profissionais disponíveis para atender
+        solicitações de cursos da Universo Treinamentos Brasil.
+      </p>
+
+    </div>
+
+    <section class="filtros-box">
+
+      <h3>Filtros</h3>
+
+      <p>
+        Pesquise por nome, cidade, curso, experiência
+        ou disponibilidade para viagens.
+      </p>
+
+      <div class="filtros-grid">
+
+        <input
+          id="filtroNome"
+          type="text"
+          placeholder="Nome do instrutor"
+        >
+
+        <input
+          id="filtroCidade"
+          type="text"
+          placeholder="Cidade / UF"
+        >
+
+        <input
+          id="filtroCurso"
+          type="text"
+          placeholder="Área ou curso"
+        >
+
+        <select id="filtroExperiencia">
+
+          <option value="">
+            Experiência mínima
+          </option>
+
+          <option value="1">1 ano ou mais</option>
+          <option value="3">3 anos ou mais</option>
+          <option value="5">5 anos ou mais</option>
+          <option value="10">10 anos ou mais</option>
+          <option value="15">15 anos ou mais</option>
+          <option value="20">20 anos ou mais</option>
+
+        </select>
+
+        <select id="filtroViagens">
+
+          <option value="">
+            Viagens: todos
+          </option>
+
+          <option value="sim">
+            Disponível para viagens
+          </option>
+
+          <option value="nao">
+            Não disponível
+          </option>
+
+        </select>
+
+        <select id="ordenarExperiencia">
+
+          <option value="">
+            Ordenar experiência
+          </option>
+
+          <option value="maior">
+            Maior experiência
+          </option>
+
+          <option value="menor">
+            Menor experiência
+          </option>
+
+        </select>
+
+      </div>
+
+      <div class="filtros-acoes">
+
+        <button
+          type="button"
+          id="limparFiltros"
+        >
+          LIMPAR FILTROS
+        </button>
+
+      </div>
+
+    </section>
+
+    <div
+      id="resumo"
+      class="resumo"
+    >
+      Carregando banco de instrutores...
+    </div>
+
+    <div
+      id="listaInstrutores"
+      class="grid"
+    ></div>
+
+  </main>
+
+  <script>
+
+    /*
+      IMPORTANTE:
+      copie os mesmos valores usados no
+      admin-instrutores.html
+    */
+
+    const SUPABASE_URL =
+      "https://xkxlgmmssvllcmhymibj.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV";
+
+
+    let todosInstrutores = [];
+
+
+    function normalizar(valor){
+
+      return String(valor || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g,"");
+
+    }
+
+
+    function experienciaNumero(valor){
+
+      const numero =
+        parseInt(valor,10);
+
+      return Number.isNaN(numero)
+        ? 0
+        : numero;
+
+    }
+
+
+    function escapar(valor){
+
+      const div =
+        document.createElement("div");
+
+      div.textContent =
+        valor ?? "";
+
+      return div.innerHTML;
+
+    }
+
+
+    function renderizar(){
+
+      const nome =
+        normalizar(
+          document.getElementById(
+            "filtroNome"
+          ).value
+        );
+
+      const cidade =
+        normalizar(
+          document.getElementById(
+            "filtroCidade"
+          ).value
+        );
+
+      const curso =
+        normalizar(
+          document.getElementById(
+            "filtroCurso"
+          ).value
+        );
+
+      const experienciaMinima =
+        Number(
+          document.getElementById(
+            "filtroExperiencia"
+          ).value || 0
+        );
+
+      const viagens =
+        normalizar(
+          document.getElementById(
+            "filtroViagens"
+          ).value
+        );
+
+      const ordenar =
+        document.getElementById(
+          "ordenarExperiencia"
+        ).value;
+
+
+      let resultado =
+        todosInstrutores.filter(i => {
+
+          const nomeOk =
+            normalizar(
+              i.nome_completo
+            ).includes(nome);
+
+          const cidadeOk =
+            normalizar(
+              i.cidade_uf
+            ).includes(cidade);
+
+          const cursoOk =
+            normalizar(
+              i.area_cursos
+            ).includes(curso);
+
+          const experienciaOk =
+            experienciaNumero(
+              i.anos_experiencia
+            ) >= experienciaMinima;
+
+          let viagensOk = true;
+
+          if(viagens){
+
+            viagensOk =
+              normalizar(
+                i.disponibilidade_viagens
+              ) === viagens;
+
+          }
+
+          return (
+            nomeOk &&
+            cidadeOk &&
+            cursoOk &&
+            experienciaOk &&
+            viagensOk
+          );
+
+        });
+
+
+      if(ordenar === "maior"){
+
+        resultado.sort(
+          (a,b) =>
+            experienciaNumero(
+              b.anos_experiencia
+            ) -
+            experienciaNumero(
+              a.anos_experiencia
+            )
+        );
+
+      }
+
+
+      if(ordenar === "menor"){
+
+        resultado.sort(
+          (a,b) =>
+            experienciaNumero(
+              a.anos_experiencia
+            ) -
+            experienciaNumero(
+              b.anos_experiencia
+            )
+        );
+
+      }
+
+
+      const resumo =
+        document.getElementById(
+          "resumo"
+        );
+
+      resumo.textContent =
+        `${resultado.length} instrutor(es) encontrado(s)`;
+
+
+      const lista =
+        document.getElementById(
+          "listaInstrutores"
+        );
+
+
+      if(resultado.length === 0){
+
+        lista.innerHTML = `
+          <div class="mensagem">
+            Nenhum instrutor ativo encontrado
+            com esses filtros.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      lista.innerHTML =
+        resultado.map(i => `
+
+          <article class="card">
+
+            <span class="status">
+              ATIVO
+            </span>
+
+            <h3>
+              ${escapar(i.nome_completo)}
+            </h3>
+
+            <p>
+              <strong>Cidade / UF:</strong>
+              ${escapar(i.cidade_uf)}
+            </p>
+
+            <p>
+              <strong>Área / Cursos:</strong>
+              ${escapar(i.area_cursos)}
+            </p>
+
+            <p>
+              <strong>Experiência:</strong>
+              ${escapar(i.anos_experiencia)}
+            </p>
+
+            <p>
+              <strong>Empresa atual:</strong>
+              ${escapar(i.empresa_atual || "-")}
+            </p>
+
+            <p>
+              <strong>Disponibilidade para viagens:</strong>
+              ${escapar(
+                i.disponibilidade_viagens
+              )}
+            </p>
+
+            <p>
+              <strong>Experiência profissional:</strong>
+              ${escapar(
+                i.experiencia_profissional
+              )}
+            </p>
+
+            <p>
+              <strong>Formação / Qualificações:</strong>
+              ${escapar(
+                i.formacao_qualificacoes
+              )}
+            </p>
+
+            <p>
+              <strong>Experiência como instrutor:</strong>
+              ${escapar(
+                i.experiencia_instrutor
+              )}
+            </p>
+
+            <div class="contato">
+
+              <p>
+                <strong>Telefone / WhatsApp:</strong>
+                ${escapar(
+                  i.telefone_whatsapp
+                )}
+              </p>
+
+              <p>
+                <strong>E-mail:</strong>
+                ${escapar(i.email)}
+              </p>
+
+            </div>
+
+          </article>
+
+        `).join("");
+
+    }
+
+
+    async function carregarBanco(){
+
+      const token =
+        sessionStorage.getItem(
+          "utb_access_token"
+        );
+
+
+      if(!token){
+
+        window.location.href =
+          "admin-instrutores.html";
+
+        return;
+
+      }
+
+
+      const resumo =
+        document.getElementById(
+          "resumo"
+        );
+
+
+      try{
+
+        const resposta =
+          await fetch(
+            `${SUPABASE_URL}/functions/v1/listar-instrutores-ativos`,
+            {
+              method:"GET",
+
+              headers:{
+                "apikey":
+                  SUPABASE_KEY,
+
+                "Authorization":
+                  `Bearer ${token}`
+              }
+            }
+          );
+
+
+        const dados =
+          await resposta.json();
+
+
+        if(
+          resposta.status === 401 ||
+          resposta.status === 403
+        ){
+
+          sessionStorage.removeItem(
+            "utb_access_token"
+          );
+
+          window.location.href =
+            "admin-instrutores.html";
+
+          return;
+
+        }
+
+
+        if(!resposta.ok){
+
+          throw new Error(
+            dados.error ||
+            "Não foi possível carregar o banco."
+          );
+
+        }
+
+
+        todosInstrutores =
+          dados.instrutores || [];
+
+
+        renderizar();
+
+
+      }catch(erro){
+
+        resumo.innerHTML =
+          `<span class="erro">
+            ${escapar(erro.message)}
+          </span>`;
+
+      }
+
+    }
+
+
+    [
+      "filtroNome",
+      "filtroCidade",
+      "filtroCurso",
+      "filtroExperiencia",
+      "filtroViagens",
+      "ordenarExperiencia"
+    ].forEach(id => {
+
+      const campo =
+        document.getElementById(id);
+
+      campo.addEventListener(
+        "input",
+        renderizar
+      );
+
+      campo.addEventListener(
+        "change",
+        renderizar
+      );
+
+    });
+
+
+    document
+      .getElementById(
+        "limparFiltros"
+      )
+      .addEventListener(
+        "click",
+        () => {
+
+          document.getElementById(
+            "filtroNome"
+          ).value = "";
+
+          document.getElementById(
+            "filtroCidade"
+          ).value = "";
+
+          document.getElementById(
+            "filtroCurso"
+          ).value = "";
+
+          document.getElementById(
+            "filtroExperiencia"
+          ).value = "";
+
+          document.getElementById(
+            "filtroViagens"
+          ).value = "";
+
+          document.getElementById(
+            "ordenarExperiencia"
+          ).value = "";
+
+          renderizar();
+
+        }
+      );
+
+
+    document
+      .getElementById(
+        "btnSair"
+      )
+      .addEventListener(
+        "click",
+        () => {
+
+          sessionStorage.removeItem(
+            "utb_access_token"
+          );
+
+          window.location.href =
+            "admin-instrutores.html";
+
+        }
+      );
+
+
+    carregarBanco();
+
+  </script>
+
+</body>
+</html>
