@@ -416,7 +416,18 @@ tr:last-child td{border-bottom:none}
 </div>
 
 </div></section>
+<section class="section white">
+  <div class="container">
+    <div class="head">
+      <h2>Banco de Instrutores UTB</h2>
+      <p>Profissionais ativos e aprovados pela Universo Treinamentos Brasil.</p>
+    </div>
 
+    <div id="lista-instrutores-ativos" class="grid-3">
+      <p>Carregando instrutores...</p>
+    </div>
+  </div>
+</section>
 <section class="section" id="cadastro"><div class="container split">
 <form class="form" id="partner-form">
 <h2 style="margin-top:0">Cadastro rápido e gratuito de instrutor</h2>
@@ -724,8 +735,75 @@ if(certForm){
     }
   });
 }
+  async function carregarInstrutoresAtivos(){
+
+  const lista = document.getElementById("lista-instrutores-ativos");
+
+  if(!lista) return;
+
+  try{
+
+    const resposta = await fetch(
+      `${SUPABASE_URL}/functions/v1/listar-instrutores-ativos`
+    );
+
+    const dados = await resposta.json();
+
+    if(!resposta.ok){
+      throw new Error(
+        dados.error || "Erro ao carregar instrutores."
+      );
+    }
+
+    const instrutores = dados.instrutores || [];
+
+    if(instrutores.length === 0){
+      lista.innerHTML =
+        "<p>Nenhum instrutor ativo disponível no momento.</p>";
+      return;
+    }
+
+    lista.innerHTML = instrutores.map(i => `
+      <article class="card">
+        <h3>${i.nome_completo || ""}</h3>
+
+        <p>
+          <strong>Cidade / UF:</strong>
+          ${i.cidade_uf || "-"}
+        </p>
+
+        <p>
+          <strong>Área / Cursos:</strong>
+          ${i.area_cursos || "-"}
+        </p>
+
+        <p>
+          <strong>Experiência:</strong>
+          ${i.anos_experiencia || "-"}
+        </p>
+
+        <p>
+          <strong>Disponibilidade para viagens:</strong>
+          ${i.disponibilidade_viagens || "-"}
+        </p>
+
+        <p>
+          <strong>Formação / Qualificações:</strong>
+          ${i.formacao_qualificacoes || "-"}
+        </p>
+      </article>
+    `).join("");
+
+  }catch(erro){
+
+    lista.innerHTML =
+      "<p>Não foi possível carregar os instrutores.</p>";
+
+  }
+}
+
+carregarInstrutoresAtivos();
 
 </script>
-
 </body>
 </html>
