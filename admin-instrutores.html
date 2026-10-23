@@ -520,8 +520,19 @@ async function salvar(id){
     );
 
     if(!resposta.ok){
-      throw new Error("Não foi possível salvar.");
-    }
+
+  let erroServidor = {};
+
+  try{
+    erroServidor = await resposta.json();
+  }catch(e){}
+
+  throw new Error(
+    erroServidor.message ||
+    erroServidor.details ||
+    "Não foi possível salvar."
+  );
+}
 
     msg.innerHTML =
       '<p class="sucesso">Decisão salva com sucesso.</p>';
