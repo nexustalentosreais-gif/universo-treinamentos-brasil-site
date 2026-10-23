@@ -744,10 +744,15 @@ if(certForm){
   try{
 
     const resposta = await fetch(
-      `${SUPABASE_URL}/functions/v1/listar-instrutores-ativos`
-    );
-
-    const dados = await resposta.json();
+  `${SUPABASE_URL}/functions/v1/listar-instrutores-ativos`,
+  {
+    method:"GET",
+    headers:{
+      "apikey":SUPABASE_KEY,
+      "Authorization":`Bearer ${SUPABASE_KEY}`
+    }
+  }
+);    const dados = await resposta.json();
 
     if(!resposta.ok){
       throw new Error(
