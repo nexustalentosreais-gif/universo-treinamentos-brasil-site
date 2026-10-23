@@ -911,6 +911,29 @@ function aplicarFiltrosInstrutores(){
   const ordenar =
     document.getElementById("ordenarExperienciaInstrutor").value;
 
+  const existeFiltro =
+  nome ||
+  cidade ||
+  curso ||
+  experienciaMinima > 0 ||
+  viagens ||
+  ordenar;
+
+if(!existeFiltro){
+
+  lista.innerHTML = `
+    <div class="card">
+      <strong>Pesquise no Banco de Instrutores UTB</strong>
+      <p>
+        Utilize os filtros acima para localizar profissionais
+        por nome, cidade, curso, experiência ou disponibilidade.
+      </p>
+    </div>
+  `;
+
+  return;
+}
+
   let resultado = todosInstrutoresAtivos.filter(i => {
 
     const correspondeNome =
