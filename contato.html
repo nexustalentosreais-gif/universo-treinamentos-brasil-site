@@ -535,9 +535,11 @@ function collect(form){
 
 const quoteForm=$("#quote-form");
 if(quoteForm){
-  quoteForm.addEventListener("submit",e=>{
+  quoteForm.addEventListener("submit", async e=>{
     e.preventDefault();
     const d=collect(quoteForm);
+    try{const resposta=await fetch("https://xkxlgmmssvllcmhymibj.supabase.co/functions/v1/registrar-solicitacao-curso",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({empresa:d.empresa||"",cnpj:d.cnpj||"",responsavel:d.nome||"",email:d.email||"",telefone_whatsapp:d.telefone||"",curso:d.curso||"",cidade_uf:d.cidade||"",quantidade_participantes:d.participantes||null,data_preferencial:d.data_preferencial||null,observacoes:d.mensagem||""})});const dadosSolicitacao=await resposta.json();if(!resposta.ok){throw new Error(dadosSolicitacao.error||"Não foi possível registrar a solicitação.");}}catch(erro){alert("Erro ao enviar solicitação: "+erro.message);return;}
+
     const msg=[
       "Olá! Gostaria de solicitar uma proposta do Universo Treinamentos Brasil.",
       "",
