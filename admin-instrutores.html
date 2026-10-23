@@ -530,7 +530,7 @@ async function salvar(id){
   throw new Error(
     erroServidor.message ||
     erroServidor.details ||
-    "Não foi possível salvar."
+    "Não é possível aprovar ou ativar: existem documentos pendentes ou reprovados."
   );
 }
 
