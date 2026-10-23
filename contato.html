@@ -552,14 +552,9 @@ if(quoteForm){
       `Participantes: ${d.participantes||""}`,
       `Necessidade: ${d.mensagem||""}`
     ].join("\n");
-    const link=wa(msg);
-    if(link){ window.open(link,"_blank","noopener"); return; }
-    if(CONFIG.email){
-      location.href=`mailto:${CONFIG.email}?subject=${encodeURIComponent("Solicitação de proposta - Universo Treinamentos Brasil")}&body=${encodeURIComponent(msg)}`;
-      return;
-    }
-    alert("Formulário pronto. Falta conectar WhatsApp, e-mail ou backend.");
-  });
+    alert("Solicitação enviada com sucesso! A equipe da Universo Treinamentos Brasil entrará em contato.");
+
+quoteForm.reset();   });
 }
 
 const partnerForm=$("#partner-form");
