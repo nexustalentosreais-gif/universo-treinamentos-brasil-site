@@ -79,10 +79,53 @@ button,input,textarea,select{font:inherit}
 .brand small{display:block;color:var(--muted);font-size:.72rem;letter-spacing:.035em}
 .links{display:flex;gap:18px;align-items:center;font-weight:850;color:#2b343c}
 .links a:hover{color:#0b7fc8}
-.links .nav-cta{
-  background:var(--black);color:white;padding:11px 16px;border-radius:12px;
-  border:1px solid var(--black);
+.links a:hover{color:#0b7fc8}
+
+.links a.active-page{
+  color:#1598e8;
+  border-bottom:3px solid #1598e8;
+  padding-bottom:5px;
 }
+
+.brasil-love{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-width:76px;
+  margin-left:2px;
+  line-height:1;
+}
+
+.brasil-flag{
+  font-size:34px;
+  line-height:1;
+}
+
+.brasil-text{
+  margin-top:5px;
+  color:#0b4f8a;
+  font-size:.72rem;
+  font-weight:950;
+  white-space:nowrap;
+}
+
+.links .nav-cta{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--black);
+  color:white;
+  padding:10px 14px;
+  border-radius:10px;
+  border:1px solid var(--black);
+  min-width:145px;
+  white-space:nowrap;
+  text-align:center;
+  line-height:1;
+  font-size:.92rem;
+}
+
 .links .nav-cta:hover{background:#23262b;color:white}
 .menu{
   display:none;border:1px solid var(--border);background:white;color:var(--black);
@@ -294,9 +337,13 @@ tr:last-child td{border-bottom:none}
       <a href="empresas.html">Empresas</a>
       <a href="instrutores.html">Instrutores</a>
       <a href="certificados.html">Certificados</a>
-      <a href="depoimentos.html">Depoimentos</a>
+      <a class="active-page" href="depoimentos.html">Depoimentos</a>
       <a href="sobre.html">Sobre</a>
       <a class="nav-cta" href="contato.html#proposta">Solicitar proposta</a>
+      <div class="brasil-love">
+  <span class="brasil-flag">🇧🇷</span>
+  <span class="brasil-text">Ame o Brasil</span>
+</div>
     </nav>
   </div>
 </header>
