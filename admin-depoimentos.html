@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Depoimentos | Administração UTB</title>
+
+  <style>
+    *{
+      box-sizing:border-box;
+    }
+
+    body{
+      margin:0;
+      font-family:Arial,Helvetica,sans-serif;
+      background:#f4f7fb;
+      color:#17345f;
+    }
+
+    header{
+      background:#17345f;
+      color:white;
+      padding:22px 30px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+    }
+
+    header h1{
+      margin:0 0 5px;
+    }
+
+    header p{
+      margin:0;
+      opacity:.75;
+    }
+
+    .top-actions{
+      display:flex;
+      gap:10px;
+    }
+
+    button,select,textarea{
+      font:inherit;
+    }
+
+    .btn-top{
+      border:0;
+      border-radius:9px;
+      padding:12px 18px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .btn-voltar{
+      background:white;
+      color:#17345f;
+    }
+
+    .btn-sair{
+      background:transparent;
+      color:white;
+    }
+
+    main{
+      max-width:1400px;
+      margin:auto;
+      padding:30px;
+    }
+
+    .titulo h2{
+      margin:0 0 7px;
+      font-size:32px;
+    }
+
+    .titulo p{
+      margin:0 0 25px;
+      color:#60718c;
+    }
+
+    .filtros{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      padding:16px;
+      background:#eaf3ff;
+      border-radius:12px;
+      margin-bottom:22px;
+    }
+
+    .filtros select{
+      min-height:45px;
+      border:1px solid #ccd7e6;
+      border-radius:8px;
+      padding:0 12px;
+      background:white;
+    }
+
+    #resumo{
+      margin-bottom:16px;
+      font-weight:700;
+    }
+
+    .lista{
+      display:grid;
+      gap:18px;
+    }
+
+    .card{
+      background:white;
+      border:1px solid #dce5ef;
+      border-radius:14px;
+      padding:22px;
+      box-shadow:0 3px 10px rgba(0,0,0,.04);
+    }
+
+    .card-top{
+      display:flex;
+      justify-content:space-between;
+      gap:15px;
+      margin-bottom:18px;
+    }
+
+    .card h3{
+      margin:0 0 7px;
+    }
+
+    .badge{
+      display:inline-block;
+      padding:5px 10px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      background:#edf4ff;
+    }
+
+    .dados{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      margin-bottom:18px;
+    }
+
+    .dado strong{
+      display:block;
+      margin-bottom:4px;
+    }
+
+    .relato{
+      background:#f7f9fc;
+      padding:15px;
+      border-radius:9px;
+      line-height:1.5;
+      margin-bottom:18px;
+    }
+
+    .fotos{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:18px;
+    }
+
+    .fotos img{
+      width:180px;
+      height:130px;
+      object-fit:cover;
+      border-radius:9px;
+      border:1px solid #d8e0ea;
+      cursor:pointer;
+    }
+
+    .moderacao{
+      display:grid;
+      grid-template-columns:1fr 2fr auto;
+      gap:12px;
+      align-items:end;
+      border-top:1px solid #e1e7ef;
+      padding-top:18px;
+    }
+
+    .moderacao label{
+      display:block;
+      font-weight:700;
+      margin-bottom:7px;
+    }
+
+    .moderacao select,
+    .moderacao textarea{
+      width:100%;
+      border:1px solid #ccd7e6;
+      border-radius:8px;
+      padding:10px;
+    }
+
+    .moderacao textarea{
+      min-height:70px;
+    }
+
+    .salvar{
+      border:0;
+      border-radius:8px;
+      background:#17345f;
+      color:white;
+      padding:13px 20px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .vazio,.erro{
+      background:white;
+      padding:20px;
+      border-radius:10px;
+      border:1px solid #dce5ef;
+    }
+
+    .erro{
+      color:#a12626;
+    }
+
+    @media(max-width:800px){
+      .dados,
+      .filtros,
+      .moderacao{
+        grid-template-columns:1fr;
+      }
+
+      header{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div>
+    <h1>Depoimentos UTB</h1>
+    <p>Moderação administrativa</p>
+  </div>
+
+  <div class="top-actions">
+    <button id="btnVoltar" class="btn-top btn-voltar">
+      VOLTAR AO PAINEL
+    </button>
+
+    <button id="btnSair" class="btn-top btn-sair">
+      SAIR
+    </button>
+  </div>
+</header>
+
+<main>
+
+  <section class="titulo">
+    <h2>Conteúdos recebidos</h2>
+    <p>
+      Analise depoimentos, críticas, sugestões e fotos antes da publicação.
+    </p>
+  </section>
+
+  <section class="filtros">
+
+    <select id="filtroStatus">
+      <option value="todos">Todos os status</option>
+      <option value="pendente" selected>Pendentes</option>
+      <option value="aprovado">Aprovados</option>
+      <option value="reprovado">Reprovados</option>
+    </select>
+
+    <select id="filtroTipo">
+      <option value="todos">Todos os tipos</option>
+      <option value="depoimento">Depoimentos</option>
+      <option value="critica">Críticas</option>
+      <option value="sugestao">Sugestões</option>
+    </select>
+
+  </section>
+
+  <div id="resumo">Carregando...</div>
+
+  <div id="lista" class="lista"></div>
+
+</main>
+
+<script>
+
+const URL_LISTAR =
+  "https://xkxlgmmssvllcmhymibj.supabase.co/functions/v1/listar-depoimentos-admin";
+
+const URL_MODERAR =
+  "https://xkxlgmmssvllcmhymibj.supabase.co/functions/v1/moderar-depoimento";
+
+let depoimentos = [];
+
+const lista =
+  document.getElementById("lista");
+
+const resumo =
+  document.getElementById("resumo");
+
+const filtroStatus =
+  document.getElementById("filtroStatus");
+
+const filtroTipo =
+  document.getElementById("filtroTipo");
+
+
+function escapar(valor){
+  return String(valor ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+
+function token(){
+  return sessionStorage.getItem(
+    "utb_access_token"
+  );
+}
+
+
+function nomeStatus(status){
+  const nomes={
+    pendente:"Pendente",
+    aprovado:"Aprovado",
+    reprovado:"Reprovado"
+  };
+
+  return nomes[status] || status;
+}
+
+
+function nomeTipo(tipo){
+  const nomes={
+    depoimento:"Depoimento",
+    critica:"Crítica",
+    sugestao:"Sugestão"
+  };
+
+  return nomes[tipo] || tipo;
+}
+
+
+function nomePublicacao(item){
+  if(item.exibicao_nome==="anonimo"){
+    return "Anônimo";
+  }
+
+  if(item.exibicao_nome==="primeiro_nome"){
+    return String(item.nome || "")
+      .split(" ")[0];
+  }
+
+  return item.nome || "-";
+}
+
+
+async function carregar(){
+
+  const accessToken=token();
+
+  if(!accessToken){
+    resumo.textContent=
+      "Sessão administrativa não encontrada.";
+    return;
+  }
+
+  resumo.textContent=
+    "Carregando conteúdos...";
+
+  lista.innerHTML="";
+
+  try{
+
+    const resposta=
+      await fetch(
+        URL_LISTAR,
+        {
+          headers:{
+            Authorization:
+              `Bearer ${accessToken}`
+          }
+        }
+      );
+
+    const dados=
+      await resposta.json();
+
+    if(!resposta.ok){
+      throw new Error(
+        dados.error ||
+        "Erro ao carregar."
+      );
+    }
+
+    depoimentos=
+      dados.depoimentos || [];
+
+    renderizar();
+
+  }catch(erro){
+
+    resumo.textContent=
+      "Erro ao carregar conteúdos.";
+
+    lista.innerHTML=
+      `<div class="erro">
+        ${escapar(erro.message)}
+      </div>`;
+  }
+}
+
+
+function renderizar(){
+
+  const status=
+    filtroStatus.value;
+
+  const tipo=
+    filtroTipo.value;
+
+  const resultado=
+    depoimentos.filter(
+      item =>
+        (
+          status==="todos" ||
+          item.status===status
+        )
+        &&
+        (
+          tipo==="todos" ||
+          item.tipo===tipo
+        )
+    );
+
+  resumo.textContent=
+    `${resultado.length} conteúdo(s) encontrado(s)`;
+
+
+  if(!resultado.length){
+
+    lista.innerHTML=
+      `<div class="vazio">
+        Nenhum conteúdo encontrado.
+      </div>`;
+
+    return;
+  }
+
+
+  lista.innerHTML=
+    resultado
+      .map(card)
+      .join("");
+}
+
+
+function card(item){
+
+  const fotos=
+    (item.fotos || [])
+      .filter(foto => foto.url)
+      .map(
+        foto => `
+          <a
+            href="${escapar(foto.url)}"
+            target="_blank"
+            rel="noopener"
+          >
+            <img
+              src="${escapar(foto.url)}"
+              alt="Foto enviada"
+            >
+          </a>
+        `
+      )
+      .join("");
+
+
+  return `
+    <article class="card">
+
+      <div class="card-top">
+        <div>
+          <h3>
+            ${escapar(nomePublicacao(item))}
+          </h3>
+
+          <span class="badge">
+            ${escapar(nomeTipo(item.tipo))}
+            •
+            ${escapar(nomeStatus(item.status))}
+          </span>
+        </div>
+
+        <div>
+          ${item.created_at
+            ? new Date(
+                item.created_at
+              ).toLocaleString("pt-BR")
+            : ""
+          }
+        </div>
+      </div>
+
+
+      <div class="dados">
+
+        <div class="dado">
+          <strong>Nome enviado</strong>
+          ${escapar(item.nome)}
+        </div>
+
+        <div class="dado">
+          <strong>E-mail</strong>
+          ${escapar(item.email)}
+        </div>
+
+        <div class="dado">
+          <strong>Curso</strong>
+          ${escapar(item.curso)}
+        </div>
+
+        <div class="dado">
+          <strong>Cidade / UF</strong>
+          ${escapar(item.cidade || "-")}
+        </div>
+
+      </div>
+
+
+      <div class="relato">
+        <strong>Relato</strong>
+        <br><br>
+        ${escapar(item.relato)}
+      </div>
+
+
+      ${
+        fotos
+          ? `<div class="fotos">${fotos}</div>`
+          : ""
+      }
+
+
+      <div class="moderacao">
+
+        <div>
+          <label>Status</label>
+
+          <select id="status-${item.id}">
+            <option
+              value="pendente"
+              ${item.status==="pendente" ? "selected" : ""}
+            >
+              Pendente
+            </option>
+
+            <option
+              value="aprovado"
+              ${item.status==="aprovado" ? "selected" : ""}
+            >
+              Aprovado
+            </option>
+
+            <option
+              value="reprovado"
+              ${item.status==="reprovado" ? "selected" : ""}
+            >
+              Reprovado
+            </option>
+          </select>
+        </div>
+
+
+        <div>
+          <label>
+            Observação administrativa
+          </label>
+
+          <textarea
+            id="obs-${item.id}"
+          >${escapar(item.observacao_admin || "")}</textarea>
+        </div>
+
+
+        <button
+          class="salvar"
+          id="salvar-${item.id}"
+          onclick="moderar('${item.id}')"
+        >
+          SALVAR
+        </button>
+
+      </div>
+
+    </article>
+  `;
+}
+
+
+async function moderar(id){
+
+  const accessToken=token();
+
+  const status=
+    document.getElementById(
+      `status-${id}`
+    ).value;
+
+  const observacao=
+    document.getElementById(
+      `obs-${id}`
+    ).value;
+
+  const botao=
+    document.getElementById(
+      `salvar-${id}`
+    );
+
+  botao.disabled=true;
+  botao.textContent="SALVANDO...";
+
+
+  try{
+
+    const resposta=
+      await fetch(
+        URL_MODERAR,
+        {
+          method:"PATCH",
+
+          headers:{
+            "Content-Type":
+              "application/json",
+
+            Authorization:
+              `Bearer ${accessToken}`
+          },
+
+          body:JSON.stringify({
+            id,
+            status,
+            observacao_admin:
+              observacao
+          })
+        }
+      );
+
+
+    const dados=
+      await resposta.json();
+
+
+    if(!resposta.ok){
+      throw new Error(
+        dados.error ||
+        "Erro ao salvar."
+      );
+    }
+
+
+    const item=
+      depoimentos.find(
+        d => d.id===id
+      );
+
+
+    if(item){
+      item.status=status;
+      item.observacao_admin=
+        observacao;
+    }
+
+
+    alert(
+      "Moderação salva com sucesso."
+    );
+
+    renderizar();
+
+  }catch(erro){
+
+    alert(
+      erro.message ||
+      "Erro ao salvar moderação."
+    );
+
+  }finally{
+
+    if(
+      document.getElementById(
+        `salvar-${id}`
+      )
+    ){
+      document.getElementById(
+        `salvar-${id}`
+      ).disabled=false;
+
+      document.getElementById(
+        `salvar-${id}`
+      ).textContent="SALVAR";
+    }
+  }
+}
+
+
+filtroStatus.addEventListener(
+  "change",
+  renderizar
+);
+
+filtroTipo.addEventListener(
+  "change",
+  renderizar
+);
+
+
+document
+  .getElementById("btnVoltar")
+  .addEventListener(
+    "click",
+    () => {
+      history.back();
+    }
+  );
+
+
+document
+  .getElementById("btnSair")
+  .addEventListener(
+    "click",
+    () => {
+      sessionStorage.removeItem(
+        "utb_access_token"
+      );
+
+      location.href=
+        "admin-instrutores.html";
+    }
+  );
+
+
+carregar();
+
+</script>
+
+</body>
+</html>
