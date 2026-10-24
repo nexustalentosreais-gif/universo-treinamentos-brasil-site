@@ -1,1087 +1,1803 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-  <meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-  <title>Solicitações de Cursos | Administração UTB</title>
+    <title>
+        Solicitações de Cursos | Administração UTB
+    </title>
 
-  <style>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-    *{
-      box-sizing:border-box;
-    }
+        body {
+            margin: 0;
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+            background: #f4f7fb;
+            color: #16345f;
+        }
 
-    body{
-      margin:0;
-      font-family:Arial,Helvetica,sans-serif;
-      background:#f5f7fb;
-      color:#172033;
-    }
+        header {
+            background: #17345f;
+            color: white;
+            padding: 22px 30px;
 
-    .topo{
-      background:#0b1f44;
-      color:#fff;
-      padding:18px 24px;
-    }
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
 
-    .topo-interno{
-      max-width:1400px;
-      margin:auto;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:15px;
-      flex-wrap:wrap;
-    }
+        header h1 {
+            margin: 0 0 6px;
+            font-size: 25px;
+        }
 
-    .topo h1{
-      margin:0;
-      font-size:24px;
-    }
+        header p {
+            margin: 0;
+            opacity: 0.75;
+        }
 
-    .topo p{
-      margin:5px 0 0;
-      opacity:.8;
-    }
+        .acoes-topo {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
 
-    .acoes-topo{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
+        button,
+        select,
+        input {
+            font: inherit;
+        }
 
-    button,
-    .botao{
-      border:0;
-      border-radius:10px;
-      padding:12px 16px;
-      font-weight:700;
-      cursor:pointer;
-      text-decoration:none;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-    }
+        .btn-topo {
+            border: 0;
+            border-radius: 10px;
+            padding: 13px 18px;
+            font-weight: 700;
+            cursor: pointer;
+        }
 
-    .botao-claro{
-      background:#fff;
-      color:#0b1f44;
-    }
+        #btnVoltar {
+            background: white;
+            color: #17345f;
+        }
 
-    .botao-escuro{
-      background:#202b40;
-      color:#fff;
-    }
+        #btnSair {
+            background: transparent;
+            color: white;
+        }
 
-    main{
-      max-width:1400px;
-      margin:30px auto;
-      padding:0 20px 50px;
-    }
+        main {
+            max-width: 1450px;
+            margin: auto;
+            padding: 30px;
+        }
 
-    .cabecalho h2{
-      margin:0 0 8px;
-      font-size:32px;
-    }
+        .titulo {
+            margin-bottom: 28px;
+        }
 
-    .cabecalho p{
-      margin:0;
-      color:#5d687c;
-    }
+        .titulo h2 {
+            margin: 0 0 8px;
+            font-size: 34px;
+        }
 
-    .filtros{
-      margin-top:24px;
-      background:#e8f1ff;
-      border:1px solid #cad9f0;
-      border-radius:16px;
-      padding:20px;
-    }
+        .titulo p {
+            margin: 0;
+            color: #60718c;
+        }
 
-    .filtros-grid{
-      display:grid;
-      grid-template-columns:
-        repeat(auto-fit,minmax(190px,1fr));
-      gap:12px;
-    }
+        .filtros {
+            background: #eaf3ff;
+            padding: 18px;
+            border-radius: 14px;
 
-    input,
-    select,
-    textarea{
-      width:100%;
-      border:1px solid #c6cfdd;
-      border-radius:9px;
-      padding:11px 12px;
-      font-size:14px;
-      background:#fff;
-    }
+            display: grid;
+            grid-template-columns:
+                repeat(4, minmax(180px, 1fr));
+            gap: 12px;
+        }
 
-    .resumo{
-      margin:22px 0 15px;
-      font-weight:700;
-    }
+        .filtros input,
+        .filtros select {
+            width: 100%;
+            min-height: 46px;
+            border: 1px solid #ccd7e6;
+            border-radius: 9px;
+            background: white;
+            padding: 0 14px;
+            color: #243d61;
+        }
 
-    .lista{
-      display:grid;
-      gap:18px;
-    }
+        .resumo {
+            margin: 22px 0 14px;
+            font-weight: 700;
+            color: #456184;
+        }
 
-    .card{
-      background:#fff;
-      border:1px solid #dce3ee;
-      border-radius:16px;
-      padding:22px;
-      box-shadow:0 6px 18px rgba(0,0,0,.05);
-    }
+        .lista {
+            display: grid;
+            gap: 18px;
+        }
 
-    .card-topo{
-      display:flex;
-      justify-content:space-between;
-      gap:15px;
-      flex-wrap:wrap;
-      margin-bottom:15px;
-    }
+        .vazio {
+            background: white;
+            border: 1px solid #dde5ef;
+            border-radius: 12px;
+            padding: 22px;
+            color: #60718c;
+        }
 
-    .card h3{
-      margin:0 0 5px;
-      color:#0b1f44;
-    }
+        .erro {
+            background: #fff1f1;
+            color: #a12626;
+            border: 1px solid #f2caca;
+            border-radius: 10px;
+            padding: 14px;
+        }
 
-    .status-tag{
-      display:inline-block;
-      border-radius:999px;
-      padding:6px 10px;
-      background:#eef3fa;
-      font-size:13px;
-      font-weight:700;
-    }
+        .card {
+            background: white;
+            border: 1px solid #dde5ef;
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow:
+                0 3px 10px rgba(0, 0, 0, 0.04);
+        }
 
-    .dados{
-      display:grid;
-      grid-template-columns:
-        repeat(auto-fit,minmax(240px,1fr));
-      gap:8px 20px;
-    }
+        .card-topo {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            align-items: flex-start;
+            margin-bottom: 18px;
+        }
 
-    .dados p{
-      margin:5px 0;
-      line-height:1.45;
-    }
+        .card-topo h3 {
+            margin: 0 0 7px;
+            font-size: 21px;
+        }
 
-    .observacoes{
-      margin-top:15px;
-      background:#f8fafc;
-      border-radius:10px;
-      padding:14px;
-    }
+        .badge {
+            display: inline-block;
+            background: #edf4ff;
+            color: #315b93;
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+        }
 
-    .gestao{
-      margin-top:18px;
-      padding-top:18px;
-      border-top:1px solid #e3e8ef;
-      display:grid;
-      grid-template-columns:
-        minmax(180px,1fr)
-        minmax(220px,2fr)
-        auto;
-      gap:12px;
-      align-items:end;
-    }
+        .data {
+            color: #60718c;
+            font-size: 14px;
+            white-space: nowrap;
+        }
 
-    .gestao label{
-      display:block;
-      font-weight:700;
-      margin-bottom:6px;
-    }
+        .dados {
+            display: grid;
+            grid-template-columns:
+                repeat(5, minmax(150px, 1fr));
+            gap: 20px;
+        }
 
-    .salvar{
-      background:#0b1f44;
-      color:#fff;
-      min-height:43px;
-    }
+        .dado {
+            color: #60718c;
+            line-height: 1.5;
+        }
 
-    .mensagem{
-      background:#fff;
-      border:1px solid #dce3ee;
-      border-radius:12px;
-      padding:20px;
-    }
+        .dado strong {
+            color: #294b78;
+        }
 
-    .erro{
-      color:#a32424;
-      font-weight:700;
-    }
+        .necessidade {
+            margin-top: 20px;
+            color: #60718c;
+            line-height: 1.5;
+        }
 
-    @media(max-width:800px){
+        .necessidade strong {
+            color: #294b78;
+        }
 
-      .gestao{
-        grid-template-columns:1fr;
-      }
+        .edicao {
+            margin-top: 22px;
+            padding-top: 20px;
+            border-top: 1px solid #e3e9f1;
 
-    }
+            display: grid;
+            grid-template-columns:
+                1fr 2fr auto;
+            gap: 12px;
+            align-items: end;
+        }
 
-  </style>
+        .campo-edicao label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #36577f;
+        }
+
+        .campo-edicao select {
+            width: 100%;
+            min-height: 45px;
+            border: 1px solid #ccd7e6;
+            border-radius: 8px;
+            background: white;
+            padding: 0 12px;
+        }
+
+        .btn-salvar {
+            min-height: 45px;
+            border: 0;
+            border-radius: 8px;
+            background: #17345f;
+            color: white;
+            padding: 0 22px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-salvar:disabled {
+            opacity: 0.55;
+            cursor: wait;
+        }
+
+        .paginacao {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+            margin: 28px 0;
+        }
+
+        .paginacao button {
+            border: 1px solid #ccd7e6;
+            background: white;
+            color: #244b78;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .paginacao button:disabled {
+            opacity: 0.45;
+            cursor: default;
+        }
+
+        #paginaInfo {
+            color: #60718c;
+            font-weight: 700;
+        }
+
+        @media (max-width: 1000px) {
+            .filtros {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .dados {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .edicao {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            main {
+                padding: 20px 14px;
+            }
+
+            .filtros,
+            .dados {
+                grid-template-columns: 1fr;
+            }
+
+            .card-topo {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-  <header class="topo">
-
-    <div class="topo-interno">
-
-      <div>
+<header>
+    <div>
         <h1>Solicitações de Cursos UTB</h1>
         <p>Área restrita à administração</p>
-      </div>
-
-      <div class="acoes-topo">
-<div class="acoes-topo">
-
-  <a href="admin.html" class="botao botao-claro">
-    VOLTAR AO PAINEL
-  </a>
-
-  <button
-    id="btnSair"
-    class="botao botao-escuro"
-    type="button"
-  >
-    SAIR
-  </button>
-
-</div>
-  </header>
-
-  <main>
-
-    <div class="cabecalho">
-
-      <h2>Pedidos recebidos</h2>
-
-      <p>
-        Consulte solicitações, acompanhe o andamento
-        e defina o instrutor responsável.
-      </p>
-
     </div>
+
+    <div class="acoes-topo">
+        <button
+            id="btnVoltar"
+            class="btn-topo"
+            type="button"
+        >
+            VOLTAR AO PAINEL
+        </button>
+
+        <button
+            id="btnSair"
+            class="btn-topo"
+            type="button"
+        >
+            SAIR
+        </button>
+    </div>
+</header>
+
+<main>
+
+    <section class="titulo">
+        <h2>Pedidos recebidos</h2>
+
+        <p>
+            Consulte solicitações, acompanhe o andamento
+            e defina o instrutor responsável.
+        </p>
+    </section>
 
     <section class="filtros">
 
-      <div class="filtros-grid">
-
         <input
-          id="filtroEmpresa"
-          type="text"
-          placeholder="Empresa / instituição"
+            id="filtroEmpresa"
+            type="text"
+            placeholder="Empresa / instituição"
+            autocomplete="off"
         >
 
         <input
-          id="filtroCurso"
-          type="text"
-          placeholder="Curso"
+            id="filtroCurso"
+            type="text"
+            placeholder="Curso"
+            autocomplete="off"
         >
 
         <input
-          id="filtroCidade"
-          type="text"
-          placeholder="Cidade / UF"
+            id="filtroCidade"
+            type="text"
+            placeholder="Cidade / UF"
+            autocomplete="off"
         >
 
-        <select id="filtroStatus">
+        <select
+            id="filtroStatus"
+            autocomplete="off"
+        >
+            <option
+                value="__selecione__"
+                selected
+            >
+                Selecione o status
+            </option>
 
-          <option value="_selecione_¨ selected disabled>
-            Selecione o status
-          </option>
+            <option value="todos">
+                Todos os status
+            </option>
 
-          <option value="todos">
-            Todos os status
-          </option>
-          
-          <option value="nova">
-            Nova
-          </option>
+            <option value="nova">
+                Nova
+            </option>
 
-          <option value="em_analise">
-            Em análise
-          </option>
+            <option value="em_analise">
+                Em análise
+            </option>
 
-          <option value="aguardando_instrutor">
-            Aguardando instrutor
-          </option>
+            <option value="aguardando_instrutor">
+                Aguardando instrutor
+            </option>
 
-          <option value="instrutor_definido">
-            Instrutor definido
-          </option>
+            <option value="instrutor_definido">
+                Instrutor definido
+            </option>
 
-          <option value="proposta_enviada">
-            Proposta enviada
-          </option>
+            <option value="agendada">
+                Agendada
+            </option>
 
-          <option value="aprovada">
-            Aprovada
-          </option>
+            <option value="concluida">
+                Concluída
+            </option>
 
-          <option value="em_execucao">
-            Em execução
-          </option>
-
-          <option value="concluida">
-            Concluída
-          </option>
-
-          <option value="cancelada">
-            Cancelada
-          </option>
-
+            <option value="cancelada">
+                Cancelada
+            </option>
         </select>
-
-      </div>
 
     </section>
 
     <div
-      id="resumo"
-      class="resumo"
+        id="resumo"
+        class="resumo"
     >
-      Use os filtros acima para localizar as solicitações.
+        Use o campo Status para localizar as solicitações.
     </div>
 
     <div
-      id="lista"
-      class="lista"
+        id="lista"
+        class="lista"
     ></div>
 
-  </main>
+    <div
+        id="paginacao"
+        class="paginacao"
+    >
+        <button
+            id="btnAnterior"
+            type="button"
+        >
+            Anterior
+        </button>
 
+        <span id="paginaInfo"></span>
 
-  <script>
+        <button
+            id="btnProxima"
+            type="button"
+        >
+            Próxima
+        </button>
+    </div>
 
+</main>
+
+<script>
     /*
-      COPIAR OS MESMOS VALORES DE:
-      admin-instrutores.html
-      ou admin-banco-instrutores.html
+    =========================================================
+    ATENÇÃO
+    COPIE OS DOIS VALORES DO ARQUIVO ANTIGO E COLE AQUI.
+    NÃO INVENTE NOVA CHAVE.
+    =========================================================
     */
 
     const SUPABASE_URL =
-      "https://xkxlgmmssvllcmhymibj.supabase.co";
+        "https://xkxlgmmssvllcmhymibj.supabase.co";
 
     const SUPABASE_KEY =
-      "sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV";
+        "sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV";
 
+    /*
+    =========================================================
+    ESTADO DA TELA
+    =========================================================
+    */
 
     let solicitacoes = [];
     let instrutores = [];
 
+    let consultaRealizada = false;
 
-    function escapar(valor){
+    let paginaAtual = 1;
 
-      const div =
-        document.createElement("div");
+    const ITENS_POR_PAGINA = 20;
 
-      div.textContent =
-        valor ?? "";
 
-      return div.innerHTML;
+    /*
+    =========================================================
+    ELEMENTOS
+    =========================================================
+    */
 
+    const filtroEmpresa =
+        document.getElementById("filtroEmpresa");
+
+    const filtroCurso =
+        document.getElementById("filtroCurso");
+
+    const filtroCidade =
+        document.getElementById("filtroCidade");
+
+    const filtroStatus =
+        document.getElementById("filtroStatus");
+
+    const resumo =
+        document.getElementById("resumo");
+
+    const lista =
+        document.getElementById("lista");
+
+    const paginacao =
+        document.getElementById("paginacao");
+
+    const btnAnterior =
+        document.getElementById("btnAnterior");
+
+    const btnProxima =
+        document.getElementById("btnProxima");
+
+    const paginaInfo =
+        document.getElementById("paginaInfo");
+
+
+    /*
+    =========================================================
+    FUNÇÕES AUXILIARES
+    =========================================================
+    */
+
+    function escapar(valor) {
+        return String(valor ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
     }
 
 
-    function normalizar(valor){
-
-      return String(valor || "")
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g,"");
-
+    function normalizar(valor) {
+        return String(valor ?? "")
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .trim();
     }
 
 
-    function nomeStatus(status){
+    function pegar(objeto, ...campos) {
+        for (const campo of campos) {
+            const valor = objeto?.[campo];
 
-      const nomes = {
+            if (
+                valor !== undefined &&
+                valor !== null &&
+                String(valor).trim() !== ""
+            ) {
+                return valor;
+            }
+        }
 
-        nova:
-          "Nova",
-
-        em_analise:
-          "Em análise",
-
-        aguardando_instrutor:
-          "Aguardando instrutor",
-
-        instrutor_definido:
-          "Instrutor definido",
-
-        proposta_enviada:
-          "Proposta enviada",
-
-        aprovada:
-          "Aprovada",
-
-        em_execucao:
-          "Em execução",
-
-        concluida:
-          "Concluída",
-
-        cancelada:
-          "Cancelada"
-
-      };
-
-      return nomes[status] || status;
-
+        return "";
     }
 
 
-    function formatarData(valor){
+    function nomeStatus(status) {
+        const nomes = {
+            nova: "Nova",
+            em_analise: "Em análise",
+            aguardando_instrutor:
+                "Aguardando instrutor",
+            instrutor_definido:
+                "Instrutor definido",
+            agendada: "Agendada",
+            concluida: "Concluída",
+            cancelada: "Cancelada"
+        };
 
-      if(!valor){
-        return "-";
-      }
+        return nomes[status] ||
+            String(status || "-")
+                .replaceAll("_", " ");
+    }
 
-      const data =
-        new Date(valor);
 
-      if(
-        Number.isNaN(
-          data.getTime()
-        )
-      ){
-        return valor;
-      }
+    function formatarData(valor) {
+        if (!valor) {
+            return "-";
+        }
 
-      return data.toLocaleDateString(
-        "pt-BR"
-      );
+        const data = new Date(valor);
 
+        if (Number.isNaN(data.getTime())) {
+            return escapar(valor);
+        }
+
+        return data.toLocaleDateString(
+            "pt-BR"
+        );
+    }
+
+
+    function obterId(solicitacao) {
+        return String(
+            pegar(
+                solicitacao,
+                "id",
+                "solicitacao_id"
+            )
+        );
+    }
+
+
+    /*
+    =========================================================
+    AUTENTICAÇÃO
+    =========================================================
+    */
+
+    function obterToken() {
+        return sessionStorage.getItem(
+            "utb_access_token"
+        );
+    }
+
+
+    function exigirLogin() {
+        const token = obterToken();
+
+        if (!token) {
+            window.location.href =
+                "admin-instrutores.html";
+
+            return false;
+        }
+
+        return true;
+    }
+
+
+    /*
+    =========================================================
+    BUSCA NO SUPABASE
+    =========================================================
+    */
+
+    async function requisicao(
+        caminho,
+        opcoes = {}
+    ) {
+        const token = obterToken();
+
+        const headers = {
+            "apikey": SUPABASE_KEY,
+            "Authorization":
+                `Bearer ${token}`,
+            ...(opcoes.headers || {})
+        };
+
+        const resposta = await fetch(
+            `${SUPABASE_URL}${caminho}`,
+            {
+                ...opcoes,
+                headers
+            }
+        );
+
+        if (
+            resposta.status === 401 ||
+            resposta.status === 403
+        ) {
+            sessionStorage.removeItem(
+                "utb_access_token"
+            );
+
+            window.location.href =
+                "admin-instrutores.html";
+
+            throw new Error(
+                "Sessão expirada."
+            );
+        }
+
+        return resposta;
+    }
+
+
+    async function carregarDados() {
+        if (!exigirLogin()) {
+            return;
+        }
+
+        resumo.textContent =
+            "Carregando solicitações...";
+
+        lista.innerHTML = "";
+
+        paginacao.style.display = "none";
+
+        try {
+            const [
+                respostaSolicitacoes,
+                respostaInstrutores
+            ] = await Promise.all([
+
+                requisicao(
+                    "/functions/v1/admin-solicitacoes-cursos"
+                ),
+
+                requisicao(
+                    "/functions/v1/listar-instrutores-ativos"
+                )
+
+            ]);
+
+
+            const dadosSolicitacoes =
+                await respostaSolicitacoes.json();
+
+            const dadosInstrutores =
+                await respostaInstrutores.json();
+
+
+            if (!respostaSolicitacoes.ok) {
+                throw new Error(
+                    dadosSolicitacoes.error ||
+                    "Erro ao carregar solicitações."
+                );
+            }
+
+
+            if (!respostaInstrutores.ok) {
+                throw new Error(
+                    dadosInstrutores.error ||
+                    "Erro ao carregar instrutores."
+                );
+            }
+
+
+            const recebidas =
+                Array.isArray(
+                    dadosSolicitacoes
+                )
+                    ? dadosSolicitacoes
+                    : (
+                        dadosSolicitacoes
+                            .solicitacoes || []
+                    );
+
+
+            /*
+            Remove somente repetição do MESMO ID.
+            Não apaga solicitações diferentes.
+            */
+
+            const mapa = new Map();
+
+            recebidas.forEach(
+                (solicitacao, indice) => {
+
+                    const id =
+                        obterId(solicitacao);
+
+                    const chave =
+                        id ||
+                        `sem-id-${indice}`;
+
+                    if (!mapa.has(chave)) {
+                        mapa.set(
+                            chave,
+                            solicitacao
+                        );
+                    }
+                }
+            );
+
+
+            solicitacoes =
+                Array.from(mapa.values());
+
+
+            instrutores =
+                Array.isArray(
+                    dadosInstrutores
+                )
+                    ? dadosInstrutores
+                    : (
+                        dadosInstrutores
+                            .instrutores || []
+                    );
+
+
+            consultaRealizada = true;
+
+            paginaAtual = 1;
+
+            renderizar();
+
+        } catch (erro) {
+
+            console.error(erro);
+
+            resumo.textContent =
+                "Não foi possível carregar as solicitações.";
+
+            lista.innerHTML =
+                `<div class="erro">
+                    ${escapar(erro.message)}
+                </div>`;
+        }
+    }
+
+
+    /*
+    =========================================================
+    FILTROS
+    =========================================================
+    */
+
+    function obterResultadoFiltrado() {
+        const empresa =
+            normalizar(
+                filtroEmpresa.value
+            );
+
+        const curso =
+            normalizar(
+                filtroCurso.value
+            );
+
+        const cidade =
+            normalizar(
+                filtroCidade.value
+            );
+
+        const status =
+            filtroStatus.value;
+
+
+        if (
+            status === "__selecione__"
+        ) {
+            return [];
+        }
+
+
+        return solicitacoes.filter(
+            (s) => {
+
+                const nomeEmpresa =
+                    normalizar(
+                        pegar(
+                            s,
+                            "empresa_instituicao",
+                            "empresa",
+                            "empresa_nome",
+                            "instituicao"
+                        )
+                    );
+
+
+                const nomeCurso =
+                    normalizar(
+                        pegar(
+                            s,
+                            "curso",
+                            "curso_nome",
+                            "nome_curso"
+                        )
+                    );
+
+
+                const cidadeUf =
+                    normalizar(
+                        pegar(
+                            s,
+                            "cidade_uf",
+                            "cidade",
+                            "cidadeUF"
+                        )
+                    );
+
+
+                const statusSolicitacao =
+                    String(
+                        pegar(
+                            s,
+                            "status"
+                        )
+                    );
+
+
+                const empresaOk =
+                    !empresa ||
+                    nomeEmpresa.includes(
+                        empresa
+                    );
+
+
+                const cursoOk =
+                    !curso ||
+                    nomeCurso.includes(
+                        curso
+                    );
+
+
+                const cidadeOk =
+                    !cidade ||
+                    cidadeUf.includes(
+                        cidade
+                    );
+
+
+                const statusOk =
+                    status === "todos" ||
+                    statusSolicitacao ===
+                        status;
+
+
+                return (
+                    empresaOk &&
+                    cursoOk &&
+                    cidadeOk &&
+                    statusOk
+                );
+            }
+        );
+    }
+
+
+    /*
+    =========================================================
+    RENDERIZAÇÃO
+    =========================================================
+    */
+
+    function renderizar() {
+
+        if (
+            filtroStatus.value ===
+            "__selecione__"
+        ) {
+            resumo.textContent =
+                "Use o campo Status para localizar as solicitações.";
+
+            lista.innerHTML = "";
+
+            paginacao.style.display =
+                "none";
+
+            return;
+        }
+
+
+        if (!consultaRealizada) {
+            lista.innerHTML = "";
+            return;
+        }
+
+
+        const resultado =
+            obterResultadoFiltrado();
+
+
+        resumo.textContent =
+            `${resultado.length} solicitação(ões) encontrada(s)`;
+
+
+        if (!resultado.length) {
+            lista.innerHTML =
+                `<div class="vazio">
+                    Nenhuma solicitação encontrada.
+                </div>`;
+
+            paginacao.style.display =
+                "none";
+
+            return;
+        }
+
+
+        const totalPaginas =
+            Math.max(
+                1,
+                Math.ceil(
+                    resultado.length /
+                    ITENS_POR_PAGINA
+                )
+            );
+
+
+        if (
+            paginaAtual >
+            totalPaginas
+        ) {
+            paginaAtual =
+                totalPaginas;
+        }
+
+
+        const inicio =
+            (paginaAtual - 1) *
+            ITENS_POR_PAGINA;
+
+
+        const pagina =
+            resultado.slice(
+                inicio,
+                inicio +
+                    ITENS_POR_PAGINA
+            );
+
+
+        lista.innerHTML =
+            pagina
+                .map(renderizarCard)
+                .join("");
+
+
+        paginaInfo.textContent =
+            `Página ${paginaAtual} de ${totalPaginas}`;
+
+
+        btnAnterior.disabled =
+            paginaAtual <= 1;
+
+
+        btnProxima.disabled =
+            paginaAtual >=
+            totalPaginas;
+
+
+        paginacao.style.display =
+            totalPaginas > 1
+                ? "flex"
+                : "none";
+    }
+
+
+    function renderizarCard(s) {
+
+        const id =
+            obterId(s);
+
+
+        const empresa =
+            pegar(
+                s,
+                "empresa_instituicao",
+                "empresa",
+                "empresa_nome",
+                "instituicao"
+            ) || "-";
+
+
+        const responsavel =
+            pegar(
+                s,
+                "responsavel",
+                "nome_responsavel"
+            ) || "-";
+
+
+        const cnpj =
+            pegar(
+                s,
+                "cnpj"
+            ) || "-";
+
+
+        const email =
+            pegar(
+                s,
+                "email"
+            ) || "-";
+
+
+        const telefone =
+            pegar(
+                s,
+                "telefone",
+                "whatsapp",
+                "telefone_whatsapp"
+            ) || "-";
+
+
+        const curso =
+            pegar(
+                s,
+                "curso",
+                "curso_nome",
+                "nome_curso"
+            ) || "-";
+
+
+        const cidade =
+            pegar(
+                s,
+                "cidade_uf",
+                "cidade",
+                "cidadeUF"
+            ) || "-";
+
+
+        const participantes =
+            pegar(
+                s,
+                "participantes",
+                "quantidade_participantes"
+            ) || "-";
+
+
+        const dataPreferencial =
+            pegar(
+                s,
+                "data_preferencial",
+                "data_desejada"
+            ) || "-";
+
+
+        const necessidade =
+            pegar(
+                s,
+                "necessidade",
+                "necessidade_informada",
+                "observacoes",
+                "mensagem"
+            ) || "-";
+
+
+        const status =
+            pegar(
+                s,
+                "status"
+            ) || "nova";
+
+
+        const instrutorAtual =
+            String(
+                pegar(
+                    s,
+                    "instrutor_id",
+                    "instrutor_utb_id"
+                )
+            );
+
+
+        const recebida =
+            pegar(
+                s,
+                "created_at",
+                "recebida_em",
+                "data_criacao"
+            );
+
+
+        return `
+            <article class="card">
+
+                <div class="card-topo">
+
+                    <div>
+                        <h3>
+                            ${escapar(empresa)}
+                        </h3>
+
+                        <span class="badge">
+                            ${escapar(
+                                nomeStatus(
+                                    status
+                                )
+                            )}
+                        </span>
+                    </div>
+
+                    <div class="data">
+                        Recebida em:
+                        ${formatarData(
+                            recebida
+                        )}
+                    </div>
+
+                </div>
+
+
+                <div class="dados">
+
+                    <div class="dado">
+                        <strong>
+                            Responsável:
+                        </strong>
+                        ${escapar(
+                            responsavel
+                        )}
+                    </div>
+
+                    <div class="dado">
+                        <strong>
+                            CNPJ:
+                        </strong>
+                        ${escapar(cnpj)}
+                    </div>
+
+                    <div class="dado">
+                        <strong>
+                            E-mail:
+                        </strong>
+                        ${escapar(email)}
+                    </div>
+
+                    <div class="dado">
+                        <strong>
+                            Telefone / WhatsApp:
+                        </strong>
+                        ${escapar(
+                            telefone
+                        )}
+                    </div>
+
+                    <div class="dado">
+                        <strong>
+                            Curso:
+                        </strong>
+                        ${escapar(curso)}
+                    </div>
+
+                    <div class="dado">
+                        <strong>
+                            Cidade / UF:
+                        </strong>
+                        ${escapar(cidade)}
+                    </div>
+
+                    <div class="dado">
+                        <strong>
+                            Participantes:
+                        </strong>
+                        ${escapar(
+                            participantes
+                        )}
+                    </div>
+
+                    <div class="dado">
+                        <strong>
+                            Data preferencial:
+                        </strong>
+                        ${escapar(
+                            dataPreferencial
+                        )}
+                    </div>
+
+                </div>
+
+
+                <div class="necessidade">
+
+                    <strong>
+                        Necessidade informada:
+                    </strong>
+
+                    <br>
+
+                    ${escapar(
+                        necessidade
+                    )}
+
+                </div>
+
+
+                <div class="edicao">
+
+                    <div class="campo-edicao">
+                        <label>
+                            Status
+                        </label>
+
+                        <select
+                            id="status-${escapar(id)}"
+                        >
+                            ${opcoesStatus(
+                                status
+                            )}
+                        </select>
+                    </div>
+
+
+                    <div class="campo-edicao">
+                        <label>
+                            Instrutor UTB
+                        </label>
+
+                        <select
+                            id="instrutor-${escapar(id)}"
+                        >
+                            ${opcoesInstrutores(
+                                instrutorAtual
+                            )}
+                        </select>
+                    </div>
+
+
+                    <button
+                        class="btn-salvar"
+                        id="salvar-${escapar(id)}"
+                        type="button"
+                        onclick="salvarSolicitacao('${escapar(id)}')"
+                    >
+                        SALVAR
+                    </button>
+
+                </div>
+
+            </article>
+        `;
+    }
+
+
+    function opcoesStatus(
+        selecionado
+    ) {
+        const opcoes = [
+            ["nova", "Nova"],
+            [
+                "em_analise",
+                "Em análise"
+            ],
+            [
+                "aguardando_instrutor",
+                "Aguardando instrutor"
+            ],
+            [
+                "instrutor_definido",
+                "Instrutor definido"
+            ],
+            [
+                "agendada",
+                "Agendada"
+            ],
+            [
+                "concluida",
+                "Concluída"
+            ],
+            [
+                "cancelada",
+                "Cancelada"
+            ]
+        ];
+
+
+        if (
+            selecionado &&
+            !opcoes.some(
+                ([valor]) =>
+                    valor === selecionado
+            )
+        ) {
+            opcoes.unshift([
+                selecionado,
+                nomeStatus(
+                    selecionado
+                )
+            ]);
+        }
+
+
+        return opcoes
+            .map(
+                ([valor, nome]) => `
+                    <option
+                        value="${escapar(valor)}"
+                        ${
+                            valor === selecionado
+                                ? "selected"
+                                : ""
+                        }
+                    >
+                        ${escapar(nome)}
+                    </option>
+                `
+            )
+            .join("");
     }
 
 
     function opcoesInstrutores(
-      instrutorAtual
-    ){
-
-      let html =
-        `<option value="">
-          Nenhum instrutor definido
-        </option>`;
-
-      instrutores.forEach(i => {
-
-        const selecionado =
-          i.id === instrutorAtual
-            ? "selected"
-            : "";
-
-        html += `
-          <option
-            value="${escapar(i.id)}"
-            ${selecionado}
-          >
-            ${escapar(i.nome_completo)}
-            — ${escapar(i.cidade_uf || "")}
-            — ${escapar(i.area_cursos || "")}
-          </option>
+        selecionado
+    ) {
+        const primeira = `
+            <option value="">
+                Nenhum instrutor definido
+            </option>
         `;
 
-      });
 
-      return html;
+        const demais =
+            instrutores
+                .map(
+                    (instrutor) => {
 
+                        const id =
+                            String(
+                                pegar(
+                                    instrutor,
+                                    "id",
+                                    "instrutor_id"
+                                )
+                            );
+
+
+                        const nome =
+                            pegar(
+                                instrutor,
+                                "nome_completo",
+                                "nome"
+                            ) ||
+                            "Instrutor UTB";
+
+
+                        return `
+                            <option
+                                value="${escapar(id)}"
+                                ${
+                                    id === selecionado
+                                        ? "selected"
+                                        : ""
+                                }
+                            >
+                                ${escapar(nome)}
+                            </option>
+                        `;
+                    }
+                )
+                .join("");
+
+
+        return primeira + demais;
     }
 
 
-    function renderizar(){
-
-      const empresa =
-        normalizar(
-          document.getElementById(
-            "filtroEmpresa"
-          ).value
-        );
-
-      const curso =
-        normalizar(
-          document.getElementById(
-            "filtroCurso"
-          ).value
-        );
-
-      const cidade =
-        normalizar(
-          document.getElementById(
-            "filtroCidade"
-          ).value
-        );
-
-      const status =
-        document.getElementById(
-          "filtroStatus"
-        ).value;
-
-
-      const resultado =
-        solicitacoes.filter(s => {
-
-          return (
-            normalizar(
-              s.empresa
-            ).includes(empresa)
-            &&
-            normalizar(
-              s.curso
-            ).includes(curso)
-            &&
-            normalizar(
-              s.cidade_uf
-            ).includes(cidade)
-            &&
-            (
-              status === "todos" ||
-              !status ||
-              s.status === status
-            )
-          );
-
-        });
-
-
-      document.getElementById(
-        "resumo"
-      ).textContent =
-        `${resultado.length} solicitação(ões) encontrada(s)`;
-
-
-      const lista =
-        document.getElementById(
-          "lista"
-        );
-
-
-      if(resultado.length === 0){
-
-        lista.innerHTML = `
-          <div class="mensagem">
-            Nenhuma solicitação encontrada.
-          </div>
-        `;
-
-        return;
-
-      }
-
-
-      lista.innerHTML =
-        resultado.map(s => `
-
-          <article class="card">
-
-            <div class="card-topo">
-
-              <div>
-
-                <h3>
-                  ${escapar(s.empresa)}
-                </h3>
-
-                <div class="status-tag">
-                  ${escapar(nomeStatus(s.status))}
-                </div>
-
-              </div>
-
-              <div>
-                Recebida em:
-                <strong>
-                  ${escapar(
-                    formatarData(
-                      s.criado_em
-                    )
-                  )}
-                </strong>
-              </div>
-
-            </div>
-
-
-            <div class="dados">
-
-              <p>
-                <strong>Responsável:</strong>
-                ${escapar(s.responsavel)}
-              </p>
-
-              <p>
-                <strong>CNPJ:</strong>
-                ${escapar(s.cnpj || "-")}
-              </p>
-
-              <p>
-                <strong>E-mail:</strong>
-                ${escapar(s.email)}
-              </p>
-
-              <p>
-                <strong>Telefone / WhatsApp:</strong>
-                ${escapar(
-                  s.telefone_whatsapp
-                )}
-              </p>
-
-              <p>
-                <strong>Curso:</strong>
-                ${escapar(s.curso)}
-              </p>
-
-              <p>
-                <strong>Cidade / UF:</strong>
-                ${escapar(s.cidade_uf)}
-              </p>
-
-              <p>
-                <strong>Participantes:</strong>
-                ${escapar(
-                  s.quantidade_participantes
-                  ?? "-"
-                )}
-              </p>
-
-              <p>
-                <strong>Data preferencial:</strong>
-                ${escapar(
-                  formatarData(
-                    s.data_preferencial
-                  )
-                )}
-              </p>
-
-            </div>
-
-
-            <div class="observacoes">
-
-              <strong>
-                Necessidade informada:
-              </strong>
-
-              <div>
-                ${escapar(
-                  s.observacoes || "-"
-                )}
-              </div>
-
-            </div>
-
-
-            <div class="gestao">
-
-              <div>
-
-                <label>
-                  Status
-                </label>
-
-                <select
-                  id="status-${s.id}"
-                >
-
-                  <option
-                    value="nova"
-                    ${s.status === "nova"
-                      ? "selected"
-                      : ""}
-                  >
-                    Nova
-                  </option>
-
-                  <option
-                    value="em_analise"
-                    ${s.status === "em_analise"
-                      ? "selected"
-                      : ""}
-                  >
-                    Em análise
-                  </option>
-
-                  <option
-                    value="aguardando_instrutor"
-                    ${s.status === "aguardando_instrutor"
-                      ? "selected"
-                      : ""}
-                  >
-                    Aguardando instrutor
-                  </option>
-
-                  <option
-                    value="instrutor_definido"
-                    ${s.status === "instrutor_definido"
-                      ? "selected"
-                      : ""}
-                  >
-                    Instrutor definido
-                  </option>
-
-                  <option
-                    value="proposta_enviada"
-                    ${s.status === "proposta_enviada"
-                      ? "selected"
-                      : ""}
-                  >
-                    Proposta enviada
-                  </option>
-
-                  <option
-                    value="aprovada"
-                    ${s.status === "aprovada"
-                      ? "selected"
-                      : ""}
-                  >
-                    Aprovada
-                  </option>
-
-                  <option
-                    value="em_execucao"
-                    ${s.status === "em_execucao"
-                      ? "selected"
-                      : ""}
-                  >
-                    Em execução
-                  </option>
-
-                  <option
-                    value="concluida"
-                    ${s.status === "concluida"
-                      ? "selected"
-                      : ""}
-                  >
-                    Concluída
-                  </option>
-
-                  <option
-                    value="cancelada"
-                    ${s.status === "cancelada"
-                      ? "selected"
-                      : ""}
-                  >
-                    Cancelada
-                  </option>
-
-                </select>
-
-              </div>
-
-
-              <div>
-
-                <label>
-                  Instrutor UTB
-                </label>
-
-                <select
-                  id="instrutor-${s.id}"
-                >
-                  ${opcoesInstrutores(
-                    s.instrutor_id
-                  )}
-                </select>
-
-              </div>
-
-
-              <button
-                class="salvar"
-                type="button"
-                onclick="salvarSolicitacao('${s.id}')"
-              >
-                SALVAR
-              </button>
-
-            </div>
-
-          </article>
-
-        `).join("");
-
-    }
-
-
-    async function carregarTudo(){
-
-      const token =
-        sessionStorage.getItem(
-          "utb_access_token"
-        );
-
-
-      if(!token){
-
-        window.location.href =
-          "admin-instrutores.html";
-
-        return;
-
-      }
-
-
-      try{
-
-        const [
-          respostaSolicitacoes,
-          respostaInstrutores
-        ] = await Promise.all([
-
-          fetch(
-            `${SUPABASE_URL}/functions/v1/admin-solicitacoes-cursos`,
-            {
-              headers:{
-                "apikey":
-                  SUPABASE_KEY,
-
-                "Authorization":
-                  `Bearer ${token}`
-              }
+    /*
+    =========================================================
+    SALVAR SOLICITAÇÃO
+    =========================================================
+    */
+
+    async function salvarSolicitacao(
+        id
+    ) {
+        const token =
+            obterToken();
+
+        if (!token) {
+            window.location.href =
+                "admin-instrutores.html";
+            return;
+        }
+
+
+        const campoStatus =
+            document.getElementById(
+                `status-${id}`
+            );
+
+
+        const campoInstrutor =
+            document.getElementById(
+                `instrutor-${id}`
+            );
+
+
+        const botao =
+            document.getElementById(
+                `salvar-${id}`
+            );
+
+
+        const status =
+            campoStatus.value;
+
+
+        const instrutorId =
+            campoInstrutor.value ||
+            null;
+
+
+        botao.disabled = true;
+        botao.textContent =
+            "SALVANDO...";
+
+
+        try {
+
+            /*
+            Primeiro formato:
+            compatível com a estrutura
+            mais provável da Edge Function.
+            */
+
+            let resposta =
+                await requisicao(
+                    "/functions/v1/admin-solicitacoes-cursos",
+                    {
+                        method: "PATCH",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+                                id,
+                                status,
+                                instrutor_id:
+                                    instrutorId
+                            })
+                    }
+                );
+
+
+            /*
+            Caso a função use
+            solicitacao_id em vez de id.
+            */
+
+            if (!resposta.ok) {
+
+                resposta =
+                    await requisicao(
+                        "/functions/v1/admin-solicitacoes-cursos",
+                        {
+                            method:
+                                "PATCH",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    solicitacao_id:
+                                        id,
+                                    status,
+                                    instrutor_id:
+                                        instrutorId
+                                })
+                        }
+                    );
             }
-          ),
 
-          fetch(
-            `${SUPABASE_URL}/functions/v1/listar-instrutores-ativos`,
-            {
-              headers:{
-                "apikey":
-                  SUPABASE_KEY,
 
-                "Authorization":
-                  `Bearer ${token}`
-              }
+            const dados =
+                await resposta
+                    .json()
+                    .catch(
+                        () => ({})
+                    );
+
+
+            if (!resposta.ok) {
+                throw new Error(
+                    dados.error ||
+                    "Não foi possível salvar a solicitação."
+                );
             }
-          )
-
-        ]);
 
 
-        if(
-          respostaSolicitacoes.status === 401 ||
-          respostaSolicitacoes.status === 403 ||
-          respostaInstrutores.status === 401 ||
-          respostaInstrutores.status === 403
-        ){
+            const item =
+                solicitacoes.find(
+                    (s) =>
+                        obterId(s) ===
+                        String(id)
+                );
 
-          sessionStorage.removeItem(
-            "utb_access_token"
-          );
 
-          window.location.href =
-            "admin-instrutores.html";
+            if (item) {
+                item.status =
+                    status;
 
-          return;
+                item.instrutor_id =
+                    instrutorId;
+            }
 
+
+            botao.textContent =
+                "SALVO";
+
+
+            setTimeout(
+                () => {
+                    botao.textContent =
+                        "SALVAR";
+
+                    botao.disabled =
+                        false;
+                },
+                1000
+            );
+
+
+            renderizar();
+
+        } catch (erro) {
+
+            console.error(erro);
+
+            alert(
+                erro.message ||
+                "Erro ao salvar."
+            );
+
+            botao.textContent =
+                "SALVAR";
+
+            botao.disabled =
+                false;
         }
-
-
-        const dadosSolicitacoes =
-          await respostaSolicitacoes.json();
-
-        const dadosInstrutores =
-          await respostaInstrutores.json();
-
-
-        if(!respostaSolicitacoes.ok){
-
-          throw new Error(
-            dadosSolicitacoes.error ||
-            "Erro ao carregar solicitações."
-          );
-
-        }
-
-
-        if(!respostaInstrutores.ok){
-
-          throw new Error(
-            dadosInstrutores.error ||
-            "Erro ao carregar instrutores."
-          );
-
-        }
-
-
-        solicitacoes =
-          dadosSolicitacoes.solicitacoes || [];
-
-        instrutores =
-          dadosInstrutores.instrutores || [];
-
-
-        renderizar();
-
-
-      }catch(erro){
-
-        document.getElementById(
-          "resumo"
-        ).innerHTML =
-          `<span class="erro">
-            ${escapar(erro.message)}
-          </span>`;
-
-      }
-
     }
 
 
-    async function salvarSolicitacao(id){
+    /*
+    =========================================================
+    EVENTOS
+    =========================================================
+    */
 
-      const token =
-        sessionStorage.getItem(
-          "utb_access_token"
-        );
-
-      const status =
-        document.getElementById(
-          `status-${id}`
-        ).value;
-
-      const instrutorId =
-        document.getElementById(
-          `instrutor-${id}`
-        ).value || null;
-
-
-      try{
-
-        const resposta =
-          await fetch(
-            `${SUPABASE_URL}/functions/v1/admin-solicitacoes-cursos`,
-            {
-              method:"PATCH",
-
-              headers:{
-                "Content-Type":
-                  "application/json",
-
-                "apikey":
-                  SUPABASE_KEY,
-
-                "Authorization":
-                  `Bearer ${token}`
-              },
-
-              body:JSON.stringify({
-                id,
-                status,
-                instrutor_id:
-                  instrutorId
-              })
-            }
-          );
-
-
-        const dados =
-          await resposta.json();
-
-
-        if(!resposta.ok){
-
-          throw new Error(
-            dados.error ||
-            "Não foi possível salvar."
-          );
-
-        }
-
-
-        alert(
-          "Solicitação atualizada com sucesso."
-        );
-
-
-        const indice =
-          solicitacoes.findIndex(
-            s => s.id === id
-          );
-
-
-        if(indice >= 0){
-
-          solicitacoes[indice] =
-            dados.solicitacao;
-
-        }
-
-
-        renderizar();
-
-
-      }catch(erro){
-
-        alert(
-          "Erro: " +
-          erro.message
-        );
-
-      }
-
-    }
-
-
-    [
-      "filtroEmpresa",
-      "filtroCurso",
-      "filtroCidade",
-    ].forEach(id => {
-
-      const campo =
-        document.getElementById(id);
-
-      campo.addEventListener(
-        "input",
-        renderizar
-      );
-
-    });
-document
-    .getElementById("filtroStatus")
-    .addEventListener(
+    filtroStatus.addEventListener(
         "change",
         async () => {
 
-            document
-                .getElementById("resumo")
-                .textContent =
-                "Carregando solicitações...";
+            paginaAtual = 1;
 
-            await carregarTudo();
+
+            if (
+                filtroStatus.value ===
+                "__selecione__"
+            ) {
+                consultaRealizada =
+                    false;
+
+                solicitacoes = [];
+
+                instrutores = [];
+
+                renderizar();
+
+                return;
+            }
+
+
+            /*
+            A consulta acontece SOMENTE
+            quando o usuário escolhe
+            algum status.
+            */
+
+            await carregarDados();
         }
     );
-    document.getElementById("filtroStatus").value = "__selecione__";
-document.getElementById("resumo").textContent =
-    "Use os filtros acima para localizar as solicitações.";
-document.getElementById("lista").innerHTML = "";
-    document
-      .getElementById(
-        "btnSair"
-      )
-      .addEventListener(
+
+
+    [
+        filtroEmpresa,
+        filtroCurso,
+        filtroCidade
+    ].forEach(
+        (campo) => {
+
+            campo.addEventListener(
+                "input",
+                () => {
+
+                    paginaAtual = 1;
+
+                    if (
+                        consultaRealizada
+                    ) {
+                        renderizar();
+                    }
+                }
+            );
+        }
+    );
+
+
+    btnAnterior.addEventListener(
         "click",
         () => {
 
-          sessionStorage.removeItem(
-            "utb_access_token"
-          );
+            if (
+                paginaAtual > 1
+            ) {
+                paginaAtual--;
 
-          window.location.href =
-            "admin-instrutores.html";
+                renderizar();
 
+                window.scrollTo(
+                    0,
+                    0
+                );
+            }
         }
-      );
+    );
 
-  </script>
+
+    btnProxima.addEventListener(
+        "click",
+        () => {
+
+            paginaAtual++;
+
+            renderizar();
+
+            window.scrollTo(
+                0,
+                0
+            );
+        }
+    );
+
+
+    document
+        .getElementById(
+            "btnVoltar"
+        )
+        .addEventListener(
+            "click",
+            () => {
+
+                window.location.href =
+                    "admin-instrutores.html";
+            }
+        );
+
+
+    document
+        .getElementById(
+            "btnSair"
+        )
+        .addEventListener(
+            "click",
+            () => {
+
+                sessionStorage.removeItem(
+                    "utb_access_token"
+                );
+
+                window.location.href =
+                    "admin-instrutores.html";
+            }
+        );
+
+
+    /*
+    =========================================================
+    INÍCIO DA PÁGINA
+    =========================================================
+    */
+
+    if (exigirLogin()) {
+
+        /*
+        Força sempre:
+        "Selecione o status"
+        mesmo se o Firefox tentar
+        restaurar a opção anterior.
+        */
+
+        filtroStatus.selectedIndex =
+            0;
+
+        filtroStatus.value =
+            "__selecione__";
+
+
+        solicitacoes = [];
+
+        instrutores = [];
+
+        consultaRealizada = false;
+
+
+        resumo.textContent =
+            "Use o campo Status para localizar as solicitações.";
+
+        lista.innerHTML = "";
+
+        paginacao.style.display =
+            "none";
+    }
+
+</script>
 
 </body>
 </html>
