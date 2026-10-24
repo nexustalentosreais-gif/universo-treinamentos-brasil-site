@@ -298,7 +298,7 @@
             Selecione o status
           </option>
 
-          <option value="">
+          <option value="todos">
             Todos os status
           </option>
           
@@ -543,6 +543,7 @@
             ).includes(cidade)
             &&
             (
+              status === "todos" ||
               !status ||
               s.status === status
             )
