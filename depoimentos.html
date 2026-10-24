@@ -365,18 +365,86 @@ tr:last-child td{border-bottom:none}
 </div></section>
 
 <section class="section white"><div class="container split">
-<form class="form" id="testimonial-form">
+<form class="form" id="testimonial-form" enctype="multipart/form-data">
 <h2 style="margin-top:0">Quero enviar meu depoimento</h2>
+
 <div class="form-grid">
-<div><label>Nome</label><input name="nome"></div>
-<div><label>E-mail</label><input type="email" name="email"></div>
-<div><label>Curso realizado</label><input name="curso"></div>
-<div><label>Cidade / UF</label><input name="cidade"></div>
-<div class="full"><label>Seu relato</label><textarea name="relato"></textarea></div>
-<div class="full"><label><input type="checkbox" required> Autorizo o envio para análise. A publicação dependerá de consentimento específico.</label></div>
-<div class="full"><button class="btn btn-black" type="submit">ENVIAR PARA ANÁLISE</button></div>
+
+<div>
+<label>Tipo de envio</label>
+<select name="tipo" required>
+<option value="">Selecione</option>
+<option value="depoimento">Depoimento</option>
+<option value="critica">Crítica</option>
+<option value="sugestao">Sugestão</option>
+</select>
 </div>
-<p class="help">Na versão final, fotos serão enviadas por upload ou e-mail e haverá termo específico de autorização de uso de texto e imagem.</p>
+
+<div>
+<label>Como deseja aparecer na publicação</label>
+<select name="exibicao_nome" required>
+<option value="">Selecione</option>
+<option value="nome_completo">Nome completo</option>
+<option value="primeiro_nome">Somente primeiro nome</option>
+<option value="anonimo">Anônimo</option>
+</select>
+</div>
+
+<div>
+<label>Nome</label>
+<input name="nome" required>
+</div>
+
+<div>
+<label>E-mail</label>
+<input type="email" name="email" required>
+</div>
+
+<div>
+<label>Curso realizado</label>
+<input name="curso" required>
+</div>
+
+<div>
+<label>Cidade / UF</label>
+<input name="cidade">
+</div>
+
+<div class="full">
+<label>Seu relato</label>
+<textarea name="relato" required></textarea>
+</div>
+
+<div class="full">
+<label>Fotos do curso (opcional)</label>
+<input
+type="file"
+name="fotos"
+accept="image/jpeg,image/png,image/webp"
+multiple
+>
+<p class="help">
+Você poderá enviar várias fotos. As imagens serão analisadas pela administração antes de qualquer publicação.
+</p>
+</div>
+
+<div class="full">
+<label>
+<input type="checkbox" name="autorizacao" required>
+Autorizo o envio deste conteúdo para análise da Universo Treinamentos Brasil. Entendo que o material não será publicado automaticamente e dependerá de aprovação administrativa.
+</label>
+</div>
+
+<div class="full">
+<button class="btn btn-black" type="submit">
+ENVIAR PARA ANÁLISE
+</button>
+</div>
+
+<p class="help">
+Após o envio, o depoimento, crítica, sugestão e fotos ficarão pendentes para análise da administração. Somente conteúdos aprovados poderão aparecer nesta página pública.
+</p>
+ 
 </form>
 <div class="soft">
 <h3>Regras de publicação</h3>
@@ -504,11 +572,50 @@ if(partnerForm){
   });
 }
 
-const testimonialForm=$("#testimonial-form");
-if(testimonialForm){
-  testimonialForm.addEventListener("submit",e=>{
+const testimonialForm = $("#testimonial-form");
+
+if (testimonialForm) {
+  testimonialForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    alert("Envio estruturado. Todo depoimento seguirá para moderação e autorização antes de ser publicado.");
+
+    const botao = testimonialForm.querySelector('button[type="submit"]');
+
+    botao.disabled = true;
+    botao.textContent = "ENVIANDO...";
+
+    try {
+      const formData = new FormData(testimonialForm);
+
+      const resposta = await fetch(
+        "https://xkxlgmmssvllcmhymibj.supabase.co/functions/v1/enviar-depoimento",
+        {
+          method: "POST",
+          body: formData
+        }
+      );
+
+      const dados = await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(
+          dados.error || "Erro ao enviar."
+        );
+      }
+
+      alert(
+        "Enviado com sucesso para análise da administração."
+      );
+
+      testimonialForm.reset();
+
+    } catch (erro) {
+      alert(
+        erro.message || "Não foi possível enviar."
+      );
+    } finally {
+      botao.disabled = false;
+      botao.textContent = "ENVIAR PARA ANÁLISE";
+    }
   });
 }
 
