@@ -208,12 +208,8 @@ async function entrar(){
 
     accessToken = dados.access_token;
     sessionStorage.setItem("utb_access_token", accessToken);
-
-    loginBox.classList.add("oculto");
-    painel.classList.remove("oculto");
-
-    await carregarCadastros();
-
+  window.location.href = "admin.html";
+return;
   }catch(erro){
     loginMsg.innerHTML = `<p class="erro">${erro.message}</p>`;
   }
