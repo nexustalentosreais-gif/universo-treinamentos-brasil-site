@@ -1059,6 +1059,10 @@ document
             await carregarTudo();
         }
     );
+    document.getElementById("filtroStatus").value = "__selecione__";
+document.getElementById("resumo").textContent =
+    "Use os filtros acima para localizar as solicitações.";
+document.getElementById("lista").innerHTML = "";
     document
       .getElementById(
         "btnSair"
