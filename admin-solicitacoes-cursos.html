@@ -294,10 +294,14 @@
 
         <select id="filtroStatus">
 
+          <option value="_selecione_¨ selected disabled>
+            Selecione o status
+          </option>
+
           <option value="">
             Todos os status
           </option>
-
+          
           <option value="nova">
             Nova
           </option>
@@ -344,7 +348,7 @@
       id="resumo"
       class="resumo"
     >
-      Carregando solicitações...
+      Use os filtros acima para localizar as solicitações.
     </div>
 
     <div
@@ -1029,7 +1033,6 @@
       "filtroEmpresa",
       "filtroCurso",
       "filtroCidade",
-      "filtroStatus"
     ].forEach(id => {
 
       const campo =
@@ -1040,14 +1043,9 @@
         renderizar
       );
 
-      campo.addEventListener(
-        "change",
-        renderizar
-      );
-
     });
 
-
+    
     document
       .getElementById(
         "btnSair"
