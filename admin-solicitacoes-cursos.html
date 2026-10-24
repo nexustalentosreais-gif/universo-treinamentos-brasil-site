@@ -1044,7 +1044,20 @@
       );
 
     });
+document
+    .getElementById("filtroStatus")
+    .addEventListener(
+        "change",
+        async () => {
 
+            document
+                .getElementById("resumo")
+                .textContent =
+                "Carregando solicitações...";
+
+            await carregarTudo();
+        }
+    );
     document
       .getElementById(
         "btnSair"
