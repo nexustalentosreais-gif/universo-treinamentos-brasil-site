@@ -365,19 +365,39 @@
 
 <script>
 
-  const token =
-    sessionStorage.getItem(
-      "utb_access_token"
-    );
+ const token =
+  sessionStorage.getItem(
+    "utb_access_token"
+  );
 
+const origem =
+  document.referrer || "";
 
-  if(!token){
+const veioDeAreaAdmin =
+  origem.startsWith(
+    window.location.origin + "/admin-"
+  );
 
-    window.location.href =
-      "admin-instrutores.html";
+const veioDoProprioPainel =
+  origem.includes(
+    "/admin.html"
+  );
 
-  }
+if (
+  !token ||
+  !veioDeAreaAdmin ||
+  veioDoProprioPainel
+) {
 
+  sessionStorage.removeItem(
+    "utb_access_token"
+  );
+
+  window.location.replace(
+    "admin-instrutores.html"
+  );
+
+}
 
   function abrirPagina(pagina){
 
