@@ -1142,67 +1142,77 @@ Proposta Comercial ${numero} - UTB
 
 <style>
 
+@page {
+  size: A4;
+  margin: 8mm;
+}
+
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  padding: 40px;
+  padding: 10px;
   font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  line-height: 1.25;
   color: #1f2937;
   background: white;
 }
 
 .documento {
-  max-width: 850px;
+  width: 100%;
+  max-width: 190mm;
   margin: auto;
 }
 
 .acoes {
   text-align: center;
-  margin-bottom: 25px;
+  margin-bottom: 12px;
 }
 
 .acoes button {
   border: 0;
   background: #0d47a1;
   color: white;
-  padding: 12px 20px;
-  border-radius: 7px;
+  padding: 9px 16px;
+  border-radius: 6px;
   font-weight: bold;
   cursor: pointer;
 }
 
 .cabecalho {
-  border-bottom: 4px solid #0d47a1;
-  padding-bottom: 18px;
-  margin-bottom: 25px;
+  border-bottom: 3px solid #0d47a1;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .cabecalho h1 {
   margin: 0;
   color: #0d47a1;
-  font-size: 28px;
+  font-size: 21px;
 }
 
 .cabecalho strong {
   display: block;
-  margin-top: 7px;
+  margin-top: 3px;
+  font-size: 12px;
 }
 
 .cabecalho span {
   display: block;
-  margin-top: 5px;
+  margin-top: 2px;
   color: #64748b;
-  font-size: 13px;
+  font-size: 10px;
 }
 
 .numero {
   background: #eef4fb;
-  padding: 14px;
-  border-radius: 7px;
-  margin-bottom: 25px;
+  padding: 8px 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  line-height: 1.2;
 }
 
 .numero strong {
@@ -1211,65 +1221,70 @@ body {
 
 h2 {
   color: #0d47a1;
-  font-size: 18px;
+  font-size: 14px;
   border-bottom: 1px solid #dbe3ee;
-  padding-bottom: 7px;
-  margin-top: 28px;
+  padding-bottom: 3px;
+  margin: 10px 0 5px;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
+  page-break-inside: avoid;
 }
 
 td {
   border: 1px solid #dbe3ee;
-  padding: 10px;
+  padding: 5px 7px;
   vertical-align: top;
+  font-size: 10.5px;
 }
 
 td:first-child {
-  width: 32%;
+  width: 30%;
   font-weight: bold;
   background: #f8fafc;
 }
 
 .valor {
   color: #0d47a1;
-  font-size: 22px;
+  font-size: 16px;
   font-weight: bold;
 }
 
 .observacoes {
   border: 1px solid #dbe3ee;
-  border-radius: 7px;
-  padding: 15px;
-  min-height: 80px;
-  line-height: 1.5;
+  border-radius: 5px;
+  padding: 7px;
+  min-height: 35px;
+  line-height: 1.25;
+  font-size: 10.5px;
 }
 
 .assinaturas {
   display: flex;
   justify-content: space-between;
-  gap: 40px;
-  margin-top: 55px;
+  gap: 30px;
+  margin-top: 24px;
+  page-break-inside: avoid;
 }
 
 .assinatura {
   width: 45%;
   text-align: center;
   border-top: 1px solid #334155;
-  padding-top: 8px;
-  font-size: 13px;
+  padding-top: 5px;
+  font-size: 10px;
 }
 
 .rodape {
-  margin-top: 45px;
-  padding-top: 15px;
+  margin-top: 16px;
+  padding-top: 7px;
   border-top: 1px solid #dbe3ee;
   text-align: center;
   color: #64748b;
-  font-size: 12px;
+  font-size: 9px;
+  line-height: 1.25;
 }
 
 @media print {
@@ -1278,12 +1293,24 @@ td:first-child {
     padding: 0;
   }
 
+  .documento {
+    max-width: none;
+  }
+
   .acoes {
     display: none;
   }
 
+  h2,
+  table,
+  .observacoes,
+  .assinaturas {
+    break-inside: avoid;
+  }
+
 }
 
+ 
 </style>
 
 </head>
