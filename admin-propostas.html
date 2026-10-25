@@ -1,21 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <title>Propostas Comerciais | Administração UTB</title>
 
-  <title>
-    Propostas Comerciais | Administração UTB
-  </title>
+  <script>
+    if (!sessionStorage.getItem("utb_access_token")) {
+      window.location.replace("admin-instrutores.html");
+    }
+  </script>
 
   <style>
-
     * {
       box-sizing: border-box;
     }
@@ -33,7 +30,7 @@
       padding: 20px;
     }
 
-    .header-conteudo {
+    .topo {
       max-width: 1200px;
       margin: auto;
       display: flex;
@@ -43,74 +40,48 @@
       flex-wrap: wrap;
     }
 
-    .titulo-area h1 {
+    h1 {
       margin: 0;
       color: #0d47a1;
       font-size: 26px;
     }
 
-    .titulo-area p {
-      margin: 6px 0 0;
+    .subtitulo {
+      margin-top: 5px;
       color: #64748b;
-      font-size: 14px;
     }
 
     .acoes-topo {
       display: flex;
       gap: 10px;
-      flex-wrap: wrap;
     }
 
     button {
-      border: none;
+      border: 0;
       border-radius: 8px;
       padding: 11px 16px;
       font-weight: bold;
       cursor: pointer;
-      font-size: 14px;
     }
 
-    button:hover {
-      opacity: 0.92;
-    }
-
-    .botao-voltar {
-      background: #0d47a1;
+    .azul {
+      background: #1565c0;
       color: white;
     }
 
-    .botao-sair {
+    .escuro {
       background: #111827;
       color: white;
     }
 
-    .botao-nova {
-      background: #1565c0;
-      color: white;
-    }
-
-    .botao-salvar {
-      background: #0d47a1;
-      color: white;
-    }
-
-    .botao-cancelar {
+    .cinza {
       background: #64748b;
       color: white;
     }
 
-    .botao-editar {
-      background: #1565c0;
-      color: white;
-      padding: 8px 12px;
-      font-size: 12px;
-    }
-
-    .botao-excluir {
+    .vermelho {
       background: #b91c1c;
       color: white;
-      padding: 8px 12px;
-      font-size: 12px;
     }
 
     main {
@@ -121,115 +92,51 @@
 
     .resumo {
       display: grid;
-      grid-template-columns:
-        repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 15px;
       margin-bottom: 25px;
     }
 
-    .resumo-card {
+    .resumo-card,
+    .painel,
+    .formulario {
       background: white;
-      border-radius: 12px;
-      padding: 20px;
       border: 1px solid #dbe3ee;
-      box-shadow:
-        0 3px 12px rgba(0, 0, 0, 0.05);
+      border-radius: 12px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+    }
+
+    .resumo-card {
+      padding: 20px;
     }
 
     .resumo-card span {
       display: block;
-      font-size: 13px;
       color: #64748b;
+      font-size: 13px;
       margin-bottom: 8px;
     }
 
     .resumo-card strong {
-      display: block;
       font-size: 28px;
       color: #0d47a1;
     }
 
     .painel,
-    .formulario-area {
-      background: white;
-      border-radius: 12px;
+    .formulario {
       padding: 22px;
-      border: 1px solid #dbe3ee;
-      box-shadow:
-        0 3px 12px rgba(0, 0, 0, 0.05);
       margin-bottom: 25px;
     }
 
-    .formulario-area {
+    .formulario {
       display: none;
     }
 
-    .formulario-area.ativo {
+    .formulario.ativo {
       display: block;
     }
 
-    .formulario-area h2 {
-      margin: 0 0 20px;
-      color: #0d47a1;
-      font-size: 22px;
-    }
-
-    .grade-formulario {
-      display: grid;
-      grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .campo {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-    }
-
-    .campo-completo {
-      grid-column: 1 / -1;
-    }
-
-    .campo label {
-      font-weight: bold;
-      font-size: 14px;
-      color: #334155;
-    }
-
-    .campo input,
-    .campo select,
-    .campo textarea {
-      width: 100%;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      padding: 11px 12px;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 14px;
-      background: white;
-    }
-
-    .campo textarea {
-      min-height: 110px;
-      resize: vertical;
-    }
-
-    .campo input:focus,
-    .campo select:focus,
-    .campo textarea:focus {
-      outline: 2px solid #bfdbfe;
-      border-color: #2563eb;
-    }
-
-    .acoes-formulario {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 22px;
-      flex-wrap: wrap;
-    }
-
-    .painel-topo {
+    .cabecalho-painel {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -238,41 +145,77 @@
       margin-bottom: 20px;
     }
 
-    .painel-topo h2 {
+    h2 {
       margin: 0;
       color: #0d47a1;
       font-size: 21px;
     }
 
-    .filtros {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
+    .grade {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 20px;
     }
 
-    .filtros input,
-    .filtros select {
-      padding: 10px 12px;
-      border: 1px solid #cbd5e1;
-      border-radius: 7px;
+    .campo {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .campo-completo {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-weight: bold;
       font-size: 14px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font: inherit;
       background: white;
     }
 
-    .filtros input {
-      min-width: 260px;
-      flex: 1;
+    textarea {
+      min-height: 100px;
+      resize: vertical;
     }
 
-    .tabela-container {
+    .acoes-formulario {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .filtros {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filtros input {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .tabela {
       overflow-x: auto;
     }
 
     table {
       width: 100%;
+      min-width: 950px;
       border-collapse: collapse;
-      min-width: 1000px;
     }
 
     th {
@@ -281,19 +224,12 @@
       text-align: left;
       padding: 12px;
       font-size: 13px;
-      border-bottom: 1px solid #dbe3ee;
     }
 
     td {
-      padding: 13px 12px;
+      padding: 12px;
       border-bottom: 1px solid #e5e7eb;
       font-size: 14px;
-      vertical-align: middle;
-    }
-
-    .acoes-tabela {
-      display: flex;
-      gap: 6px;
     }
 
     .status {
@@ -305,4 +241,585 @@
     }
 
     .status-elaboracao {
-      background: #
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-enviada {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .status-aprovada {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-recusada {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .status-cancelada {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .acoes-tabela {
+      display: flex;
+      gap: 5px;
+    }
+
+    .acoes-tabela button {
+      padding: 7px 10px;
+      font-size: 12px;
+    }
+
+    .vazio {
+      text-align: center;
+      padding: 35px;
+      color: #64748b;
+    }
+
+    @media (max-width: 800px) {
+      .resumo {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .grade {
+        grid-template-columns: 1fr;
+      }
+
+      .campo-completo {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .resumo {
+        grid-template-columns: 1fr;
+      }
+
+      .acoes-topo {
+        width: 100%;
+      }
+
+      .acoes-topo button {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="topo">
+    <div>
+      <h1>Propostas Comerciais</h1>
+      <div class="subtitulo">
+        Universo Treinamentos Brasil - UTB
+      </div>
+    </div>
+
+    <div class="acoes-topo">
+      <button class="azul" onclick="voltarPainel()">
+        VOLTAR AO PAINEL
+      </button>
+
+      <button class="escuro" onclick="sair()">
+        SAIR
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="resumo">
+    <div class="resumo-card">
+      <span>Total de propostas</span>
+      <strong id="totalPropostas">0</strong>
+    </div>
+
+    <div class="resumo-card">
+      <span>Em elaboração</span>
+      <strong id="totalElaboracao">0</strong>
+    </div>
+
+    <div class="resumo-card">
+      <span>Enviadas</span>
+      <strong id="totalEnviadas">0</strong>
+    </div>
+
+    <div class="resumo-card">
+      <span>Aprovadas</span>
+      <strong id="totalAprovadas">0</strong>
+    </div>
+  </section>
+
+  <section class="formulario" id="areaFormulario">
+    <h2 id="tituloFormulario">Nova Proposta Comercial</h2>
+
+    <form id="formProposta">
+      <input type="hidden" id="propostaId">
+
+      <div class="grade">
+
+        <div class="campo">
+          <label>Empresa / Instituição *</label>
+          <input id="empresa" required>
+        </div>
+
+        <div class="campo">
+          <label>Nome do contato</label>
+          <input id="contato">
+        </div>
+
+        <div class="campo">
+          <label>E-mail</label>
+          <input type="email" id="email">
+        </div>
+
+        <div class="campo">
+          <label>Telefone / WhatsApp</label>
+          <input id="telefone">
+        </div>
+
+        <div class="campo">
+          <label>Cidade</label>
+          <input id="cidade">
+        </div>
+
+        <div class="campo">
+          <label>UF</label>
+          <select id="uf">
+            <option value="">Selecione</option>
+            <option>AC</option><option>AL</option><option>AP</option>
+            <option>AM</option><option>BA</option><option>CE</option>
+            <option>DF</option><option>ES</option><option>GO</option>
+            <option>MA</option><option>MT</option><option>MS</option>
+            <option>MG</option><option>PA</option><option>PB</option>
+            <option>PR</option><option>PE</option><option>PI</option>
+            <option>RJ</option><option>RN</option><option>RS</option>
+            <option>RO</option><option>RR</option><option>SC</option>
+            <option>SP</option><option>SE</option><option>TO</option>
+          </select>
+        </div>
+
+        <div class="campo campo-completo">
+          <label>Curso / Treinamento *</label>
+          <input
+            id="curso"
+            placeholder="Ex.: NR-10 Básico 40h"
+            required
+          >
+        </div>
+
+        <div class="campo">
+          <label>Quantidade de participantes</label>
+          <input type="number" min="1" id="participantes">
+        </div>
+
+        <div class="campo">
+          <label>Carga horária</label>
+          <input id="cargaHoraria" placeholder="Ex.: 40 horas">
+        </div>
+
+        <div class="campo">
+          <label>Modalidade</label>
+          <select id="modalidade">
+            <option value="">Selecione</option>
+            <option>Presencial</option>
+            <option>Online</option>
+            <option>Semipresencial</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label>Valor da proposta (R$) *</label>
+          <input
+            type="number"
+            min="0"
+            step="0.01"
+            id="valor"
+            required
+          >
+        </div>
+
+        <div class="campo">
+          <label>Validade da proposta</label>
+          <input type="date" id="validade">
+        </div>
+
+        <div class="campo">
+          <label>Status</label>
+          <select id="status">
+            <option value="elaboracao">Em elaboração</option>
+            <option value="enviada">Enviada</option>
+            <option value="aprovada">Aprovada</option>
+            <option value="recusada">Recusada</option>
+            <option value="cancelada">Cancelada</option>
+          </select>
+        </div>
+
+        <div class="campo campo-completo">
+          <label>Observações / Condições comerciais</label>
+          <textarea id="observacoes"></textarea>
+        </div>
+
+      </div>
+
+      <div class="acoes-formulario">
+        <button
+          type="button"
+          class="cinza"
+          onclick="cancelarFormulario()"
+        >
+          CANCELAR
+        </button>
+
+        <button type="submit" class="azul">
+          SALVAR PROPOSTA
+        </button>
+      </div>
+
+    </form>
+  </section>
+
+  <section class="painel">
+
+    <div class="cabecalho-painel">
+      <h2>Controle de Propostas</h2>
+
+      <button class="azul" onclick="novaProposta()">
+        + NOVA PROPOSTA
+      </button>
+    </div>
+
+    <div class="filtros">
+      <input
+        id="busca"
+        placeholder="Buscar empresa, contato ou curso..."
+      >
+
+      <select id="filtroStatus">
+        <option value="">Todos os status</option>
+        <option value="elaboracao">Em elaboração</option>
+        <option value="enviada">Enviada</option>
+        <option value="aprovada">Aprovada</option>
+        <option value="recusada">Recusada</option>
+        <option value="cancelada">Cancelada</option>
+      </select>
+    </div>
+
+    <div class="tabela">
+      <table>
+        <thead>
+          <tr>
+            <th>Nº</th>
+            <th>Empresa / Instituição</th>
+            <th>Curso</th>
+            <th>Cidade / UF</th>
+            <th>Participantes</th>
+            <th>Valor</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+
+        <tbody id="listaPropostas"></tbody>
+      </table>
+    </div>
+
+  </section>
+
+</main>
+
+<script>
+  const CHAVE = "utb_propostas_comerciais";
+
+  let propostas = JSON.parse(
+    localStorage.getItem(CHAVE) || "[]"
+  );
+
+  const form = document.getElementById("formProposta");
+  const areaFormulario = document.getElementById("areaFormulario");
+  const busca = document.getElementById("busca");
+  const filtroStatus = document.getElementById("filtroStatus");
+
+  function voltarPainel() {
+    window.location.href = "admin.html";
+  }
+
+  function sair() {
+    sessionStorage.removeItem("utb_access_token");
+    window.location.replace("admin-instrutores.html");
+  }
+
+  function novaProposta() {
+    form.reset();
+    document.getElementById("propostaId").value = "";
+    document.getElementById("status").value = "elaboracao";
+    document.getElementById("tituloFormulario").textContent =
+      "Nova Proposta Comercial";
+
+    areaFormulario.classList.add("ativo");
+    areaFormulario.scrollIntoView({ behavior: "smooth" });
+  }
+
+  function cancelarFormulario() {
+    form.reset();
+    document.getElementById("propostaId").value = "";
+    areaFormulario.classList.remove("ativo");
+  }
+
+  function salvarLocal() {
+    localStorage.setItem(CHAVE, JSON.stringify(propostas));
+  }
+
+  function numeroNovaProposta() {
+    if (propostas.length === 0) return 1;
+
+    return Math.max(
+      ...propostas.map(p => Number(p.numero) || 0)
+    ) + 1;
+  }
+
+  function formatarNumero(numero) {
+    return String(numero).padStart(4, "0");
+  }
+
+  function formatarValor(valor) {
+    return Number(valor || 0).toLocaleString(
+      "pt-BR",
+      {
+        style: "currency",
+        currency: "BRL"
+      }
+    );
+  }
+
+  function nomeStatus(status) {
+    const nomes = {
+      elaboracao: "Em elaboração",
+      enviada: "Enviada",
+      aprovada: "Aprovada",
+      recusada: "Recusada",
+      cancelada: "Cancelada"
+    };
+
+    return nomes[status] || status;
+  }
+
+  function escapar(texto) {
+    return String(texto || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function atualizarResumo() {
+    document.getElementById("totalPropostas").textContent =
+      propostas.length;
+
+    document.getElementById("totalElaboracao").textContent =
+      propostas.filter(p => p.status === "elaboracao").length;
+
+    document.getElementById("totalEnviadas").textContent =
+      propostas.filter(p => p.status === "enviada").length;
+
+    document.getElementById("totalAprovadas").textContent =
+      propostas.filter(p => p.status === "aprovada").length;
+  }
+
+  function renderizar() {
+    const tbody = document.getElementById("listaPropostas");
+
+    const termo = busca.value.trim().toLowerCase();
+    const filtro = filtroStatus.value;
+
+    const lista = propostas.filter(p => {
+      const texto = (
+        p.empresa + " " +
+        p.contato + " " +
+        p.curso + " " +
+        p.cidade + " " +
+        p.uf
+      ).toLowerCase();
+
+      return (
+        (!termo || texto.includes(termo)) &&
+        (!filtro || p.status === filtro)
+      );
+    });
+
+    if (lista.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="8" class="vazio">
+            Nenhuma proposta encontrada.
+          </td>
+        </tr>
+      `;
+
+      atualizarResumo();
+      return;
+    }
+
+    tbody.innerHTML = lista
+      .sort((a, b) => b.numero - a.numero)
+      .map(p => `
+        <tr>
+          <td>${formatarNumero(p.numero)}</td>
+          <td>${escapar(p.empresa)}</td>
+          <td>${escapar(p.curso)}</td>
+          <td>${escapar(
+            [p.cidade, p.uf].filter(Boolean).join(" / ") || "-"
+          )}</td>
+          <td>${escapar(p.participantes || "-")}</td>
+          <td>${formatarValor(p.valor)}</td>
+
+          <td>
+            <span class="status status-${escapar(p.status)}">
+              ${escapar(nomeStatus(p.status))}
+            </span>
+          </td>
+
+          <td>
+            <div class="acoes-tabela">
+              <button
+                class="azul"
+                onclick="editarProposta('${p.id}')"
+              >
+                EDITAR
+              </button>
+
+              <button
+                class="vermelho"
+                onclick="excluirProposta('${p.id}')"
+              >
+                EXCLUIR
+              </button>
+            </div>
+          </td>
+        </tr>
+      `)
+      .join("");
+
+    atualizarResumo();
+  }
+
+  function editarProposta(id) {
+    const p = propostas.find(item => item.id === id);
+
+    if (!p) return;
+
+    document.getElementById("propostaId").value = p.id;
+    document.getElementById("empresa").value = p.empresa || "";
+    document.getElementById("contato").value = p.contato || "";
+    document.getElementById("email").value = p.email || "";
+    document.getElementById("telefone").value = p.telefone || "";
+    document.getElementById("cidade").value = p.cidade || "";
+    document.getElementById("uf").value = p.uf || "";
+    document.getElementById("curso").value = p.curso || "";
+    document.getElementById("participantes").value =
+      p.participantes || "";
+    document.getElementById("cargaHoraria").value =
+      p.cargaHoraria || "";
+    document.getElementById("modalidade").value =
+      p.modalidade || "";
+    document.getElementById("valor").value = p.valor || "";
+    document.getElementById("validade").value = p.validade || "";
+    document.getElementById("status").value =
+      p.status || "elaboracao";
+    document.getElementById("observacoes").value =
+      p.observacoes || "";
+
+    document.getElementById("tituloFormulario").textContent =
+      "Editar Proposta " + formatarNumero(p.numero);
+
+    areaFormulario.classList.add("ativo");
+    areaFormulario.scrollIntoView({ behavior: "smooth" });
+  }
+
+  function excluirProposta(id) {
+    const p = propostas.find(item => item.id === id);
+
+    if (!p) return;
+
+    if (
+      !confirm(
+        "Deseja excluir a proposta " +
+        formatarNumero(p.numero) +
+        "?"
+      )
+    ) {
+      return;
+    }
+
+    propostas = propostas.filter(item => item.id !== id);
+
+    salvarLocal();
+    renderizar();
+  }
+
+  form.addEventListener("submit", function(evento) {
+    evento.preventDefault();
+
+    const id = document.getElementById("propostaId").value;
+
+    const dados = {
+      empresa: document.getElementById("empresa").value.trim(),
+      contato: document.getElementById("contato").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      telefone: document.getElementById("telefone").value.trim(),
+      cidade: document.getElementById("cidade").value.trim(),
+      uf: document.getElementById("uf").value,
+      curso: document.getElementById("curso").value.trim(),
+      participantes: document.getElementById("participantes").value,
+      cargaHoraria:
+        document.getElementById("cargaHoraria").value.trim(),
+      modalidade: document.getElementById("modalidade").value,
+      valor: document.getElementById("valor").value,
+      validade: document.getElementById("validade").value,
+      status: document.getElementById("status").value,
+      observacoes:
+        document.getElementById("observacoes").value.trim()
+    };
+
+    if (id) {
+      const indice = propostas.findIndex(p => p.id === id);
+
+      if (indice >= 0) {
+        propostas[indice] = {
+          ...propostas[indice],
+          ...dados
+        };
+      }
+    } else {
+      propostas.push({
+        id: Date.now().toString(),
+        numero: numeroNovaProposta(),
+        dataCriacao: new Date().toISOString(),
+        ...dados
+      });
+    }
+
+    salvarLocal();
+    cancelarFormulario();
+    renderizar();
+
+    alert("Proposta salva com sucesso.");
+  });
+
+  busca.addEventListener("input", renderizar);
+  filtroStatus.addEventListener("change", renderizar);
+
+  renderizar();
+</script>
+
+</body>
+</html>
