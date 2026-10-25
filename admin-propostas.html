@@ -70,6 +70,10 @@
       font-size: 14px;
     }
 
+    button:hover {
+      opacity: 0.92;
+    }
+
     .botao-voltar {
       background: #0d47a1;
       color: white;
@@ -83,6 +87,30 @@
     .botao-nova {
       background: #1565c0;
       color: white;
+    }
+
+    .botao-salvar {
+      background: #0d47a1;
+      color: white;
+    }
+
+    .botao-cancelar {
+      background: #64748b;
+      color: white;
+    }
+
+    .botao-editar {
+      background: #1565c0;
+      color: white;
+      padding: 8px 12px;
+      font-size: 12px;
+    }
+
+    .botao-excluir {
+      background: #b91c1c;
+      color: white;
+      padding: 8px 12px;
+      font-size: 12px;
     }
 
     main {
@@ -121,13 +149,84 @@
       color: #0d47a1;
     }
 
-    .painel {
+    .painel,
+    .formulario-area {
       background: white;
       border-radius: 12px;
       padding: 22px;
       border: 1px solid #dbe3ee;
       box-shadow:
         0 3px 12px rgba(0, 0, 0, 0.05);
+      margin-bottom: 25px;
+    }
+
+    .formulario-area {
+      display: none;
+    }
+
+    .formulario-area.ativo {
+      display: block;
+    }
+
+    .formulario-area h2 {
+      margin: 0 0 20px;
+      color: #0d47a1;
+      font-size: 22px;
+    }
+
+    .grade-formulario {
+      display: grid;
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .campo {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .campo-completo {
+      grid-column: 1 / -1;
+    }
+
+    .campo label {
+      font-weight: bold;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .campo input,
+    .campo select,
+    .campo textarea {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 11px 12px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      background: white;
+    }
+
+    .campo textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .campo input:focus,
+    .campo select:focus,
+    .campo textarea:focus {
+      outline: 2px solid #bfdbfe;
+      border-color: #2563eb;
+    }
+
+    .acoes-formulario {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 22px;
+      flex-wrap: wrap;
     }
 
     .painel-topo {
@@ -173,7 +272,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 850px;
+      min-width: 1000px;
     }
 
     th {
@@ -189,109 +288,21 @@
       padding: 13px 12px;
       border-bottom: 1px solid #e5e7eb;
       font-size: 14px;
+      vertical-align: middle;
     }
 
-    .vazio {
-      text-align: center;
-      padding: 45px 20px;
-      color: #64748b;
+    .acoes-tabela {
+      display: flex;
+      gap: 6px;
     }
 
-    .vazio strong {
-      display: block;
-      color: #334155;
-      margin-bottom: 7px;
-      font-size: 17px;
+    .status {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
     }
 
-    @media (max-width: 700px) {
-
-      .header-conteudo {
-        align-items: flex-start;
-      }
-
-      .acoes-topo {
-        width: 100%;
-      }
-
-      .acoes-topo button {
-        flex: 1;
-      }
-
-      .filtros input,
-      .filtros select {
-        width: 100%;
-        min-width: 100%;
-      }
-
-    }
-
-  </style>
-
-</head>
-
-<body>
-
-  <header>
-
-    <div class="header-conteudo">
-
-      <div class="titulo-area">
-
-        <h1>
-          Propostas Comerciais
-        </h1>
-
-        <p>
-          Universo Treinamentos Brasil - UTB
-        </p>
-
-      </div>
-
-      <div class="acoes-topo">
-
-        <button
-          class="botao-voltar"
-          type="button"
-          onclick="voltarPainel()"
-        >
-          VOLTAR AO PAINEL
-        </button>
-
-        <button
-          class="botao-sair"
-          type="button"
-          onclick="sair()"
-        >
-          SAIR
-        </button>
-
-      </div>
-
-    </div>
-
-  </header>
-
-  <main>
-
-    <section class="resumo">
-
-      <div class="resumo-card">
-
-        <span>
-          Total de propostas
-        </span>
-
-        <strong id="totalPropostas">
-          0
-        </strong>
-
-      </div>
-
-      <div class="resumo-card">
-
-        <span>
-          Em elaboração
-        </span>
-
-        <strong id="total
+    .status-elaboracao {
+      background: #
