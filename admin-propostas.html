@@ -537,288 +537,981 @@
 </main>
 
 <script>
-  const CHAVE = "utb_propostas_comerciais";
 
-  let propostas = JSON.parse(
-    localStorage.getItem(CHAVE) || "[]"
-  );
+  const SUPABASE_URL =
+    "https://xkxlgmmssvllcmhymibj.supabase.co";
 
-  const form = document.getElementById("formProposta");
-  const areaFormulario = document.getElementById("areaFormulario");
-  const busca = document.getElementById("busca");
-  const filtroStatus = document.getElementById("filtroStatus");
+  const SUPABASE_KEY =
+    "sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV";
+
+  let accessToken =
+    sessionStorage.getItem(
+      "utb_access_token"
+    ) || "";
+
+  let propostas = [];
+
+  const form =
+    document.getElementById(
+      "formProposta"
+    );
+
+  const areaFormulario =
+    document.getElementById(
+      "areaFormulario"
+    );
+
+  const busca =
+    document.getElementById(
+      "busca"
+    );
+
+  const filtroStatus =
+    document.getElementById(
+      "filtroStatus"
+    );
+
 
   function voltarPainel() {
-    window.location.href = "admin.html";
+
+    window.location.href =
+      "admin.html";
+
   }
+
 
   function sair() {
-    sessionStorage.removeItem("utb_access_token");
-    window.location.replace("admin-instrutores.html");
+
+    sessionStorage.removeItem(
+      "utb_access_token"
+    );
+
+    accessToken = "";
+
+    window.location.replace(
+      "admin-instrutores.html"
+    );
+
   }
+
+
+  function verificarSessao(resposta) {
+
+    if (
+      resposta.status === 401 ||
+      resposta.status === 403
+    ) {
+
+      sair();
+
+      return false;
+
+    }
+
+    return true;
+
+  }
+
+
+  async function carregarPropostas() {
+
+    try {
+
+      const resposta =
+        await fetch(
+          `${SUPABASE_URL}/rest/v1/propostas_comerciais?select=*&order=numero.desc`,
+          {
+            headers: {
+
+              "apikey":
+                SUPABASE_KEY,
+
+              "Authorization":
+                `Bearer ${accessToken}`
+
+            }
+          }
+        );
+
+
+      if (!verificarSessao(resposta)) {
+
+        return;
+
+      }
+
+
+      if (!resposta.ok) {
+
+        const erro =
+          await resposta.text();
+
+        throw new Error(
+          erro ||
+          "Não foi possível carregar as propostas."
+        );
+
+      }
+
+
+      propostas =
+        await resposta.json();
+
+
+      renderizar();
+
+
+    } catch (erro) {
+
+      console.error(erro);
+
+      alert(
+        "Erro ao carregar propostas: " +
+        erro.message
+      );
+
+    }
+
+  }
+
 
   function novaProposta() {
+
     form.reset();
-    document.getElementById("propostaId").value = "";
-    document.getElementById("status").value = "elaboracao";
-    document.getElementById("tituloFormulario").textContent =
+
+    document.getElementById(
+      "propostaId"
+    ).value = "";
+
+    document.getElementById(
+      "status"
+    ).value =
+      "elaboracao";
+
+    document.getElementById(
+      "tituloFormulario"
+    ).textContent =
       "Nova Proposta Comercial";
 
-    areaFormulario.classList.add("ativo");
-    areaFormulario.scrollIntoView({ behavior: "smooth" });
+    areaFormulario.classList.add(
+      "ativo"
+    );
+
+    areaFormulario.scrollIntoView({
+      behavior: "smooth"
+    });
+
   }
+
 
   function cancelarFormulario() {
+
     form.reset();
-    document.getElementById("propostaId").value = "";
-    areaFormulario.classList.remove("ativo");
+
+    document.getElementById(
+      "propostaId"
+    ).value = "";
+
+    areaFormulario.classList.remove(
+      "ativo"
+    );
+
   }
 
-  function salvarLocal() {
-    localStorage.setItem(CHAVE, JSON.stringify(propostas));
-  }
-
-  function numeroNovaProposta() {
-    if (propostas.length === 0) return 1;
-
-    return Math.max(
-      ...propostas.map(p => Number(p.numero) || 0)
-    ) + 1;
-  }
 
   function formatarNumero(numero) {
-    return String(numero).padStart(4, "0");
+
+    return String(
+      numero
+    ).padStart(
+      4,
+      "0"
+    );
+
   }
 
+
   function formatarValor(valor) {
-    return Number(valor || 0).toLocaleString(
+
+    return Number(
+      valor || 0
+    ).toLocaleString(
       "pt-BR",
       {
         style: "currency",
         currency: "BRL"
       }
     );
+
   }
+
 
   function nomeStatus(status) {
+
     const nomes = {
-      elaboracao: "Em elaboração",
-      enviada: "Enviada",
-      aprovada: "Aprovada",
-      recusada: "Recusada",
-      cancelada: "Cancelada"
+
+      elaboracao:
+        "Em elaboração",
+
+      enviada:
+        "Enviada",
+
+      aprovada:
+        "Aprovada",
+
+      recusada:
+        "Recusada",
+
+      cancelada:
+        "Cancelada"
+
     };
 
-    return nomes[status] || status;
+    return (
+      nomes[status] ||
+      status
+    );
+
   }
+
 
   function escapar(texto) {
-    return String(texto || "")
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
+
+    return String(
+      texto || ""
+    )
+      .replaceAll(
+        "&",
+        "&amp;"
+      )
+      .replaceAll(
+        "<",
+        "&lt;"
+      )
+      .replaceAll(
+        ">",
+        "&gt;"
+      )
+      .replaceAll(
+        '"',
+        "&quot;"
+      )
+      .replaceAll(
+        "'",
+        "&#039;"
+      );
+
   }
+
 
   function atualizarResumo() {
-    document.getElementById("totalPropostas").textContent =
+
+    document.getElementById(
+      "totalPropostas"
+    ).textContent =
       propostas.length;
 
-    document.getElementById("totalElaboracao").textContent =
-      propostas.filter(p => p.status === "elaboracao").length;
 
-    document.getElementById("totalEnviadas").textContent =
-      propostas.filter(p => p.status === "enviada").length;
+    document.getElementById(
+      "totalElaboracao"
+    ).textContent =
+      propostas.filter(
+        p =>
+          p.status ===
+          "elaboracao"
+      ).length;
 
-    document.getElementById("totalAprovadas").textContent =
-      propostas.filter(p => p.status === "aprovada").length;
+
+    document.getElementById(
+      "totalEnviadas"
+    ).textContent =
+      propostas.filter(
+        p =>
+          p.status ===
+          "enviada"
+      ).length;
+
+
+    document.getElementById(
+      "totalAprovadas"
+    ).textContent =
+      propostas.filter(
+        p =>
+          p.status ===
+          "aprovada"
+      ).length;
+
   }
 
+
   function renderizar() {
-    const tbody = document.getElementById("listaPropostas");
 
-    const termo = busca.value.trim().toLowerCase();
-    const filtro = filtroStatus.value;
-
-    const lista = propostas.filter(p => {
-      const texto = (
-        p.empresa + " " +
-        p.contato + " " +
-        p.curso + " " +
-        p.cidade + " " +
-        p.uf
-      ).toLowerCase();
-
-      return (
-        (!termo || texto.includes(termo)) &&
-        (!filtro || p.status === filtro)
+    const tbody =
+      document.getElementById(
+        "listaPropostas"
       );
-    });
+
+
+    const termo =
+      busca.value
+        .trim()
+        .toLowerCase();
+
+
+    const filtro =
+      filtroStatus.value;
+
+
+    const lista =
+      propostas.filter(
+        p => {
+
+          const texto =
+            (
+              (p.empresa || "") +
+              " " +
+              (p.contato || "") +
+              " " +
+              (p.curso || "") +
+              " " +
+              (p.cidade || "") +
+              " " +
+              (p.uf || "")
+            ).toLowerCase();
+
+
+          return (
+
+            (
+              !termo ||
+              texto.includes(
+                termo
+              )
+            )
+
+            &&
+
+            (
+              !filtro ||
+              p.status === filtro
+            )
+
+          );
+
+        }
+      );
+
 
     if (lista.length === 0) {
+
       tbody.innerHTML = `
         <tr>
-          <td colspan="8" class="vazio">
+          <td
+            colspan="8"
+            class="vazio"
+          >
             Nenhuma proposta encontrada.
           </td>
         </tr>
       `;
 
       atualizarResumo();
+
       return;
+
     }
 
-    tbody.innerHTML = lista
-      .sort((a, b) => b.numero - a.numero)
-      .map(p => `
-        <tr>
-          <td>${formatarNumero(p.numero)}</td>
-          <td>${escapar(p.empresa)}</td>
-          <td>${escapar(p.curso)}</td>
-          <td>${escapar(
-            [p.cidade, p.uf].filter(Boolean).join(" / ") || "-"
-          )}</td>
-          <td>${escapar(p.participantes || "-")}</td>
-          <td>${formatarValor(p.valor)}</td>
 
-          <td>
-            <span class="status status-${escapar(p.status)}">
-              ${escapar(nomeStatus(p.status))}
-            </span>
-          </td>
+    tbody.innerHTML =
+      lista.map(
+        p => `
+          <tr>
 
-          <td>
-            <div class="acoes-tabela">
-              <button
-                class="azul"
-                onclick="editarProposta('${p.id}')"
+            <td>
+              ${formatarNumero(
+                p.numero
+              )}
+            </td>
+
+            <td>
+              ${escapar(
+                p.empresa
+              )}
+            </td>
+
+            <td>
+              ${escapar(
+                p.curso
+              )}
+            </td>
+
+            <td>
+              ${escapar(
+                [
+                  p.cidade,
+                  p.uf
+                ]
+                  .filter(Boolean)
+                  .join(" / ")
+                  || "-"
+              )}
+            </td>
+
+            <td>
+              ${escapar(
+                p.participantes
+                || "-"
+              )}
+            </td>
+
+            <td>
+              ${formatarValor(
+                p.valor
+              )}
+            </td>
+
+            <td>
+
+              <span
+                class="
+                  status
+                  status-${escapar(
+                    p.status
+                  )}
+                "
               >
-                EDITAR
-              </button>
+                ${escapar(
+                  nomeStatus(
+                    p.status
+                  )
+                )}
+              </span>
 
-              <button
-                class="vermelho"
-                onclick="excluirProposta('${p.id}')"
+            </td>
+
+            <td>
+
+              <div
+                class="acoes-tabela"
               >
-                EXCLUIR
-              </button>
-            </div>
-          </td>
-        </tr>
-      `)
-      .join("");
+
+                <button
+                  class="azul"
+                  onclick="
+                    editarProposta(
+                      '${p.id}'
+                    )
+                  "
+                >
+                  EDITAR
+                </button>
+
+                <button
+                  class="vermelho"
+                  onclick="
+                    excluirProposta(
+                      '${p.id}'
+                    )
+                  "
+                >
+                  EXCLUIR
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+        `
+      ).join("");
+
 
     atualizarResumo();
+
   }
+
 
   function editarProposta(id) {
-    const p = propostas.find(item => item.id === id);
 
-    if (!p) return;
+    const p =
+      propostas.find(
+        item =>
+          item.id === id
+      );
 
-    document.getElementById("propostaId").value = p.id;
-    document.getElementById("empresa").value = p.empresa || "";
-    document.getElementById("contato").value = p.contato || "";
-    document.getElementById("email").value = p.email || "";
-    document.getElementById("telefone").value = p.telefone || "";
-    document.getElementById("cidade").value = p.cidade || "";
-    document.getElementById("uf").value = p.uf || "";
-    document.getElementById("curso").value = p.curso || "";
-    document.getElementById("participantes").value =
+
+    if (!p) {
+
+      return;
+
+    }
+
+
+    document.getElementById(
+      "propostaId"
+    ).value =
+      p.id;
+
+
+    document.getElementById(
+      "empresa"
+    ).value =
+      p.empresa || "";
+
+
+    document.getElementById(
+      "contato"
+    ).value =
+      p.contato || "";
+
+
+    document.getElementById(
+      "email"
+    ).value =
+      p.email || "";
+
+
+    document.getElementById(
+      "telefone"
+    ).value =
+      p.telefone || "";
+
+
+    document.getElementById(
+      "cidade"
+    ).value =
+      p.cidade || "";
+
+
+    document.getElementById(
+      "uf"
+    ).value =
+      p.uf || "";
+
+
+    document.getElementById(
+      "curso"
+    ).value =
+      p.curso || "";
+
+
+    document.getElementById(
+      "participantes"
+    ).value =
       p.participantes || "";
-    document.getElementById("cargaHoraria").value =
-      p.cargaHoraria || "";
-    document.getElementById("modalidade").value =
+
+
+    document.getElementById(
+      "cargaHoraria"
+    ).value =
+      p.carga_horaria || "";
+
+
+    document.getElementById(
+      "modalidade"
+    ).value =
       p.modalidade || "";
-    document.getElementById("valor").value = p.valor || "";
-    document.getElementById("validade").value = p.validade || "";
-    document.getElementById("status").value =
-      p.status || "elaboracao";
-    document.getElementById("observacoes").value =
+
+
+    document.getElementById(
+      "valor"
+    ).value =
+      p.valor || "";
+
+
+    document.getElementById(
+      "validade"
+    ).value =
+      p.validade || "";
+
+
+    document.getElementById(
+      "status"
+    ).value =
+      p.status ||
+      "elaboracao";
+
+
+    document.getElementById(
+      "observacoes"
+    ).value =
       p.observacoes || "";
 
-    document.getElementById("tituloFormulario").textContent =
-      "Editar Proposta " + formatarNumero(p.numero);
 
-    areaFormulario.classList.add("ativo");
-    areaFormulario.scrollIntoView({ behavior: "smooth" });
+    document.getElementById(
+      "tituloFormulario"
+    ).textContent =
+      "Editar Proposta " +
+      formatarNumero(
+        p.numero
+      );
+
+
+    areaFormulario.classList.add(
+      "ativo"
+    );
+
+
+    areaFormulario.scrollIntoView({
+      behavior: "smooth"
+    });
+
   }
 
-  function excluirProposta(id) {
-    const p = propostas.find(item => item.id === id);
 
-    if (!p) return;
+  async function excluirProposta(id) {
 
-    if (
-      !confirm(
-        "Deseja excluir a proposta " +
-        formatarNumero(p.numero) +
-        "?"
-      )
-    ) {
+    const p =
+      propostas.find(
+        item =>
+          item.id === id
+      );
+
+
+    if (!p) {
+
       return;
+
     }
 
-    propostas = propostas.filter(item => item.id !== id);
 
-    salvarLocal();
-    renderizar();
+    const confirmar =
+      confirm(
+        "Deseja excluir a proposta " +
+        formatarNumero(
+          p.numero
+        ) +
+        "?"
+      );
+
+
+    if (!confirmar) {
+
+      return;
+
+    }
+
+
+    try {
+
+      const resposta =
+        await fetch(
+          `${SUPABASE_URL}/rest/v1/propostas_comerciais?id=eq.${id}`,
+          {
+
+            method: "DELETE",
+
+            headers: {
+
+              "apikey":
+                SUPABASE_KEY,
+
+              "Authorization":
+                `Bearer ${accessToken}`,
+
+              "Prefer":
+                "return=minimal"
+
+            }
+
+          }
+        );
+
+
+      if (!verificarSessao(resposta)) {
+
+        return;
+
+      }
+
+
+      if (!resposta.ok) {
+
+        const erro =
+          await resposta.text();
+
+        throw new Error(
+          erro ||
+          "Não foi possível excluir a proposta."
+        );
+
+      }
+
+
+      await carregarPropostas();
+
+
+    } catch (erro) {
+
+      alert(
+        "Erro ao excluir: " +
+        erro.message
+      );
+
+    }
+
   }
 
-  form.addEventListener("submit", function(evento) {
-    evento.preventDefault();
 
-    const id = document.getElementById("propostaId").value;
+  form.addEventListener(
+    "submit",
+    async function(evento) {
 
-    const dados = {
-      empresa: document.getElementById("empresa").value.trim(),
-      contato: document.getElementById("contato").value.trim(),
-      email: document.getElementById("email").value.trim(),
-      telefone: document.getElementById("telefone").value.trim(),
-      cidade: document.getElementById("cidade").value.trim(),
-      uf: document.getElementById("uf").value,
-      curso: document.getElementById("curso").value.trim(),
-      participantes: document.getElementById("participantes").value,
-      cargaHoraria:
-        document.getElementById("cargaHoraria").value.trim(),
-      modalidade: document.getElementById("modalidade").value,
-      valor: document.getElementById("valor").value,
-      validade: document.getElementById("validade").value,
-      status: document.getElementById("status").value,
-      observacoes:
-        document.getElementById("observacoes").value.trim()
-    };
+      evento.preventDefault();
 
-    if (id) {
-      const indice = propostas.findIndex(p => p.id === id);
 
-      if (indice >= 0) {
-        propostas[indice] = {
-          ...propostas[indice],
-          ...dados
-        };
+      const id =
+        document.getElementById(
+          "propostaId"
+        ).value;
+
+
+      const participantesValor =
+        document.getElementById(
+          "participantes"
+        ).value;
+
+
+      const dados = {
+
+        empresa:
+          document.getElementById(
+            "empresa"
+          ).value.trim(),
+
+        contato:
+          document.getElementById(
+            "contato"
+          ).value.trim()
+          || null,
+
+        email:
+          document.getElementById(
+            "email"
+          ).value.trim()
+          || null,
+
+        telefone:
+          document.getElementById(
+            "telefone"
+          ).value.trim()
+          || null,
+
+        cidade:
+          document.getElementById(
+            "cidade"
+          ).value.trim()
+          || null,
+
+        uf:
+          document.getElementById(
+            "uf"
+          ).value
+          || null,
+
+        curso:
+          document.getElementById(
+            "curso"
+          ).value.trim(),
+
+        participantes:
+          participantesValor
+          ? Number(
+              participantesValor
+            )
+          : null,
+
+        carga_horaria:
+          document.getElementById(
+            "cargaHoraria"
+          ).value.trim()
+          || null,
+
+        modalidade:
+          document.getElementById(
+            "modalidade"
+          ).value
+          || null,
+
+        valor:
+          Number(
+            document.getElementById(
+              "valor"
+            ).value
+          ),
+
+        validade:
+          document.getElementById(
+            "validade"
+          ).value
+          || null,
+
+        status:
+          document.getElementById(
+            "status"
+          ).value,
+
+        observacoes:
+          document.getElementById(
+            "observacoes"
+          ).value.trim()
+          || null
+
+      };
+
+
+      try {
+
+        let resposta;
+
+
+        if (id) {
+
+          resposta =
+            await fetch(
+              `${SUPABASE_URL}/rest/v1/propostas_comerciais?id=eq.${id}`,
+              {
+
+                method: "PATCH",
+
+                headers: {
+
+                  "apikey":
+                    SUPABASE_KEY,
+
+                  "Authorization":
+                    `Bearer ${accessToken}`,
+
+                  "Content-Type":
+                    "application/json",
+
+                  "Prefer":
+                    "return=minimal"
+
+                },
+
+                body:
+                  JSON.stringify(
+                    dados
+                  )
+
+              }
+            );
+
+
+        } else {
+
+          resposta =
+            await fetch(
+              `${SUPABASE_URL}/rest/v1/propostas_comerciais`,
+              {
+
+                method: "POST",
+
+                headers: {
+
+                  "apikey":
+                    SUPABASE_KEY,
+
+                  "Authorization":
+                    `Bearer ${accessToken}`,
+
+                  "Content-Type":
+                    "application/json",
+
+                  "Prefer":
+                    "return=minimal"
+
+                },
+
+                body:
+                  JSON.stringify(
+                    dados
+                  )
+
+              }
+            );
+
+        }
+
+
+        if (!verificarSessao(resposta)) {
+
+          return;
+
+        }
+
+
+        if (!resposta.ok) {
+
+          let mensagem =
+            "Não foi possível salvar a proposta.";
+
+
+          try {
+
+            const erro =
+              await resposta.json();
+
+            mensagem =
+              erro.message ||
+              erro.details ||
+              mensagem;
+
+          } catch (e) {}
+
+
+          throw new Error(
+            mensagem
+          );
+
+        }
+
+
+        cancelarFormulario();
+
+        await carregarPropostas();
+
+        alert(
+          "Proposta salva no Supabase com sucesso."
+        );
+
+
+      } catch (erro) {
+
+        alert(
+          "Erro ao salvar proposta: " +
+          erro.message
+        );
+
       }
-    } else {
-      propostas.push({
-        id: Date.now().toString(),
-        numero: numeroNovaProposta(),
-        dataCriacao: new Date().toISOString(),
-        ...dados
-      });
+
     }
+  );
 
-    salvarLocal();
-    cancelarFormulario();
-    renderizar();
 
-    alert("Proposta salva com sucesso.");
-  });
+  busca.addEventListener(
+    "input",
+    renderizar
+  );
 
-  busca.addEventListener("input", renderizar);
-  filtroStatus.addEventListener("change", renderizar);
 
-  renderizar();
+  filtroStatus.addEventListener(
+    "change",
+    renderizar
+  );
+
+
+  if (!accessToken) {
+
+    sair();
+
+  } else {
+
+    carregarPropostas();
+
+  }
+
 </script>
 
 </body>
