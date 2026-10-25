@@ -995,27 +995,38 @@
                 class="acoes-tabela"
               >
 
-                <button
-                  class="azul"
-                  onclick="
-                    editarProposta(
-                      '${p.id}'
-                    )
-                  "
-                >
-                  EDITAR
-                </button>
+<button
+  class="azul"
+  onclick="
+    gerarPropostaPDF(
+      '${p.id}'
+    )
+  "
+>
+  IMPRIMIR / PDF
+</button>
 
-                <button
-                  class="vermelho"
-                  onclick="
-                    excluirProposta(
-                      '${p.id}'
-                    )
-                  "
-                >
-                  EXCLUIR
-                </button>
+<button
+  class="azul"
+  onclick="
+    editarProposta(
+      '${p.id}'
+    )
+  "
+>
+  EDITAR
+</button>
+
+<button
+  class="vermelho"
+  onclick="
+    excluirProposta(
+      '${p.id}'
+    )
+  "
+>
+  EXCLUIR
+</button>
 
               </div>
 
@@ -1030,6 +1041,437 @@
 
   }
 
+function formatarData(data) {
+
+  if (!data) {
+    return "-";
+  }
+
+  const texto = String(data);
+
+  if (texto.includes("T")) {
+    return new Date(texto)
+      .toLocaleDateString("pt-BR");
+  }
+
+  const partes = texto.split("-");
+
+  if (partes.length === 3) {
+    return (
+      partes[2] + "/" +
+      partes[1] + "/" +
+      partes[0]
+    );
+  }
+
+  return texto;
+}
+
+
+function gerarPropostaPDF(id) {
+
+  const p = propostas.find(
+    item => item.id === id
+  );
+
+  if (!p) {
+
+    alert(
+      "Proposta não encontrada."
+    );
+
+    return;
+  }
+
+
+  const numero =
+    formatarNumero(p.numero);
+
+
+  const cidadeUf =
+    [
+      p.cidade,
+      p.uf
+    ]
+      .filter(Boolean)
+      .join(" / ") || "-";
+
+
+  const observacoes =
+    escapar(
+      p.observacoes ||
+      "Sem observações adicionais."
+    )
+    .replace(
+      /\n/g,
+      "<br>"
+    );
+
+
+  const janela =
+    window.open(
+      "",
+      "_blank",
+      "width=900,height=700"
+    );
+
+
+  if (!janela) {
+
+    alert(
+      "O navegador bloqueou a janela de impressão."
+    );
+
+    return;
+  }
+
+
+  janela.document.write(`
+
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>
+Proposta Comercial ${numero} - UTB
+</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 40px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #1f2937;
+  background: white;
+}
+
+.documento {
+  max-width: 850px;
+  margin: auto;
+}
+
+.acoes {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.acoes button {
+  border: 0;
+  background: #0d47a1;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 7px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.cabecalho {
+  border-bottom: 4px solid #0d47a1;
+  padding-bottom: 18px;
+  margin-bottom: 25px;
+}
+
+.cabecalho h1 {
+  margin: 0;
+  color: #0d47a1;
+  font-size: 28px;
+}
+
+.cabecalho strong {
+  display: block;
+  margin-top: 7px;
+}
+
+.cabecalho span {
+  display: block;
+  margin-top: 5px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.numero {
+  background: #eef4fb;
+  padding: 14px;
+  border-radius: 7px;
+  margin-bottom: 25px;
+}
+
+.numero strong {
+  color: #0d47a1;
+}
+
+h2 {
+  color: #0d47a1;
+  font-size: 18px;
+  border-bottom: 1px solid #dbe3ee;
+  padding-bottom: 7px;
+  margin-top: 28px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+td {
+  border: 1px solid #dbe3ee;
+  padding: 10px;
+  vertical-align: top;
+}
+
+td:first-child {
+  width: 32%;
+  font-weight: bold;
+  background: #f8fafc;
+}
+
+.valor {
+  color: #0d47a1;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.observacoes {
+  border: 1px solid #dbe3ee;
+  border-radius: 7px;
+  padding: 15px;
+  min-height: 80px;
+  line-height: 1.5;
+}
+
+.assinaturas {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  margin-top: 55px;
+}
+
+.assinatura {
+  width: 45%;
+  text-align: center;
+  border-top: 1px solid #334155;
+  padding-top: 8px;
+  font-size: 13px;
+}
+
+.rodape {
+  margin-top: 45px;
+  padding-top: 15px;
+  border-top: 1px solid #dbe3ee;
+  text-align: center;
+  color: #64748b;
+  font-size: 12px;
+}
+
+@media print {
+
+  body {
+    padding: 0;
+  }
+
+  .acoes {
+    display: none;
+  }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="documento">
+
+  <div class="acoes">
+
+    <button onclick="window.print()">
+      IMPRIMIR / SALVAR EM PDF
+    </button>
+
+  </div>
+
+
+  <div class="cabecalho">
+
+    <h1>
+      Universo Treinamentos Brasil
+    </h1>
+
+    <strong>
+      UTB
+    </strong>
+
+    <span>
+      João Manoel dos Santos Reis Treinamentos ME
+    </span>
+
+    <span>
+      www.universotreinamentosbrasil.com.br
+    </span>
+
+  </div>
+
+
+  <div class="numero">
+
+    <strong>
+      PROPOSTA COMERCIAL Nº ${numero}
+    </strong>
+
+    <br><br>
+
+    Data:
+    ${formatarData(p.criado_em)}
+
+  </div>
+
+
+  <h2>
+    Dados do Cliente
+  </h2>
+
+  <table>
+
+    <tr>
+      <td>Empresa / Instituição</td>
+      <td>${escapar(p.empresa)}</td>
+    </tr>
+
+    <tr>
+      <td>Contato</td>
+      <td>${escapar(p.contato || "-")}</td>
+    </tr>
+
+    <tr>
+      <td>E-mail</td>
+      <td>${escapar(p.email || "-")}</td>
+    </tr>
+
+    <tr>
+      <td>Telefone / WhatsApp</td>
+      <td>${escapar(p.telefone || "-")}</td>
+    </tr>
+
+    <tr>
+      <td>Cidade / UF</td>
+      <td>${escapar(cidadeUf)}</td>
+    </tr>
+
+  </table>
+
+
+  <h2>
+    Treinamento Proposto
+  </h2>
+
+  <table>
+
+    <tr>
+      <td>Curso / Treinamento</td>
+      <td>${escapar(p.curso)}</td>
+    </tr>
+
+    <tr>
+      <td>Carga horária</td>
+      <td>${escapar(p.carga_horaria || "-")}</td>
+    </tr>
+
+    <tr>
+      <td>Modalidade</td>
+      <td>${escapar(p.modalidade || "-")}</td>
+    </tr>
+
+    <tr>
+      <td>Participantes</td>
+      <td>${escapar(p.participantes || "-")}</td>
+    </tr>
+
+  </table>
+
+
+  <h2>
+    Investimento
+  </h2>
+
+  <table>
+
+    <tr>
+      <td>Valor total</td>
+      <td class="valor">
+        ${formatarValor(p.valor)}
+      </td>
+    </tr>
+
+    <tr>
+      <td>Validade da proposta</td>
+      <td>
+        ${formatarData(p.validade)}
+      </td>
+    </tr>
+
+  </table>
+
+
+  <h2>
+    Condições Comerciais / Observações
+  </h2>
+
+  <div class="observacoes">
+    ${observacoes}
+  </div>
+
+
+  <div class="assinaturas">
+
+    <div class="assinatura">
+      Universo Treinamentos Brasil - UTB
+    </div>
+
+    <div class="assinatura">
+      Cliente
+    </div>
+
+  </div>
+
+
+  <div class="rodape">
+
+    Universo Treinamentos Brasil - UTB
+
+    <br>
+
+    João Manoel dos Santos Reis Treinamentos ME
+
+    <br>
+
+    www.universotreinamentosbrasil.com.br
+
+  </div>
+
+</div>
+
+</body>
+
+</html>
+
+  `);
+
+
+  janela.document.close();
+
+  janela.focus();
+
+}
 
   function editarProposta(id) {
 
