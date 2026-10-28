@@ -692,7 +692,25 @@ document.getElementById(
   "observacoes"
 ).value =
   "Condições de pagamento: Pix, boleto, cartão de crédito ou débito, conforme negociação com a contratante. Emissão de nota fiscal.";
-  
+
+const dataValidade = new Date();
+dataValidade.setDate(
+  dataValidade.getDate() + 15
+);
+
+const ano = dataValidade.getFullYear();
+const mes = String(
+  dataValidade.getMonth() + 1
+).padStart(2, "0");
+const dia = String(
+  dataValidade.getDate()
+).padStart(2, "0");
+
+document.getElementById(
+  "validade"
+).value = `${ano}-${mes}-${dia}`;
+
+    
     document.getElementById(
       "tituloFormulario"
     ).textContent =
