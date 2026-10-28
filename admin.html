@@ -370,23 +370,9 @@
     "utb_access_token"
   );
 
-const origem =
-  document.referrer || "";
-
-const veioDeAreaAdmin =
-  origem.startsWith(
-    window.location.origin + "/admin-"
-  );
-
-const veioDoProprioPainel =
-  origem.includes(
-    "/admin.html"
-  );
 
 if (
-  !token ||
-  !veioDeAreaAdmin ||
-  veioDoProprioPainel
+  !token
 ) {
 
   sessionStorage.removeItem(
