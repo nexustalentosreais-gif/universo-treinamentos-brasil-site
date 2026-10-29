@@ -2,17 +2,42 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Solicitar Serviço de Engenharia Elétrica | Universo Treinamentos Brasil</title>
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1"
+>
+<title>
+Solicitar Serviço de Engenharia Elétrica | Universo Treinamentos Brasil
+</title>
 <meta
 name="description"
 content="Solicite serviços profissionais de Engenharia Elétrica da Universo Treinamentos Brasil."
 >
-<meta name="robots" content="index,follow">
+<meta
+name="robots"
+content="index,follow"
+>
 <link
 rel="canonical"
 href="https://universotreinamentosbrasil.com.br/solicitar-engenharia.html"
 >
+<meta
+property="og:title"
+content="Solicitar Serviço de Engenharia Elétrica | Universo Treinamentos Brasil"
+>
+<meta
+property="og:description"
+content="Solicite projetos, adequações e serviços profissionais de Engenharia Elétrica."
+>
+<meta
+property="og:type"
+content="website"
+>
+<meta
+property="og:locale"
+content="pt_BR"
+>
+
 <style>
 :root{
 --black:#0b0b0d;
@@ -32,8 +57,12 @@ href="https://universotreinamentosbrasil.com.br/solicitar-engenharia.html"
 --shadow:0 18px 50px rgba(0,0,0,.08);
 --radius:22px;
 }
-{box-sizing:border-box}
-html{scroll-behavior:smooth}
+{
+box-sizing:border-box
+}
+html{
+scroll-behavior:smooth
+}
 body{
 margin:0;
 font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
@@ -43,20 +72,26 @@ line-height:1.55;
 }
 a{
 color:inherit;
-text-decoration:none;
+text-decoration:none
+}
+img{
+max-width:100%;
+display:block
 }
 button,
 input,
 textarea,
 select{
-font:inherit;
+font:inherit
 }
 .container{
 width:min(1180px,calc(100% - 34px));
-margin:auto;
+margin:auto
 }
 
-/* CABEÇALHO /
+/* =========================
+CABEÇALHO PADRÃO UTB
+========================= /
 .topbar{
 background:var(--black);
 color:#d8e9f6;
@@ -85,7 +120,7 @@ display:flex;
 align-items:center;
 gap:13px;
 font-weight:950;
-color:var(--black);
+color:var(--black)
 }
 .logo{
 width:48px;
@@ -97,47 +132,28 @@ background:var(--black);
 color:var(--blue);
 border:2px solid var(--blue);
 font-weight:1000;
-box-shadow:0 8px 20px rgba(0,0,0,.10);
+box-shadow:0 8px 20px rgba(0,0,0,.10)
 }
 .brand small{
 display:block;
 color:var(--muted);
 font-size:.72rem;
-letter-spacing:.035em;
+letter-spacing:.035em
 }
 .links{
 display:flex;
 gap:18px;
 align-items:center;
 font-weight:850;
-color:#2b343c;
+color:#2b343c
 }
 .links a:hover{
-color:#0b7fc8;
+color:#0b7fc8
 }
 .links a.active-page{
 color:#1598e8;
 border-bottom:3px solid #1598e8;
 padding-bottom:5px;
-}
-.links .nav-cta{
-display:inline-flex;
-align-items:center;
-justify-content:center;
-background:var(--black);
-color:white;
-padding:10px 14px;
-border-radius:10px;
-border:1px solid var(--black);
-min-width:210px;
-white-space:nowrap;
-text-align:center;
-line-height:1;
-font-size:.92rem;
-}
-.links .nav-cta:hover{
-background:#23262b;
-color:white;
 }
 .brasil-love{
 display:flex;
@@ -159,6 +175,25 @@ font-size:.72rem;
 font-weight:950;
 white-space:nowrap;
 }
+.links .nav-cta{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+background:var(--black);
+color:white;
+padding:10px 14px;
+border-radius:10px;
+border:1px solid var(--black);
+min-width:145px;
+white-space:nowrap;
+text-align:center;
+line-height:1;
+font-size:.92rem;
+}
+.links .nav-cta:hover{
+background:#23262b;
+color:white
+}
 .menu{
 display:none;
 border:1px solid var(--border);
@@ -167,78 +202,346 @@ color:var(--black);
 border-radius:10px;
 padding:9px 12px;
 font-weight:900;
-cursor:pointer;
+cursor:pointer
 }
 
-/* APRESENTAÇÃO /
+/* =========================
+ELEMENTOS PADRÃO UTB
+========================= /
+.hero{
+padding:82px 0 62px;
+background:
+radial-gradient(circle at 82% 12%,rgba(127,201,255,.45),transparent 30%),
+linear-gradient(180deg,#fff 0%,#f5f8fb 100%);
+}
+.hero-grid{
+display:grid;
+grid-template-columns:1.12fr .88fr;
+gap:42px;
+align-items:center
+}
+.eyebrow{
+display:inline-flex;
+padding:7px 11px;
+border-radius:999px;
+background:var(--black);
+color:var(--blue);
+font-size:.79rem;
+font-weight:950;
+letter-spacing:.065em;
+text-transform:uppercase;
+}
+.hero h1{
+font-size:clamp(2.55rem,5.5vw,5.15rem);
+line-height:.97;
+letter-spacing:-.055em;
+margin:18px 0 18px;
+color:var(--black);
+}
+.hero h1 span{
+color:#1598e8
+}
+.hero p{
+max-width:780px;
+color:var(--muted);
+font-size:1.14rem
+}
+.actions{
+display:flex;
+flex-wrap:wrap;
+gap:11px;
+margin-top:25px
+}
+.btn{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+min-height:50px;
+padding:0 18px;
+border-radius:13px;
+border:1px solid transparent;
+font-weight:950;
+cursor:pointer;
+transition:.18s ease;
+}
+.btn:hover{
+transform:translateY(-1px);
+filter:brightness(.98)
+}
+.btn-black{
+background:var(--black);
+color:white
+}
+.btn-blue{
+background:var(--blue-strong);
+color:#06121a
+}
+.btn-white{
+background:white;
+border-color:var(--border);
+color:var(--black)
+}
+.btn-green{
+background:var(--green);
+color:white
+}
+.hero-card,
+.card,
+.panel,
+.form{
+background:white;
+border:1px solid var(--border);
+border-radius:var(--radius);
+box-shadow:0 8px 30px rgba(0,0,0,.045)
+}
+.hero-card{
+padding:24px;
+box-shadow:var(--shadow)
+}
+.hero-card h3{
+margin-top:0
+}
+.checks{
+list-style:none;
+padding:0;
+margin:0;
+display:grid;
+gap:13px
+}
+.checks li{
+display:flex;
+gap:10px;
+align-items:flex-start;
+color:#35414c
+}
+.check{
+width:26px;
+height:26px;
+border-radius:50%;
+display:grid;
+place-items:center;
+flex:0 0 auto;
+background:var(--green-soft);
+color:var(--green);
+font-weight:1000;
+}
+.kpis{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:13px;
+margin-top:23px
+}
+.kpi{
+background:white;
+border:1px solid var(--border);
+border-radius:16px;
+padding:15px;
+text-align:center
+}
+.kpi strong{
+display:block;
+color:var(--black);
+font-size:1.26rem
+}
+.kpi span{
+color:var(--muted);
+font-size:.86rem
+}
+.section{
+padding:72px 0
+}
+.section.white{
+background:white
+}
+.section.dark{
+background:var(--black);
+color:white
+}
+.section.dark .head p{
+color:#c4d0da
+}
+.head{
+max-width:860px;
+margin-bottom:30px
+}
+.head h2{
+font-size:clamp(2rem,3.4vw,3.1rem);
+line-height:1.06;
+letter-spacing:-.03em;
+margin:0 0 10px
+}
+.head p{
+margin:0;
+color:var(--muted);
+font-size:1.04rem
+}
+.grid-4{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:16px
+}
+.grid-3{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:17px
+}
+.grid-2{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:18px
+}
+.card{
+padding:21px
+}
+.card h3{
+margin:0 0 8px;
+color:var(--black)
+}
+.card p{
+margin:0 0 13px;
+color:var(--muted)
+}
+.card.dark-card{
+background:#15181c;
+border-color:#252a30;
+color:white
+}
+.card.dark-card h3{
+color:white
+}
+.card.dark-card p{
+color:#bec8d1
+}
+.tag{
+display:inline-block;
+padding:6px 9px;
+border-radius:999px;
+background:var(--blue-soft);
+color:#0f72b3;
+font-size:.77rem;
+font-weight:950;
+margin-bottom:9px
+}
+.tag.green{
+background:var(--green-soft);
+color:var(--green)
+}
+.tag.yellow{
+background:var(--yellow-soft);
+color:#8c6700
+}
+.tag.black{
+background:var(--black);
+color:white
+}
+.soft{
+background:#eef8ff;
+border:1px solid #cde9fb;
+border-radius:18px;
+padding:22px
+}
+.good{
+background:var(--green-soft);
+border:1px solid #bfe6ce;
+border-radius:17px;
+padding:18px;
+color:#17623d
+}
+.warn{
+background:var(--yellow-soft);
+border:1px solid #ead28c;
+border-radius:17px;
+padding:18px;
+color:#6f5200
+}
+.split{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:24px;
+align-items:start
+}
+.bands{
+display:flex;
+flex-wrap:wrap;
+gap:8px
+}
+.band{
+padding:8px 11px;
+border-radius:999px;
+background:white;
+border:1px solid var(--border);
+color:#33414c;
+font-weight:850
+}
+.dark .band{
+background:#121519;
+border-color:#2b333b;
+color:#dfeaf2
+}
+.steps{
+counter-reset:st;
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:13px
+}
+.step{
+background:white;
+border:1px solid var(--border);
+border-radius:16px;
+padding:17px;
+color:var(--text)
+}
+.step:before{
+counter-increment:st;
+content:counter(st);
+width:34px;
+height:34px;
+border-radius:50%;
+display:grid;
+place-items:center;
+background:var(--black);
+color:var(--blue);
+font-weight:1000;
+margin-bottom:10px
+}
 .page-hero{
 padding:58px 0 46px;
 background:linear-gradient(180deg,#fff,#f5f8fb);
-border-bottom:1px solid var(--border);
+border-bottom:1px solid var(--border)
 }
 .page-hero h1{
 font-size:clamp(2.25rem,4.6vw,3.9rem);
 margin:0 0 9px;
-letter-spacing:-.04em;
+letter-spacing:-.04em
 }
 .page-hero p{
-max-width:900px;
-color:var(--muted);
-font-size:1.05rem;
+max-width:860px;
+color:var(--muted)
 }
 .breadcrumb{
 color:#118ed8;
 font-weight:900;
 font-size:.9rem;
-margin-bottom:12px;
+margin-bottom:12px
 }
 
-/* CONTEÚDO /
-.section{
-padding:64px 0;
-}
-.grid{
-display:grid;
-grid-template-columns:1.25fr .75fr;
-gap:24px;
-align-items:start;
-}
-.form,
-.panel{
-background:white;
-border:1px solid var(--border);
-border-radius:var(--radius);
-box-shadow:0 8px 30px rgba(0,0,0,.045);
-}
+/* =========================
+FORMULÁRIO
+========================= /
 .form{
-padding:28px;
-}
-.panel{
-padding:25px;
-}
-.form h2,
-.panel h2{
-margin-top:0;
-color:#14293d;
-}
-.form p,
-.panel p{
-color:var(--muted);
+padding:24px
 }
 .form-grid{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:15px;
-}
-.full{
-grid-column:1/-1;
+gap:13px
 }
 label{
 display:block;
 font-size:.9rem;
 color:#36444f;
 font-weight:850;
-margin-bottom:6px;
+margin-bottom:6px
 }
 input,
 textarea,
@@ -248,139 +551,136 @@ border:1px solid #c9d7e1;
 border-radius:12px;
 padding:13px;
 background:white;
-color:var(--text);
+color:var(--text)
 }
 textarea{
-min-height:150px;
-resize:vertical;
+min-height:130px;
+resize:vertical
 }
-input:focus,
-textarea:focus,
-select:focus{
-outline:3px solid rgba(77,174,242,.16);
-border-color:#4daef2;
+.full{
+grid-column:1/-1
 }
 .help{
-display:block;
-margin-top:6px;
-color:var(--muted);
-font-size:.81rem;
+font-size:.83rem;
+color:var(--muted)
 }
-
-/* BOTÃO /
-.btn{
-display:inline-flex;
-align-items:center;
-justify-content:center;
-min-height:52px;
-padding:0 20px;
-border-radius:13px;
-border:0;
-font-weight:950;
-cursor:pointer;
-transition:.18s ease;
-}
-.btn:hover{
-transform:translateY(-1px);
-filter:brightness(.98);
-}
-.btn-black{
-background:var(--black);
-color:white;
-}
-
-/* PAINEL LATERAL /
-.info{
-background:#eef8ff;
-border:1px solid #cde9fb;
-border-radius:18px;
-padding:20px;
-margin-bottom:18px;
-}
-.info strong{
-color:#0b4f8a;
-}
-.checks{
-list-style:none;
-padding:0;
-margin:15px 0 0;
+.validator{
 display:grid;
-gap:12px;
+grid-template-columns:1fr auto;
+gap:10px
 }
-.checks li{
-display:flex;
-gap:10px;
-align-items:flex-start;
-color:#35414c;
-}
-.check{
-width:25px;
-height:25px;
-flex:0 0 auto;
-border-radius:50%;
-display:grid;
-place-items:center;
-background:var(--green-soft);
-color:var(--green);
-font-weight:1000;
-}
-.warning{
-margin-top:18px;
-background:var(--yellow-soft);
-border:1px solid #ead28c;
-color:#6f5200;
-border-radius:16px;
-padding:16px;
-}
-
-/* RESULTADO /
 .result{
 display:none;
-margin-top:20px;
-padding:18px;
-border-radius:16px;
+margin-top:15px
 }
 .result.show{
-display:block;
+display:block
 }
-.result.good{
-background:var(--green-soft);
-border:1px solid #bfe6ce;
-color:#17623d;
+.table{
+overflow:auto;
+border:1px solid var(--border);
+border-radius:16px
+}
+table{
+width:100%;
+border-collapse:collapse;
+background:white
+}
+th,
+td{
+padding:14px 15px;
+border-bottom:1px solid var(--border);
+text-align:left;
+vertical-align:top
+}
+th{
+background:var(--black);
+color:white
+}
+tr:last-child td{
+border-bottom:none
+}
+.gallery-placeholder{
+border:2px dashed #b8d4e8;
+border-radius:16px;
+min-height:180px;
+display:grid;
+place-items:center;
+text-align:center;
+padding:18px;
+color:#647889;
+background:#f8fcff
+}
+.cta{
+background:linear-gradient(135deg,var(--black),#1b1f24);
+color:white;
+border-radius:26px;
+padding:32px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:22px;
+border:1px solid #292d33
+}
+.cta p{
+color:#ccd6df;
+max-width:700px
 }
 
-/* RODAPÉ /
+/* =========================
+RODAPÉ PADRÃO UTB
+========================= /
 .footer{
 background:#08090b;
 color:#d9e1e7;
-padding:46px 0 25px;
+padding:46px 0 25px
 }
 .footer-grid{
 display:grid;
 grid-template-columns:1.2fr .8fr .8fr .8fr;
-gap:24px;
+gap:24px
 }
 .footer h4{
 color:white;
-margin-top:0;
+margin-top:0
 }
 .footer a{
-color:#b7ddf8;
+color:#b7ddf8
 }
 .footer small{
-color:#98a7b3;
+color:#98a7b3
 }
 .hr{
 height:1px;
 background:#2a3036;
-margin:25px 0;
+margin:25px 0
 }
 .legal{
 font-size:.84rem;
-color:#75838e;
+color:#75838e
+}
+.badge-line{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-top:12px
+}
+.status{
+font-size:.74rem;
+font-weight:1000;
+text-transform:uppercase;
+letter-spacing:.06em
+}
+.status.ready{
+color:var(--green)
+}
+.status.plan{
+color:#9d7400
 }
 
-/* RESPONSIVO /
+/* =========================
+RESPONSIVO
+========================= /
 @media(max-width:980px){
 .links{
 display:none;
@@ -394,47 +694,81 @@ background:white;
 border:1px solid var(--border);
 border-radius:16px;
 padding:16px;
-box-shadow:var(--shadow);
+box-shadow:var(--shadow)
 }
 .links.open{
-display:flex;
+display:flex
 }
 .menu{
-display:block;
+display:block
 }
-.grid{
-grid-template-columns:1fr;
+.hero-grid,
+.split{
+grid-template-columns:1fr
+}
+.grid-4,
+.grid-3{
+grid-template-columns:1fr 1fr
+}
+.steps{
+grid-template-columns:1fr 1fr
 }
 .footer-grid{
-grid-template-columns:1fr 1fr;
+grid-template-columns:1fr 1fr
 }
 }
+
 @media(max-width:640px){
 .container{
-width:min(100% - 24px,1180px);
+width:min(100% - 24px,1180px)
 }
+.hero{
+padding-top:52px
+}
+.grid-4,
+.grid-3,
+.grid-2,
 .form-grid,
+.steps,
 .footer-grid{
-grid-template-columns:1fr;
+grid-template-columns:1fr
 }
-.full{
-grid-column:auto;
+.kpis{
+grid-template-columns:1fr 1fr
+}
+.cta{
+flex-direction:column;
+align-items:flex-start
 }
 .brand small{
-display:none;
+display:none
+}
+.validator{
+grid-template-columns:1fr
 }
 }
 </style>
 </head>
+
 <body>
 
+<!-- =========================
+FAIXA SUPERIOR
+========================= -->
 <div class="topbar">
 Treinamentos presenciais para empresas, prefeituras e instituições • Rede nacional em estruturação
 </div>
 
+<!-- =========================
+CABEÇALHO
+========================= -->
 <header class="header">
 <div class="container nav">
-<a class="brand" href="index.html">
+
+<a
+class="brand"
+href="index.html"
+>
 <span class="logo">
 UTB
 </span>
@@ -446,43 +780,55 @@ Capacitação profissional em rede nacional
 </span>
 </a>
 
-<button class="menu" type="button">
+<button
+class="menu"
+type="button"
+>
 MENU
 </button>
 
 <nav class="links">
+
 <a href="index.html">
 Início
 </a>
+
 <a href="cursos.html">
 Cursos
 </a>
+
 <a href="empresas.html">
 Empresas
 </a>
+
 <a href="instrutores.html">
 Instrutores
 </a>
+
 <a href="certificados.html">
 Certificados
 </a>
+
 <a href="depoimentos.html">
 Depoimentos
 </a>
+
 <a href="sobre.html">
 Sobre
 </a>
+
 <a
 class="active-page"
 href="engenharia-eletrica.html"
 >
 Engenharia Elétrica
 </a>
+
 <a
 class="nav-cta"
 href="solicitar-engenharia.html"
 >
-Solicitar serviço de engenharia
+Solicitar serviço
 </a>
 
 <div class="brasil-love">
@@ -493,14 +839,19 @@ Solicitar serviço de engenharia
 Ame o Brasil
 </span>
 </div>
+
 </nav>
 </div>
 </header>
 
 <main>
 
+<!-- =========================
+ABERTURA
+========================= -->
 <section class="page-hero">
 <div class="container">
+
 <div class="breadcrumb">
 <a href="index.html">
 Início
@@ -509,7 +860,7 @@ Início
 <a href="engenharia-eletrica.html">
 Engenharia Elétrica
 </a>
-/ Solicitação
+/ Solicitar serviço
 </div>
 
 <h1>
@@ -517,27 +868,34 @@ Solicitar serviço de Engenharia Elétrica
 </h1>
 
 <p>
-Preencha as informações abaixo para que possamos
-compreender sua necessidade e realizar uma avaliação
-inicial do serviço solicitado.
+Preencha os dados abaixo para que possamos
+entender sua necessidade e realizar uma
+avaliação inicial do serviço técnico solicitado.
 </p>
+
 </div>
 </section>
 
+<!-- =========================
+FORMULÁRIO
+========================= -->
 <section class="section">
-<div class="container grid">
+<div class="container split">
 
 <form
 class="form"
 id="engineering-form"
 >
+
+<div class="head">
 <h2>
 Dados do solicitante
 </h2>
 <p>
-Informe seus dados e descreva o serviço de
-Engenharia Elétrica necessário.
+Este formulário é exclusivo para
+serviços de Engenharia Elétrica.
 </p>
+</div>
 
 <div class="form-grid">
 
@@ -554,33 +912,33 @@ required
 </div>
 
 <div>
-<label for="tipo-cliente">
+<label for="tipoCliente">
 Tipo de cliente *
 </label>
 <select
-id="tipo-cliente"
+id="tipoCliente"
 name="tipoCliente"
 required
 >
 <option value="">
 Selecione
 </option>
-<option>
+<option value="Pessoa física">
 Pessoa física
 </option>
-<option>
+<option value="Empresa">
 Empresa
 </option>
-<option>
+<option value="Indústria">
 Indústria
 </option>
-<option>
+<option value="Condomínio">
 Condomínio
 </option>
-<option>
+<option value="Instituição">
 Instituição
 </option>
-<option>
+<option value="Prefeitura / órgão público">
 Prefeitura / órgão público
 </option>
 </select>
@@ -595,9 +953,9 @@ id="empresa"
 name="empresa"
 type="text"
 >
-<span class="help">
-Deixe em branco se for pessoa física.
-</span>
+<div class="help">
+Pessoa física pode deixar este campo em branco.
+</div>
 </div>
 
 <div>
@@ -697,7 +1055,7 @@ Endereço do local do serviço
 id="endereco"
 name="endereco"
 type="text"
-placeholder="Rua, número, bairro ou localização aproximada"
+placeholder="Rua, número, bairro ou localização"
 >
 </div>
 
@@ -753,10 +1111,19 @@ required
 Selecione
 </option>
 <option>
-Projeto elétrico
+Projeto elétrico completo
 </option>
 <option>
-Adequação de instalação elétrica
+Projeto elétrico residencial
+</option>
+<option>
+Projeto elétrico comercial
+</option>
+<option>
+Projeto elétrico industrial
+</option>
+<option>
+Adequação elétrica
 </option>
 <option>
 Quadro de distribuição
@@ -844,14 +1211,14 @@ Sim
 Não
 </option>
 <option>
-Tenho apenas fotos / croqui
+Tenho fotos / croqui
 </option>
 </select>
 </div>
 
 <div>
 <label for="visita">
-Acredita que será necessária visita técnica?
+Visita técnica
 </label>
 <select
 id="visita"
@@ -861,10 +1228,10 @@ name="visita"
 Selecione
 </option>
 <option>
-Sim
+Acredito que será necessária
 </option>
 <option>
-Não
+Acredito que não será necessária
 </option>
 <option>
 Não sei
@@ -873,12 +1240,12 @@ Não sei
 </div>
 
 <div>
-<label for="urgencia">
+<label for="prioridade">
 Prioridade
 </label>
 <select
-id="urgencia"
-name="urgencia"
+id="prioridade"
+name="prioridade"
 >
 <option>
 Normal
@@ -887,7 +1254,7 @@ Normal
 Urgente
 </option>
 <option>
-Apenas orçamento / planejamento
+Planejamento / orçamento futuro
 </option>
 </select>
 </div>
@@ -900,7 +1267,7 @@ Descreva o serviço ou problema *
 id="descricao"
 name="descricao"
 required
-placeholder="Explique o que precisa ser feito, o problema encontrado, tipo de projeto ou qualquer informação que ajude na avaliação."
+placeholder="Explique o que precisa ser feito, qual problema foi identificado ou qual projeto você necessita."
 ></textarea>
 </div>
 
@@ -911,7 +1278,7 @@ Observações adicionais
 <textarea
 id="observacoes"
 name="observacoes"
-placeholder="Informe equipamentos, potência, características da instalação ou qualquer outra informação relevante."
+placeholder="Equipamentos, potência, características da instalação ou outras informações relevantes."
 ></textarea>
 </div>
 
@@ -935,99 +1302,158 @@ Solicitação preparada.
 </strong>
 <p>
 O WhatsApp será aberto com os dados
-informados para envio à UTB.
+preenchidos para envio à UTB.
 </p>
 </div>
 
 </form>
 
-<aside>
+<!-- =========================
+COLUNA LATERAL
+========================= -->
+<div>
 
-<div class="panel">
+<div class="soft">
 <h2>
-Antes de solicitar
+Serviço de Engenharia Elétrica
 </h2>
 <p>
-Quanto mais informações forem fornecidas,
-melhor será a avaliação inicial.
+Esta página é exclusiva para
+solicitações de serviços técnicos.
 </p>
 
 <ul class="checks">
-<li>
-<span class="check">✓</span>
-<span>
-Informe o tipo de imóvel.
-</span>
-</li>
-<li>
-<span class="check">✓</span>
-<span>
-Explique claramente o serviço necessário.
-</span>
-</li>
-<li>
-<span class="check">✓</span>
-<span>
-Informe se possui planta baixa.
-</span>
-</li>
-<li>
-<span class="check">✓</span>
-<span>
-Fotos e documentos poderão ser enviados posteriormente pelo WhatsApp.
-</span>
-</li>
-<li>
-<span class="check">✓</span>
-<span>
-A necessidade de visita técnica será avaliada conforme o serviço.
-</span>
-</li>
-</ul>
 
-<div class="warning">
-<strong>
-Importante:
-</strong>
-<p>
-O preenchimento deste formulário não
-representa aprovação automática do serviço
-nem orçamento definitivo.
-</p>
-<p>
-A solicitação será analisada tecnicamente
-antes da elaboração da proposta.
-</p>
-</div>
+<li>
+<span class="check">
+✓
+</span>
+<span>
+Projetos elétricos
+</span>
+</li>
+
+<li>
+<span class="check">
+✓
+</span>
+<span>
+Instalações residenciais,
+comerciais e industriais
+</span>
+</li>
+
+<li>
+<span class="check">
+✓
+</span>
+<span>
+Quadros elétricos
+</span>
+</li>
+
+<li>
+<span class="check">
+✓
+</span>
+<span>
+Aterramento
+</span>
+</li>
+
+<li>
+<span class="check">
+✓
+</span>
+<span>
+SPDA
+</span>
+</li>
+
+<li>
+<span class="check">
+✓
+</span>
+<span>
+Inspeções e diagnósticos
+</span>
+</li>
+
+<li>
+<span class="check">
+✓
+</span>
+<span>
+Acompanhamento e fiscalização
+</span>
+</li>
+
+<li>
+<span class="check">
+✓
+</span>
+<span>
+Responsabilidade técnica e ART
+</span>
+</li>
+
+</ul>
 </div>
 
 <div
-class="info"
-style="margin-top:20px;"
+class="warn"
+style="margin-top:18px;"
 >
 <strong>
-Contato direto
+Importante
 </strong>
 <p>
-WhatsApp:<br>
-(14) 99671-6626
+O envio da solicitação não representa
+orçamento definitivo nem contratação automática.
 </p>
 <p>
-E-mail:<br>
-engenheirojoaomanoel@yahoo.com.br
-</p>
-<p>
-Universo Treinamentos Brasil – UTB
+O serviço será analisado previamente
+para definição do escopo técnico.
 </p>
 </div>
 
-</aside>
+<div
+class="card"
+style="margin-top:18px;"
+>
+<h3>
+Contato direto
+</h3>
+<p>
+<strong>
+WhatsApp:
+</strong>
+(14) 99671-6626
+</p>
+<p>
+<strong>
+E-mail:
+</strong>
+engenheirojoaomanoel@yahoo.com.br
+</p>
+<p>
+<strong>
+Site oficial:
+</strong>
+www.universotreinamentosbrasil.com.br
+</p>
+</div>
+
+</div>
 
 </div>
 </section>
 
 </main>
 
+<!-- =========================
+RODAPÉ
+========================= -->
 <footer class="footer">
 <div class="container">
 
@@ -1038,8 +1464,35 @@ Universo Treinamentos Brasil – UTB
 Universo Treinamentos Brasil
 </h4>
 <p>
-Treinamentos profissionais presenciais
-e serviços de Engenharia Elétrica.
+Plataforma nacional de treinamentos
+profissionais presenciais e serviços
+de Engenharia Elétrica.
+</p>
+<small>
+Contratação por pessoa jurídica e
+emissão fiscal conforme o serviço
+contratado e a cobertura cadastral aplicável.
+</small>
+</div>
+
+<div>
+<h4>
+Contratantes
+</h4>
+<p>
+<a href="empresas.html">
+Empresas e indústrias
+</a>
+</p>
+<p>
+<a href="empresas.html#publico">
+Prefeituras e instituições
+</a>
+</p>
+<p>
+<a href="contato.html#proposta">
+Proposta de treinamento
+</a>
 </p>
 </div>
 
@@ -1057,36 +1510,39 @@ Engenharia Elétrica
 Solicitar serviço
 </a>
 </p>
-</div>
-
-<div>
-<h4>
-Treinamentos
-</h4>
 <p>
-<a href="cursos.html">
-Cursos
-</a>
-</p>
-<p>
-<a href="contato.html#proposta">
-Proposta de treinamento
+<a href="sobre.html">
+Responsável profissional
 </a>
 </p>
 </div>
 
 <div>
 <h4>
-Contato
+Confiança
 </h4>
 <p>
-<a href="mailto:engenheirojoaomanoel@yahoo.com.br">
+<a href="certificados.html">
+Validar certificado
+</a>
+</p>
+<p>
+<a href="depoimentos.html">
+Depoimentos
+</a>
+</p>
+<p>
+<strong>
+E-mail:
+</strong>
+<a
+href="mailto:engenheirojoaomanoel@yahoo.com.br"
+>
+👉 Clique aqui para e-mail:
+<span data-email>
 engenheirojoaomanoel@yahoo.com.br
+</span>
 </a>
-</p>
-<p>
-WhatsApp:
-(14) 99671-6626
 </p>
 </div>
 
@@ -1095,16 +1551,18 @@ WhatsApp:
 <div class="hr"></div>
 
 <small>
-© <span data-year></span>
+©
+<span data-year>
+</span>
 Universo Treinamentos Brasil.
 Todos os direitos reservados.
 </small>
 
 <p class="legal">
-Serviços de Engenharia Elétrica sujeitos à
-análise técnica, disponibilidade, condições
-da instalação, normas aplicáveis e atribuições
-profissionais pertinentes.
+Serviços técnicos sujeitos à análise prévia
+do escopo, condições da instalação, normas
+técnicas aplicáveis, requisitos legais e
+atribuições profissionais pertinentes.
 </p>
 
 </div>
@@ -1112,75 +1570,107 @@ profissionais pertinentes.
 
 <script>
 const CONFIG = {
-whatsapp: "5514996716626",
-email: "engenheirojoaomanoel@yahoo.com.br"
+domain:
+"www.universotreinamentosbrasil.com.br",
+whatsapp:
+"5514996716626",
+email:
+"engenheirojoaomanoel@yahoo.com.br",
+cnpj:
+"35.885.883/0001-49"
 };
 
+const $ =
+s => document.querySelector(s);
+
+const $$ =
+s => [...document.querySelectorAll(s)];
+
+/* MENU /
 const menu =
-document.querySelector(".menu");
+$(".menu");
 
 const links =
-document.querySelector(".links");
+$(".links");
 
-if(menu && links){
+if(
+menu &&
+links
+){
 menu.addEventListener(
 "click",
-() => links.classList.toggle("open")
+() =>
+links.classList.toggle(
+"open"
+)
+);
+
+$$(".links a").forEach(
+a =>
+a.addEventListener(
+"click",
+() =>
+links.classList.remove(
+"open"
+)
+)
 );
 }
 
-document
-.querySelectorAll(".links a")
-.forEach(link => {
-link.addEventListener(
-"click",
-() => links.classList.remove("open")
-);
-});
-
-document
-.querySelectorAll("[data-year]")
-.forEach(el => {
+/* ANO /
+$$("[data-year]").forEach(
+el =>
 el.textContent =
-new Date().getFullYear();
-});
-
-const form =
-document.getElementById(
-"engineering-form"
+new Date().getFullYear()
 );
 
-if(form){
-form.addEventListener(
+/* E-MAIL /
+$$("[data-email]").forEach(
+el =>
+el.textContent =
+CONFIG.email ||
+"E-mail a configurar"
+);
+
+/* FORMULÁRIO DE ENGENHARIA /
+const engineeringForm =
+$("#engineering-form");
+
+if(
+engineeringForm
+){
+engineeringForm.addEventListener(
 "submit",
-function(e){
+e => {
 e.preventDefault();
 
 const data =
 Object.fromEntries(
-new FormData(form).entries()
+new FormData(
+engineeringForm
+).entries()
 );
 
 const mensagem = [
-"Olá! Gostaria de solicitar um serviço de Engenharia Elétrica pela UTB.",
+"Olá! Gostaria de solicitar um serviço de Engenharia Elétrica da Universo Treinamentos Brasil.",
 "",
 "DADOS DO SOLICITANTE",
 `Nome: ${data.nome || ""}`,
 `Tipo de cliente: ${data.tipoCliente || ""}`,
-`Empresa/Instituição: ${data.empresa || ""}`,
-`CPF/CNPJ: ${data.documento || ""}`,
-`Telefone: ${data.telefone || ""}`,
+`Empresa / Instituição: ${data.empresa || ""}`,
+`CPF / CNPJ: ${data.documento || ""}`,
+`Telefone / WhatsApp: ${data.telefone || ""}`,
 `E-mail: ${data.email || ""}`,
-`Cidade/UF: ${data.cidade || ""} / ${data.uf || ""}`,
+`Cidade / UF: ${data.cidade || ""} / ${data.uf || ""}`,
 `Endereço do serviço: ${data.endereco || ""}`,
 "",
 "DADOS DO SERVIÇO",
 `Tipo de imóvel: ${data.imovel || ""}`,
 `Serviço desejado: ${data.servico || ""}`,
 `Situação da instalação: ${data.situacao || ""}`,
-`Possui planta/projeto: ${data.planta || ""}`,
+`Possui planta / projeto: ${data.planta || ""}`,
 `Visita técnica: ${data.visita || ""}`,
-`Prioridade: ${data.urgencia || ""}`,
+`Prioridade: ${data.prioridade || ""}`,
 "",
 `Descrição: ${data.descricao || ""}`,
 "",
@@ -1191,13 +1681,15 @@ const mensagem = [
 const link =
 `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(mensagem)}`;
 
-const result =
-document.getElementById(
-"form-result"
-);
+const box =
+$("#form-result");
 
-if(result){
-result.classList.add("show");
+if(
+box
+){
+box.classList.add(
+"show"
+);
 }
 
 window.open(
