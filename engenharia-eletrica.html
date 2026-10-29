@@ -1,845 +1,1784 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Engenharia Elétrica | Universo Treinamentos Brasil</title>
+<meta charset="utf-8">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1"
+>
+<title>
+Engenharia Elétrica | Universo Treinamentos Brasil
+</title>
 <meta
 name="description"
-content="Serviços profissionais de Engenharia Elétrica: projetos, adequações, laudos, aterramento, SPDA, quadros elétricos, fiscalização, responsabilidade técnica e ART."
+content="Serviços de Engenharia Elétrica da Universo Treinamentos Brasil: projetos elétricos, adequações, aterramento, SPDA, quadros elétricos, diagnósticos, fiscalização, responsabilidade técnica e ART."
+>
+<meta
+name="robots"
+content="index,follow"
+>
+<link
+rel="canonical"
+href="https://universotreinamentosbrasil.com.br/engenharia-eletrica.html"
+>
+<meta
+property="og:title"
+content="Engenharia Elétrica | Universo Treinamentos Brasil"
+>
+<meta
+property="og:description"
+content="Projetos, adequações, diagnósticos e serviços profissionais de Engenharia Elétrica."
+>
+<meta
+property="og:type"
+content="website"
+>
+<meta
+property="og:locale"
+content="pt_BR"
 >
 <style>
+:root {
+--black: #0a0f16;
+--black-2: #171f2d;
+--white: #ffffff;
+--off: #f6f8fb;
+--blue: #1598e8;
+--blue-strong: #0b7fc8;
+--blue-soft: #eaf6ff;
+--green: #27a957;
+--green-soft: #eaf8ef;
+--text: #15171a;
+--muted: #66717d;
+--border: #dfe7ef;
+--shadow:
+0 18px 50px rgba(6, 35, 70, .09);
+--radius: 22px;
+}
 
         {
         box-sizing: border-box;
-        margin: 0;
-        padding: 0;
         }
 
 html {
 scroll-behavior: smooth;
 }
+
 body {
-font-family: Arial, Helvetica, sans-serif;
-background: #ffffff;
-color: #172033;
-line-height: 1.6;
+margin: 0;
+font-family:
+Arial,
+Helvetica,
+sans-serif;
+background: var(--white);
+color: var(--text);
+line-height: 1.65;
 }
+
+img {
+max-width: 100%;
+display: block;
+}
+
 a {
+color: inherit;
 text-decoration: none;
 }
-/* =========================
-CABEÇALHO
-========================== /
-header {
-background: #ffffff;
-border-bottom: 1px solid #dce4ee;
+
+button,
+input,
+textarea,
+select {
+font: inherit;
+}
+
+.container {
+width: min(
+1180px,
+calc(100% - 32px)
+);
+margin: 0 auto;
+}
+
+/* ==================================================
+TOPO
+================================================== /
+.topbar {
+background: var(--black);
+color: #d8e9f6;
+padding: 9px 14px;
+text-align: center;
+font-size: .88rem;
+letter-spacing: .01em;
+}
+
+.header {
 position: sticky;
 top: 0;
-z-index: 1000;
-}
-.cabecalho {
-max-width: 1200px;
-margin: auto;
-padding: 15px 20px;
-display: flex;
-align-items: center;
-justify-content: space-between;
-gap: 25px;
-}
-.marca {
-display: flex;
-flex-direction: column;
-}
-.marca strong {
-color: #0b3d78;
-font-size: 22px;
-}
-.marca span {
-color: #4f6074;
-font-size: 14px;
-}
-nav {
-display: flex;
-align-items: center;
-gap: 18px;
-flex-wrap: wrap;
-justify-content: center;
-}
-nav a {
-color: #1d2a3a;
-font-weight: bold;
-font-size: 15px;
-padding: 8px 3px;
-}
-nav a:hover {
-color: #0b67c2;
-}
-nav a.ativo {
-color: #0b67c2;
-border-bottom: 3px solid #0b67c2;
-}
-.acoes-cabecalho {
-display: flex;
-align-items: center;
-gap: 18px;
-}
-.btn-proposta {
-background: #0868c9;
-color: #ffffff;
-padding: 12px 18px;
-border-radius: 7px;
-font-weight: bold;
-white-space: nowrap;
-}
-.btn-proposta:hover {
-background: #064f9c;
-}
-.ame-brasil {
-min-width: 90px;
-text-align: center;
-font-weight: bold;
-color: #17395f;
-}
-.bandeira {
-width: 72px;
-height: 46px;
-background: #159447;
-position: relative;
-margin: 0 auto 4px;
-overflow: hidden;
-border: 1px solid #d2d2d2;
-}
-.bandeira::before {
-content: "";
-width: 42px;
-height: 42px;
-background: #f6da26;
-position: absolute;
-left: 14px;
-top: 2px;
-transform: rotate(45deg);
-}
-.bandeira::after {
-content: "";
-width: 21px;
-height: 21px;
-border-radius: 50%;
-background: #21468b;
-position: absolute;
-left: 25px;
-top: 12px;
-}
-/* =========================
-HERO
-========================== /
-.hero {
+z-index: 50;
 background:
-linear-gradient(
-rgba(3, 37, 76, 0.87),
-rgba(6, 74, 137, 0.87)
-),
-linear-gradient(135deg, #103b64, #0b6bb8);
-color: #ffffff;
-padding: 75px 20px;
+rgba(255, 255, 255, .96);
+backdrop-filter:
+blur(12px);
+border-bottom:
+1px solid var(--border);
 }
-.hero-conteudo {
-max-width: 1150px;
-margin: auto;
-display: grid;
-grid-template-columns: 1.35fr 0.65fr;
-gap: 50px;
-align-items: center;
-}
-.hero h1 {
-font-size: 44px;
-line-height: 1.12;
-margin-bottom: 20px;
-}
-.hero p {
-font-size: 19px;
-max-width: 760px;
-margin-bottom: 28px;
-}
-.hero-botoes {
-display: flex;
-flex-wrap: wrap;
-gap: 14px;
-}
-.btn-principal {
-display: inline-block;
-background: #ffffff;
-color: #075cae;
-padding: 15px 23px;
-border-radius: 7px;
-font-weight: bold;
-font-size: 17px;
-}
-.btn-secundario {
-display: inline-block;
-border: 2px solid #ffffff;
-color: #ffffff;
-padding: 13px 23px;
-border-radius: 7px;
-font-weight: bold;
-font-size: 17px;
-}
-.hero-card {
-background: rgba(255, 255, 255, 0.12);
-border: 1px solid rgba(255, 255, 255, 0.35);
-border-radius: 15px;
-padding: 28px;
-backdrop-filter: blur(6px);
-}
-.hero-card h2 {
-margin-bottom: 15px;
-font-size: 23px;
-}
-.hero-card ul {
-padding-left: 20px;
-}
-.hero-card li {
-margin-bottom: 8px;
-}
-/* =========================
-SEÇÕES
-========================== /
-section {
-padding: 65px 20px;
-}
-.container {
-max-width: 1150px;
-margin: auto;
-}
-.titulo-secao {
-text-align: center;
-margin-bottom: 40px;
-}
-.titulo-secao h2 {
-color: #0b3d78;
-font-size: 34px;
-margin-bottom: 10px;
-}
-.titulo-secao p {
-color: #566578;
-max-width: 780px;
-margin: auto;
-font-size: 17px;
-}
-.fundo-claro {
-background: #f5f8fc;
-}
-/* =========================
-CARDS SERVIÇOS
-========================== /
-.grid-servicos {
-display: grid;
-grid-template-columns: repeat(3, 1fr);
-gap: 22px;
-}
-.card {
-background: #ffffff;
-border: 1px solid #dce4ed;
-border-radius: 12px;
-padding: 26px;
-box-shadow: 0 5px 18px rgba(19, 56, 93, 0.08);
-transition: 0.2s;
-}
-.card:hover {
-transform: translateY(-4px);
-box-shadow: 0 9px 25px rgba(19, 56, 93, 0.13);
-}
-.icone {
-width: 52px;
-height: 52px;
-background: #e5f1ff;
-color: #0669c9;
-border-radius: 50%;
+
+.nav {
+min-height: 76px;
 display: flex;
 align-items: center;
-justify-content: center;
-font-size: 25px;
-margin-bottom: 18px;
-}
-.card h3 {
-color: #17395f;
-font-size: 20px;
-margin-bottom: 10px;
-}
-.card p {
-color: #586678;
-}
-/* =========================
-PROJETOS
-========================== /
-.projetos-bloco {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 35px;
-align-items: start;
-}
-.lista-tecnica {
-background: #ffffff;
-border-radius: 12px;
-border: 1px solid #dce4ed;
-padding: 30px;
-}
-.lista-tecnica h3 {
-color: #0b3d78;
-margin-bottom: 18px;
-font-size: 23px;
-}
-.lista-tecnica ul {
-list-style: none;
-}
-.lista-tecnica li {
-padding: 9px 0;
-border-bottom: 1px solid #edf1f5;
-}
-.lista-tecnica li::before {
-content: "✓";
-color: #0874d1;
-font-weight: bold;
-margin-right: 10px;
-}
-/* =========================
-RESPONSABILIDADE
-========================== /
-.responsabilidade {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 35px;
-align-items: center;
-}
-.responsabilidade-texto h2 {
-color: #0b3d78;
-font-size: 33px;
-margin-bottom: 18px;
-}
-.responsabilidade-texto p {
-margin-bottom: 16px;
-color: #506174;
-font-size: 17px;
-}
-.box-profissional {
-background: #eef6ff;
-border-left: 5px solid #0b67c2;
-padding: 25px;
-border-radius: 9px;
-}
-.box-profissional strong {
-color: #0b3d78;
-display: block;
-font-size: 21px;
-margin-bottom: 8px;
-}
-/* =========================
-PROCESSO
-========================== /
-.etapas {
-display: grid;
-grid-template-columns: repeat(4, 1fr);
+justify-content:
+space-between;
 gap: 20px;
 }
-.etapa {
-text-align: center;
-padding: 25px 18px;
-}
-.numero {
-width: 55px;
-height: 55px;
-border-radius: 50%;
-background: #0868c9;
-color: #ffffff;
+
+.brand {
 display: flex;
 align-items: center;
-justify-content: center;
-margin: 0 auto 15px;
-font-size: 22px;
-font-weight: bold;
+gap: 13px;
+font-weight: 950;
+color: var(--black);
+min-width: 260px;
 }
-.etapa h3 {
-color: #17395f;
-margin-bottom: 8px;
-}
-/* =========================
-CHAMADA
-========================== /
-.chamada {
-background: #0b3d78;
-color: #ffffff;
-text-align: center;
-}
-.chamada h2 {
-font-size: 34px;
-margin-bottom: 15px;
-}
-.chamada p {
-font-size: 18px;
-max-width: 750px;
-margin: 0 auto 25px;
-}
-/* =========================
-RODAPÉ
-========================== /
-footer {
-background: #071d35;
-color: #dce7f3;
-padding: 38px 20px;
-}
-.rodape {
-max-width: 1150px;
-margin: auto;
+
+.logo {
+width: 48px;
+height: 48px;
+border-radius: 14px;
 display: grid;
-grid-template-columns: 2fr 1fr;
-gap: 30px;
+place-items: center;
+background: var(--black);
+color: var(--blue);
+border:
+2px solid var(--blue);
+font-weight: 1000;
+box-shadow:
+0 8px 20px
+rgba(0,0,0,.10);
 }
-.rodape p {
-margin-bottom: 7px;
+
+.brand small {
+display: block;
+color: var(--muted);
+font-size: .72rem;
+letter-spacing: .035em;
+margin-top: 2px;
 }
-.rodape strong {
-color: #ffffff;
+
+.links {
+display: flex;
+gap: 18px;
+align-items: center;
+font-weight: 850;
+color: #2b343c;
 }
-.copyright {
-max-width: 1150px;
-margin: 25px auto 0;
-padding-top: 18px;
-border-top: 1px solid #29425d;
-text-align: center;
-font-size: 14px;
+
+.links a {
+white-space: nowrap;
 }
-/* =========================
-RESPONSIVO
-========================== /
-@media (max-width: 950px) {
-.cabecalho {
-flex-direction: column;
+
+.links a:hover {
+color: var(--blue-strong);
 }
-.hero-conteudo {
-grid-template-columns: 1fr;
+
+.links a.active-page {
+color: var(--blue);
+border-bottom:
+3px solid var(--blue);
+padding-bottom: 5px;
 }
-.grid-servicos {
-grid-template-columns: repeat(2, 1fr);
-}
-.projetos-bloco,
-.responsabilidade {
-grid-template-columns: 1fr;
-}
-.etapas {
-grid-template-columns: repeat(2, 1fr);
-}
-.acoes-cabecalho {
-width: 100%;
+
+.links .nav-cta {
+display: inline-flex;
+align-items: center;
 justify-content: center;
+background: var(--blue);
+color: var(--white);
+padding:
+11px 16px;
+border-radius: 11px;
+box-shadow:
+0 10px 24px
+rgba(21, 152, 232, .22);
+border:
+1px solid var(--blue);
+transition: .18s ease;
 }
+
+.links .nav-cta:hover {
+color: var(--white);
+background:
+var(--blue-strong);
+transform:
+translateY(-1px);
 }
-@media (max-width: 620px) {
-.hero h1 {
+
+.brasil-love {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+min-width: 76px;
+margin-left: 2px;
+line-height: 1;
+}
+
+.brasil-flag {
 font-size: 34px;
+line-height: 1;
 }
-.grid-servicos,
-.etapas {
-grid-template-columns: 1fr;
+
+.brasil-text {
+margin-top: 5px;
+color: #0b4f8a;
+font-size: .72rem;
+font-weight: 950;
+white-space: nowrap;
 }
-.rodape {
-grid-template-columns: 1fr;
+
+.menu {
+display: none;
+background: var(--black);
+color: var(--white);
+border: 0;
+padding:
+10px 14px;
+border-radius: 10px;
+font-weight: 900;
+cursor: pointer;
 }
-nav {
+
+/* ==================================================
+HERO
+================================================== /
+.hero {
+position: relative;
+overflow: hidden;
+background:
+linear-gradient(
+135deg,
+#071c33 0%,
+#0d4d7c 52%,
+#1598e8 100%
+);
+color: var(--white);
+padding:
+82px 0 74px;
+}
+
+.hero::before {
+content: "";
+position: absolute;
+width: 520px;
+height: 520px;
+border-radius: 50%;
+right: -170px;
+top: -230px;
+background:
+rgba(255,255,255,.08);
+}
+
+.hero::after {
+content: "";
+position: absolute;
+width: 320px;
+height: 320px;
+border-radius: 50%;
+left: -180px;
+bottom: -190px;
+background:
+rgba(255,255,255,.06);
+}
+
+.hero-grid {
+position: relative;
+z-index: 2;
+display: grid;
+grid-template-columns:
+1.3fr .7fr;
+gap: 46px;
+align-items: center;
+}
+
+.eyebrow {
+display: inline-flex;
+align-items: center;
+gap: 8px;
+margin-bottom: 17px;
+padding:
+7px 11px;
+border:
+1px solid
+rgba(255,255,255,.28);
+border-radius: 999px;
+background:
+rgba(255,255,255,.10);
+font-size: .86rem;
+font-weight: 850;
+}
+
+.hero h1 {
+margin:
+0 0 18px;
+max-width: 800px;
+font-size:
+clamp(
+2.3rem,
+5vw,
+4.5rem
+);
+line-height: 1.05;
+letter-spacing:
+-.035em;
+}
+
+.hero p {
+max-width: 770px;
+margin:
+0 0 27px;
+color: #e4f2fb;
+font-size: 1.10rem;
+}
+
+.hero-actions {
+display: flex;
+flex-wrap: wrap;
 gap: 12px;
 }
-.acoes-cabecalho {
+
+.button {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+min-height: 48px;
+padding:
+12px 18px;
+border-radius: 12px;
+font-weight: 900;
+transition: .18s ease;
+border:
+1px solid transparent;
+}
+
+.button-primary {
+background:
+var(--white);
+color:
+#0b568e;
+}
+
+.button-primary:hover {
+transform:
+translateY(-2px);
+box-shadow:
+0 12px 28px
+rgba(0,0,0,.18);
+}
+
+.button-secondary {
+border-color:
+rgba(255,255,255,.50);
+color: var(--white);
+background:
+rgba(255,255,255,.07);
+}
+
+.button-secondary:hover {
+background:
+rgba(255,255,255,.14);
+}
+
+.hero-card {
+background:
+rgba(255,255,255,.10);
+border:
+1px solid
+rgba(255,255,255,.25);
+border-radius:
+var(--radius);
+padding: 28px;
+box-shadow:
+0 22px 50px
+rgba(0,0,0,.14);
+backdrop-filter:
+blur(10px);
+}
+
+.hero-card h2 {
+margin:
+0 0 16px;
+font-size: 1.4rem;
+}
+
+.hero-card ul {
+margin: 0;
+padding-left: 20px;
+}
+
+.hero-card li {
+margin-bottom: 8px;
+color: #edf8ff;
+}
+
+/* ==================================================
+SEÇÕES
+================================================== /
+.section {
+padding:
+72px 0;
+}
+
+.section-soft {
+background:
+var(--off);
+}
+
+.section-head {
+max-width: 830px;
+margin:
+0 auto 38px;
+text-align: center;
+}
+
+.section-head .kicker {
+color:
+var(--blue-strong);
+font-weight: 950;
+text-transform: uppercase;
+letter-spacing: .07em;
+font-size: .78rem;
+}
+
+.section-head h2 {
+margin:
+8px 0 12px;
+color:
+#102942;
+font-size:
+clamp(
+1.9rem,
+4vw,
+2.8rem
+);
+line-height: 1.12;
+}
+
+.section-head p {
+margin: 0;
+color:
+var(--muted);
+font-size: 1.04rem;
+}
+
+/* ==================================================
+CARDS DE SERVIÇOS
+================================================== /
+.services-grid {
+display: grid;
+grid-template-columns:
+repeat(3, 1fr);
+gap: 20px;
+}
+
+.service-card {
+background:
+var(--white);
+border:
+1px solid
+var(--border);
+border-radius:
+var(--radius);
+padding: 25px;
+box-shadow:
+var(--shadow);
+transition:
+.18s ease;
+}
+
+.service-card:hover {
+transform:
+translateY(-4px);
+border-color:
+#c7e7fb;
+}
+
+.service-icon {
+width: 54px;
+height: 54px;
+display: grid;
+place-items: center;
+margin-bottom: 17px;
+border-radius: 15px;
+background:
+var(--blue-soft);
+color:
+var(--blue-strong);
+font-size: 1.55rem;
+font-weight: 950;
+}
+
+.service-card h3 {
+margin:
+0 0 9px;
+color:
+#17354f;
+font-size: 1.13rem;
+}
+
+.service-card p {
+margin: 0;
+color:
+var(--muted);
+}
+
+/* ==================================================
+ÁREAS
+================================================== /
+.two-columns {
+display: grid;
+grid-template-columns:
+repeat(2, 1fr);
+gap: 24px;
+}
+
+.info-box {
+background:
+var(--white);
+border:
+1px solid
+var(--border);
+border-radius:
+var(--radius);
+padding: 28px;
+box-shadow:
+var(--shadow);
+}
+
+.info-box h3 {
+margin:
+0 0 16px;
+color:
+#113b5d;
+font-size: 1.3rem;
+}
+
+.check-list {
+list-style: none;
+padding: 0;
+margin: 0;
+}
+
+.check-list li {
+padding:
+9px 0;
+border-bottom:
+1px solid
+#edf1f4;
+color:
+#45515c;
+}
+
+.check-list li:last-child {
+border-bottom: 0;
+}
+
+.check-list li::before {
+content: "✓";
+display: inline-block;
+margin-right: 9px;
+color:
+var(--green);
+font-weight: 1000;
+}
+
+/* ==================================================
+PROJETO ELÉTRICO
+================================================== /
+.project-grid {
+display: grid;
+grid-template-columns:
+repeat(3, 1fr);
+gap: 18px;
+}
+
+.project-item {
+padding: 22px;
+border:
+1px solid
+var(--border);
+border-radius: 18px;
+background:
+var(--white);
+}
+
+.project-item strong {
+display: block;
+margin-bottom: 7px;
+color:
+#0b4f8a;
+font-size: 1.06rem;
+}
+
+.project-item span {
+color:
+var(--muted);
+}
+
+/* ==================================================
+RESPONSABILIDADE
+================================================== /
+.responsibility-grid {
+display: grid;
+grid-template-columns:
+1.15fr .85fr;
+gap: 28px;
+align-items: center;
+}
+
+.responsibility-copy h2 {
+margin:
+0 0 15px;
+color:
+#103b5d;
+font-size:
+clamp(
+1.9rem,
+4vw,
+2.65rem
+);
+}
+
+.responsibility-copy p {
+color:
+var(--muted);
+margin:
+0 0 14px;
+}
+
+.professional-card {
+background:
+linear-gradient(
+145deg,
+#eaf6ff,
+#ffffff
+);
+border:
+1px solid
+#cce8fb;
+border-radius:
+var(--radius);
+padding: 28px;
+box-shadow:
+var(--shadow);
+}
+
+.professional-card .tag {
+display: inline-block;
+margin-bottom: 12px;
+padding:
+6px 10px;
+border-radius: 999px;
+background:
+#dff2ff;
+color:
+#075d99;
+font-size: .76rem;
+font-weight: 950;
+text-transform:
+uppercase;
+}
+
+.professional-card h3 {
+margin:
+0 0 7px;
+color:
+#103b5d;
+font-size: 1.35rem;
+}
+
+.professional-card p {
+margin:
+0 0 12px;
+color:
+#52606c;
+}
+
+/* ==================================================
+CONTRATAÇÃO
+================================================== /
+.steps {
+display: grid;
+grid-template-columns:
+repeat(4, 1fr);
+gap: 18px;
+}
+
+.step {
+position: relative;
+background:
+var(--white);
+border:
+1px solid
+var(--border);
+border-radius:
+18px;
+padding: 24px;
+text-align: center;
+}
+
+.step-number {
+width: 52px;
+height: 52px;
+display: grid;
+place-items: center;
+margin:
+0 auto 14px;
+border-radius: 50%;
+background:
+var(--blue);
+color:
+var(--white);
+font-size: 1.15rem;
+font-weight: 1000;
+}
+
+.step h3 {
+margin:
+0 0 8px;
+color:
+#17354f;
+}
+
+.step p {
+margin: 0;
+color:
+var(--muted);
+font-size: .94rem;
+}
+
+/* ==================================================
+CHAMADA
+================================================== /
+.cta-section {
+background:
+linear-gradient(
+135deg,
+#061b31,
+#0d568a
+);
+color:
+var(--white);
+padding:
+68px 0;
+}
+
+.cta-box {
+text-align: center;
+max-width: 840px;
+margin: 0 auto;
+}
+
+.cta-box h2 {
+margin:
+0 0 13px;
+font-size:
+clamp(
+2rem,
+4vw,
+3rem
+);
+}
+
+.cta-box p {
+margin:
+0 auto 24px;
+max-width: 720px;
+color:
+#ddecf7;
+}
+
+/* ==================================================
+RODAPÉ
+================================================== /
+.footer {
+background:
+var(--black);
+color:
+#d5dde5;
+padding:
+44px 0 24px;
+}
+
+.footer-grid {
+display: grid;
+grid-template-columns:
+1.2fr .8fr;
+gap: 30px;
+}
+
+.footer h3 {
+margin-top: 0;
+color:
+var(--white);
+}
+
+.footer p {
+margin:
+6px 0;
+}
+
+.footer strong {
+color:
+var(--white);
+}
+
+.footer-bottom {
+margin-top: 28px;
+padding-top: 18px;
+border-top:
+1px solid
+#28323c;
+text-align: center;
+color:
+#9ca9b5;
+font-size: .88rem;
+}
+
+/* ==================================================
+RESPONSIVO
+================================================== /
+@media (
+max-width: 1100px
+) {
+.menu {
+display: block;
+}
+
+.nav {
+position: relative;
+}
+
+.links {
+display: none;
+position: absolute;
+top: 72px;
+right: 0;
+left: 0;
+z-index: 80;
 flex-direction: column;
+align-items: stretch;
+gap: 0;
+background:
+var(--white);
+border:
+1px solid
+var(--border);
+border-radius:
+16px;
+padding: 14px;
+box-shadow:
+var(--shadow);
+}
+
+.links.open {
+display: flex;
+}
+
+.links a {
+padding:
+12px 10px;
+}
+
+.links a.active-page {
+border-bottom: 0;
+background:
+var(--blue-soft);
+border-radius: 9px;
+}
+
+.links .nav-cta {
+margin-top: 6px;
+}
+
+.brasil-love {
+margin:
+12px auto 3px;
+}
+}
+
+@media (
+max-width: 850px
+) {
+.hero-grid,
+.responsibility-grid,
+.two-columns {
+grid-template-columns: 1fr;
+}
+
+.services-grid,
+.project-grid {
+grid-template-columns:
+repeat(2, 1fr);
+}
+
+.steps {
+grid-template-columns:
+repeat(2, 1fr);
+}
+
+.footer-grid {
+grid-template-columns: 1fr;
+}
+}
+
+@media (
+max-width: 560px
+) {
+.container {
+width:
+min(
+100% - 22px,
+1180px
+);
+}
+
+.brand {
+min-width: 0;
+}
+
+.brand > span:not(.logo) {
+font-size: .92rem;
+}
+
+.logo {
+width: 43px;
+height: 43px;
+}
+
+.hero {
+padding:
+60px 0;
+}
+
+.hero h1 {
+font-size: 2.25rem;
+}
+
+.services-grid,
+.project-grid,
+.steps {
+grid-template-columns: 1fr;
+}
+
+.section {
+padding:
+58px 0;
 }
 }
 </style>
 </head>
+
 <body>
-<!-- CABEÇALHO -->
-<header>
-<div class="cabecalho">
-<div class="marca">
-<strong>Universo Treinamentos Brasil</strong>
-<span>Treinamentos • Engenharia • Capacitação Profissional</span>
+
+<!-- ==============================================
+FAIXA SUPERIOR
+=============================================== -->
+<div class="topbar">
+Treinamentos presenciais para empresas, prefeituras e instituições • Rede nacional em estruturação
 </div>
-<nav>
-<a href="index.html">Início</a>
-<a href="sobre.html">Sobre</a>
-<a href="cursos.html">Cursos</a>
-<a href="empresas.html">Empresas</a>
-<a href="engenharia-eletrica.html" class="ativo">Engenharia Elétrica</a>
-<a href="contato.html">Contato</a>
-</nav>
-<div class="acoes-cabecalho">
+
+<!-- ==============================================
+CABEÇALHO
+=============================================== -->
+<header class="header">
+<div class="container nav">
 <a
-class="btn-proposta"
-href="contato.html"
+class="brand"
+href="index.html"
+>
+<span class="logo">
+UTB
+</span>
+<span>
+Universo Treinamentos Brasil
+<small>
+Capacitação profissional em rede nacional
+</small>
+</span>
+</a>
+
+<button
+class="menu"
+type="button"
+id="menuButton"
+aria-label="Abrir menu"
+aria-expanded="false"
+>
+MENU
+</button>
+
+<nav
+class="links"
+id="mainMenu"
+>
+<a href="index.html">
+Início
+</a>
+<a href="cursos.html">
+Cursos
+</a>
+<a href="empresas.html">
+Empresas
+</a>
+<a href="instrutores.html">
+Instrutores
+</a>
+<a href="certificados.html">
+Certificados
+</a>
+<a href="depoimentos.html">
+Depoimentos
+</a>
+<a href="sobre.html">
+Sobre
+</a>
+<a
+class="active-page"
+href="engenharia-eletrica.html"
+>
+Engenharia Elétrica
+</a>
+<a
+class="nav-cta"
+href="contato.html#proposta"
 >
 Solicitar proposta
 </a>
-<div class="ame-brasil">
-<div class="bandeira"></div>
+<div class="brasil-love">
+<span class="brasil-flag">
+🇧🇷
+</span>
+<span class="brasil-text">
 Ame o Brasil
+</span>
 </div>
-</div>
+</nav>
 </div>
 </header>
 
-<!-- APRESENTAÇÃO -->
+<main>
+
+<!-- ==============================================
+HERO
+=============================================== -->
 <section class="hero">
-<div class="hero-conteudo">
+<div class="container hero-grid">
 <div>
+<div class="eyebrow">
+⚡ Engenharia Elétrica
+</div>
 <h1>
 Engenharia Elétrica com responsabilidade técnica
 </h1>
 <p>
-Projetos, adequações, diagnósticos, acompanhamento técnico,
-fiscalização e soluções em instalações elétricas residenciais,
-comerciais e industriais.
+Projetos, adequações, diagnósticos,
+acompanhamento técnico, fiscalização e
+soluções em instalações elétricas
+residenciais, comerciais e industriais.
 </p>
-<div class="hero-botoes">
+
+<div class="hero-actions">
 <a
-href="contato.html"
-class="btn-principal"
+class="button button-primary"
+href="contato.html#proposta"
 >
 Solicitar serviço de engenharia elétrica
 </a>
 <a
+class="button button-secondary"
 href="#servicos"
-class="btn-secundario"
 >
 Conhecer serviços
 </a>
 </div>
 </div>
-<div class="hero-card">
-<h2>Atuação profissional</h2>
+
+<aside class="hero-card">
+<h2>
+Atuação profissional
+</h2>
 <ul>
-<li>Engenheiro Eletricista</li>
-<li>CREA ativo</li>
-<li>Emissão de ART quando aplicável</li>
-<li>Projetos e adequações elétricas</li>
-<li>Responsabilidade técnica</li>
-<li>Acompanhamento e fiscalização</li>
+<li>
+Engenheiro Eletricista
+</li>
+<li>
+CREA ativo
+</li>
+<li>
+Emissão de ART quando aplicável
+</li>
+<li>
+Projetos e adequações elétricas
+</li>
+<li>
+Responsabilidade técnica
+</li>
+<li>
+Acompanhamento e fiscalização
+</li>
+</ul>
+</aside>
+</div>
+</section>
+
+<!-- ==============================================
+SERVIÇOS
+=============================================== -->
+<section
+class="section"
+id="servicos"
+>
+<div class="container">
+<div class="section-head">
+<div class="kicker">
+Serviços técnicos
+</div>
+<h2>
+Serviços de Engenharia Elétrica
+</h2>
+<p>
+Soluções técnicas desenvolvidas conforme
+as características, necessidades e
+condições de cada instalação.
+</p>
+</div>
+
+<div class="services-grid">
+
+<article class="service-card">
+<div class="service-icon">
+⚡
+</div>
+<h3>
+Projetos Elétricos
+</h3>
+<p>
+Projetos de instalações elétricas
+residenciais, comerciais e industriais,
+incluindo circuitos, distribuição,
+proteções, dimensionamentos e
+documentação técnica.
+</p>
+</article>
+
+<article class="service-card">
+<div class="service-icon">
+▦
+</div>
+<h3>
+Quadros de Distribuição
+</h3>
+<p>
+Dimensionamento, organização,
+análise e adequação de quadros
+elétricos, circuitos e dispositivos
+de proteção.
+</p>
+</article>
+
+<article class="service-card">
+<div class="service-icon">
+⏚
+</div>
+<h3>
+Aterramento Elétrico
+</h3>
+<p>
+Projeto, avaliação e adequação
+de sistemas de aterramento,
+equipotencialização e proteção
+das instalações.
+</p>
+</article>
+
+<article class="service-card">
+<div class="service-icon">
+☇
+</div>
+<h3>
+SPDA
+</h3>
+<p>
+Análise e serviços relacionados
+aos sistemas de proteção contra
+descargas atmosféricas, conforme
+necessidade e aplicação técnica.
+</p>
+</article>
+
+<article class="service-card">
+<div class="service-icon">
+✓
+</div>
+<h3>
+Adequações Elétricas
+</h3>
+<p>
+Avaliação de instalações existentes
+e indicação das adequações necessárias
+para melhoria da segurança e operação.
+</p>
+</article>
+
+<article class="service-card">
+<div class="service-icon">
+🔍
+</div>
+<h3>
+Inspeção e Diagnóstico
+</h3>
+<p>
+Identificação de falhas, sobrecargas,
+aquecimentos, deficiências de proteção
+e outras anomalias elétricas.
+</p>
+</article>
+
+<article class="service-card">
+<div class="service-icon">
+🏗
+</div>
+<h3>
+Acompanhamento de Obras
+</h3>
+<p>
+Acompanhamento técnico da execução
+das instalações para verificar
+conformidade com o projeto e
+boas práticas.
+</p>
+</article>
+
+<article class="service-card">
+<div class="service-icon">
+📋
+</div>
+<h3>
+Fiscalização Técnica
+</h3>
+<p>
+Fiscalização de serviços elétricos
+executados por empresas, equipes
+contratadas ou prestadores de serviço.
+</p>
+</article>
+
+<article class="service-card">
+<div class="service-icon">
+✍
+</div>
+<h3>
+Responsabilidade Técnica e ART
+</h3>
+<p>
+Serviços sujeitos à responsabilidade
+técnica profissional com emissão de
+ART quando necessária e aplicável.
+</p>
+</article>
+
+</div>
+</div>
+</section>
+
+<!-- ==============================================
+ÁREAS DE ATUAÇÃO
+=============================================== -->
+<section class="section section-soft">
+<div class="container">
+<div class="section-head">
+<div class="kicker">
+Atuação
+</div>
+<h2>
+Áreas de atuação
+</h2>
+<p>
+Atendimento técnico para diferentes
+tipos de instalações e necessidades
+em Engenharia Elétrica.
+</p>
+</div>
+
+<div class="two-columns">
+
+<div class="info-box">
+<h3>
+Instalações elétricas
+</h3>
+<ul class="check-list">
+<li>
+Instalações residenciais
+</li>
+<li>
+Instalações comerciais
+</li>
+<li>
+Instalações industriais
+</li>
+<li>
+Distribuição de energia
+</li>
+<li>
+Quadros elétricos
+</li>
+<li>
+Circuitos de iluminação
+</li>
+<li>
+Tomadas e cargas específicas
+</li>
+<li>
+Proteções elétricas
+</li>
+<li>
+Dimensionamento de condutores
+</li>
 </ul>
 </div>
-</div>
-</section>
 
-<!-- SERVIÇOS -->
-<section id="servicos">
-<div class="container">
-<div class="titulo-secao">
-<h2>Serviços de Engenharia Elétrica</h2>
-<p>
-Soluções técnicas desenvolvidas conforme as características
-e necessidades de cada instalação.
-</p>
-</div>
-<div class="grid-servicos">
-<article class="card">
-<div class="icone">⚡</div>
-<h3>Projetos Elétricos</h3>
-<p>
-Projetos de instalações elétricas residenciais,
-comerciais e industriais, incluindo distribuição,
-circuitos, proteções, dimensionamentos e documentação técnica.
-</p>
-</article>
-<article class="card">
-<div class="icone">▦</div>
-<h3>Quadros de Distribuição</h3>
-<p>
-Dimensionamento, organização, análise e adequação de
-quadros elétricos, dispositivos de proteção e distribuição.
-</p>
-</article>
-<article class="card">
-<div class="icone">⏚</div>
-<h3>Aterramento Elétrico</h3>
-<p>
-Projeto, avaliação e adequação de sistemas de aterramento,
-equipotencialização e proteção das instalações.
-</p>
-</article>
-<article class="card">
-<div class="icone">☇</div>
-<h3>SPDA</h3>
-<p>
-Análise e serviços relacionados aos sistemas de proteção
-contra descargas atmosféricas, conforme aplicação técnica.
-</p>
-</article>
-<article class="card">
-<div class="icone">✓</div>
-<h3>Adequações Elétricas</h3>
-<p>
-Avaliação de instalações existentes e indicação das
-adequações necessárias para melhoria da segurança e operação.
-</p>
-</article>
-<article class="card">
-<div class="icone">⌕</div>
-<h3>Inspeção e Diagnóstico</h3>
-<p>
-Identificação de problemas, falhas, sobrecargas,
-aquecimentos, deficiências de proteção e outras anomalias.
-</p>
-</article>
-<article class="card">
-<div class="icone">🏗</div>
-<h3>Acompanhamento de Obras</h3>
-<p>
-Acompanhamento técnico da execução das instalações
-para verificar conformidade com o projeto e boas práticas.
-</p>
-</article>
-<article class="card">
-<div class="icone">📋</div>
-<h3>Fiscalização Técnica</h3>
-<p>
-Fiscalização de serviços elétricos executados por
-empresas, equipes contratadas ou prestadores de serviço.
-</p>
-</article>
-<article class="card">
-<div class="icone">✍</div>
-<h3>Responsabilidade Técnica e ART</h3>
-<p>
-Serviços sujeitos à responsabilidade técnica profissional
-com emissão de ART quando necessária e aplicável.
-</p>
-</article>
-</div>
-</div>
-</section>
-
-<!-- ÁREAS DE ATUAÇÃO -->
-<section class="fundo-claro">
-<div class="container">
-<div class="titulo-secao">
-<h2>Áreas de atuação</h2>
-<p>
-Atendimento técnico para diferentes tipos de instalações
-e necessidades em Engenharia Elétrica.
-</p>
-</div>
-<div class="projetos-bloco">
-<div class="lista-tecnica">
-<h3>Instalações elétricas</h3>
-<ul>
-<li>Instalações residenciais</li>
-<li>Instalações comerciais</li>
-<li>Instalações industriais</li>
-<li>Distribuição de energia</li>
-<li>Quadros elétricos</li>
-<li>Circuitos de iluminação</li>
-<li>Tomadas e cargas específicas</li>
-<li>Proteções elétricas</li>
-<li>Dimensionamento de condutores</li>
+<div class="info-box">
+<h3>
+Projetos e serviços técnicos
+</h3>
+<ul class="check-list">
+<li>
+Projetos elétricos completos
+</li>
+<li>
+Entradas de energia
+</li>
+<li>
+Padrões de fornecimento
+</li>
+<li>
+Aterramento elétrico
+</li>
+<li>
+SPDA
+</li>
+<li>
+Adequações de instalações
+</li>
+<li>
+Diagnóstico de falhas
+</li>
+<li>
+Fiscalização e acompanhamento
+</li>
+<li>
+Responsabilidade técnica
+</li>
 </ul>
 </div>
-<div class="lista-tecnica">
-<h3>Projetos e serviços técnicos</h3>
-<ul>
-<li>Projetos elétricos completos</li>
-<li>Entradas de energia</li>
-<li>Padrões de fornecimento</li>
-<li>Aterramento elétrico</li>
-<li>SPDA</li>
-<li>Adequações de instalações</li>
-<li>Diagnóstico de falhas</li>
-<li>Fiscalização e acompanhamento</li>
-<li>Responsabilidade técnica</li>
-</ul>
-</div>
+
 </div>
 </div>
 </section>
 
-<!-- PROJETOS ELÉTRICOS -->
-<section>
+<!-- ==============================================
+PROJETO ELÉTRICO COMPLETO
+=============================================== -->
+<section class="section">
 <div class="container">
-<div class="titulo-secao">
-<h2>Projeto Elétrico Completo</h2>
+<div class="section-head">
+<div class="kicker">
+Projeto técnico
+</div>
+<h2>
+Projeto Elétrico Completo
+</h2>
 <p>
-O projeto pode reunir em uma única documentação técnica
-todos os principais elementos necessários para execução
-e análise da instalação.
+O projeto pode reunir em uma única
+documentação técnica os principais
+elementos necessários para análise,
+execução e orientação da instalação.
 </p>
 </div>
-<div class="grid-servicos">
-<article class="card">
-<h3>Planta elétrica</h3>
-<p>
-Localização de iluminação, interruptores, tomadas,
-equipamentos, circuitos, quadro e caminhos elétricos.
-</p>
-</article>
-<article class="card">
-<h3>Quadro de cargas</h3>
-<p>
-Organização dos circuitos, potências, tensões,
-correntes e dispositivos de proteção.
-</p>
-</article>
-<article class="card">
-<h3>Diagrama unifilar</h3>
-<p>
-Representação técnica da alimentação,
-proteção e distribuição dos circuitos.
-</p>
-</article>
-<article class="card">
-<h3>Dimensionamentos</h3>
-<p>
-Definição das seções dos condutores,
-eletrodutos e dispositivos de proteção.
-</p>
-</article>
-<article class="card">
-<h3>Aterramento</h3>
-<p>
-Definição técnica do sistema de aterramento
-e equipotencialização conforme a instalação.
-</p>
-</article>
-<article class="card">
-<h3>Memorial descritivo</h3>
-<p>
-Documento contendo critérios, especificações,
-recomendações e informações técnicas do projeto.
-</p>
-</article>
+
+<div class="project-grid">
+
+<div class="project-item">
+<strong>
+Planta elétrica
+</strong>
+<span>
+Localização de iluminação,
+interruptores, tomadas,
+equipamentos, circuitos,
+quadro de distribuição e
+caminhos elétricos.
+</span>
+</div>
+
+<div class="project-item">
+<strong>
+Quadro de cargas
+</strong>
+<span>
+Organização dos circuitos,
+potências, tensões, correntes,
+condutores e dispositivos
+de proteção.
+</span>
+</div>
+
+<div class="project-item">
+<strong>
+Diagrama unifilar
+</strong>
+<span>
+Representação técnica da
+alimentação, proteção e
+distribuição dos circuitos.
+</span>
+</div>
+
+<div class="project-item">
+<strong>
+Dimensionamentos
+</strong>
+<span>
+Definição das seções dos
+condutores, eletrodutos e
+dispositivos de proteção.
+</span>
+</div>
+
+<div class="project-item">
+<strong>
+Aterramento
+</strong>
+<span>
+Definição técnica do sistema
+de aterramento e
+equipotencialização conforme
+as características da instalação.
+</span>
+</div>
+
+<div class="project-item">
+<strong>
+Memorial descritivo
+</strong>
+<span>
+Documento contendo critérios,
+especificações, recomendações
+e informações técnicas
+referentes ao projeto.
+</span>
+</div>
+
+<div class="project-item">
+<strong>
+Quantitativo
+</strong>
+<span>
+Levantamento dos principais
+materiais previstos para a
+instalação elétrica.
+</span>
+</div>
+
+<div class="project-item">
+<strong>
+Quadro de distribuição
+</strong>
+<span>
+Organização dos dispositivos,
+circuitos, barramentos,
+proteções e identificação
+do quadro.
+</span>
+</div>
+
+<div class="project-item">
+<strong>
+Documentação técnica
+</strong>
+<span>
+Pranchas, detalhes e demais
+informações necessárias de
+acordo com o escopo contratado.
+</span>
+</div>
+
 </div>
 </div>
 </section>
 
-<!-- PROFISSIONAL -->
-<section class="fundo-claro">
-<div class="container responsabilidade">
-<div class="responsabilidade-texto">
+<!-- ==============================================
+RESPONSABILIDADE PROFISSIONAL
+=============================================== -->
+<section class="section section-soft">
+<div class="container responsibility-grid">
+
+<div class="responsibility-copy">
 <h2>
 Responsabilidade profissional
 </h2>
 <p>
-Os serviços de Engenharia Elétrica são conduzidos
-separadamente das atividades de treinamento da UTB.
+Os serviços de Engenharia Elétrica
+são apresentados de forma separada
+das atividades de treinamento e
+capacitação da UTB.
 </p>
 <p>
-Cada serviço é analisado conforme sua complexidade,
-finalidade, características da instalação e necessidade
-de responsabilidade técnica.
+Cada serviço é analisado conforme
+sua complexidade, finalidade,
+características da instalação e
+necessidade de responsabilidade
+técnica.
 </p>
 <p>
-Quando aplicável, o serviço poderá envolver
-documentação técnica e emissão de ART.
+Quando aplicável, o serviço poderá
+envolver documentação técnica,
+acompanhamento profissional e
+emissão de ART.
 </p>
 </div>
-<div class="box-profissional">
-<strong>
+
+<aside class="professional-card">
+<span class="tag">
+Responsável técnico
+</span>
+<h3>
 Eng. João Manoel dos Santos Reis
-</strong>
-Engenheiro Eletricista<br>
-Fundador da Universo Treinamentos Brasil<br><br>
-Experiência profissional em instalações elétricas,
-manutenção, comandos, acionamentos, aterramento,
-segurança em eletricidade e capacitação profissional.
+</h3>
+<p>
+Engenheiro Eletricista
+</p>
+<p>
+Fundador da Universo Treinamentos Brasil
+</p>
+<p>
+Experiência profissional em instalações
+elétricas, manutenção, comandos,
+acionamentos, aterramento, segurança
+em eletricidade e capacitação profissional.
+</p>
+</aside>
+
+</div>
+</section>
+
+<!-- ==============================================
+CONTRATAÇÃO
+=============================================== -->
+<section class="section">
+<div class="container">
+<div class="section-head">
+<div class="kicker">
+Atendimento
+</div>
+<h2>
+Como funciona a contratação
+</h2>
+<p>
+Um processo simples para entender
+a necessidade do cliente e definir
+corretamente o serviço técnico.
+</p>
+</div>
+
+<div class="steps">
+
+<div class="step">
+<div class="step-number">
+1
+</div>
+<h3>
+Solicitação
+</h3>
+<p>
+O cliente informa sua necessidade
+e os dados iniciais do imóvel,
+instalação ou serviço.
+</p>
+</div>
+
+<div class="step">
+<div class="step-number">
+2
+</div>
+<h3>
+Análise técnica
+</h3>
+<p>
+São avaliados o escopo,
+as condições existentes e
+as informações necessárias.
+</p>
+</div>
+
+<div class="step">
+<div class="step-number">
+3
+</div>
+<h3>
+Proposta
+</h3>
+<p>
+É apresentada proposta comercial
+com descrição dos serviços,
+condições e escopo previsto.
+</p>
+</div>
+
+<div class="step">
+<div class="step-number">
+4
+</div>
+<h3>
+Execução
+</h3>
+<p>
+Após aprovação, o serviço técnico
+é desenvolvido conforme o
+escopo contratado.
+</p>
+</div>
+
 </div>
 </div>
 </section>
 
-<!-- COMO FUNCIONA -->
-<section>
-<div class="container">
-<div class="titulo-secao">
-<h2>Como funciona a contratação</h2>
-</div>
-<div class="etapas">
-<div class="etapa">
-<div class="numero">1</div>
-<h3>Solicitação</h3>
-<p>
-O cliente informa sua necessidade e os dados iniciais
-do imóvel, instalação ou serviço.
-</p>
-</div>
-<div class="etapa">
-<div class="numero">2</div>
-<h3>Análise técnica</h3>
-<p>
-São avaliados o escopo, as condições existentes
-e as informações necessárias.
-</p>
-</div>
-<div class="etapa">
-<div class="numero">3</div>
-<h3>Proposta</h3>
-<p>
-É apresentada uma proposta comercial com
-descrição dos serviços e condições.
-</p>
-</div>
-<div class="etapa">
-<div class="numero">4</div>
-<h3>Execução</h3>
-<p>
-Após aprovação, o serviço técnico é
-desenvolvido conforme o escopo contratado.
-</p>
-</div>
-</div>
-</div>
-</section>
-
-<!-- CHAMADA FINAL -->
-<section class="chamada">
-<div class="container">
+<!-- ==============================================
+CHAMADA FINAL
+=============================================== -->
+<section class="cta-section">
+<div class="container cta-box">
 <h2>
 Precisa de um serviço de Engenharia Elétrica?
 </h2>
 <p>
 Entre em contato e descreva sua necessidade.
-A UTB fará uma avaliação inicial para definição
-do serviço técnico adequado.
+A UTB fará uma avaliação inicial para
+definição do serviço técnico adequado.
 </p>
 <a
-href="contato.html"
-class="btn-principal"
+class="button button-primary"
+href="contato.html#proposta"
 >
 Solicitar serviço de engenharia elétrica
 </a>
 </div>
 </section>
 
-<!-- RODAPÉ -->
-<footer>
-<div class="rodape">
+</main>
+
+<!-- ==============================================
+RODAPÉ
+=============================================== -->
+<footer class="footer">
+<div class="container">
+<div class="footer-grid">
+
 <div>
+<h3>
+Universo Treinamentos Brasil – UTB
+</h3>
 <p>
-<strong>Universo Treinamentos Brasil – UTB</strong>
-</p>
-<p>
-Treinamentos profissionais e serviços de Engenharia Elétrica.
+Treinamentos profissionais e
+serviços de Engenharia Elétrica.
 </p>
 </div>
+
 <div>
 <p>
-<strong>Nome fantasia:</strong>
+<strong>
+Site oficial:
+</strong>
+www.universotreinamentosbrasil.com.br
+</p>
+<p>
+<strong>
+Nome fantasia:
+</strong>
 Universo Treinamentos Brasil – UTB
 </p>
 <p>
-<strong>Empresa:</strong>
+<strong>
+Empresa:
+</strong>
 João Manoel dos Santos Reis Treinamentos ME
 </p>
-<p>
-<strong>Site oficial:</strong>
-www.universotreinamentosbrasil.com.br
-</p>
 </div>
+
 </div>
-<div class="copyright">
+
+<div class="footer-bottom">
 © Universo Treinamentos Brasil – Todos os direitos reservados.
 </div>
+</div>
 </footer>
+
+<!-- ==============================================
+MENU MOBILE
+=============================================== -->
+<script>
+const menuButton =
+document.getElementById(
+"menuButton"
+);
+const mainMenu =
+document.getElementById(
+"mainMenu"
+);
+
+if (
+menuButton &&
+mainMenu
+) {
+menuButton.addEventListener(
+"click",
+function () {
+const open =
+mainMenu.classList.toggle(
+"open"
+);
+
+menuButton.setAttribute(
+"aria-expanded",
+open
+? "true"
+: "false"
+);
+}
+);
+
+mainMenu
+.querySelectorAll("a")
+.forEach(
+function (link) {
+link.addEventListener(
+"click",
+function () {
+mainMenu.classList.remove(
+"open"
+);
+
+menuButton.setAttribute(
+"aria-expanded",
+"false"
+);
+}
+);
+}
+);
+}
+</script>
+
 </body>
 </html>
