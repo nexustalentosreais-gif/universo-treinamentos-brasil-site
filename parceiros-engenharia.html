@@ -1,1 +1,1162 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Parceiros de Engenharia Elétrica | Universo Treinamentos Brasil</title>
+<meta
+name="description"
+content="Cadastro gratuito de empresas, MEIs e profissionais eletricistas interessados em integrar a rede privada de parceiros de Engenharia Elétrica da UTB."
+>
+<meta name="robots" content="index,follow">
+<link
+rel="canonical"
+href="https://universotreinamentosbrasil.com.br/parceiros-engenharia.html"
+>
+<style>
+:root{
+--black:#0b0b0d;
+--black-2:#17191d;
+--white:#ffffff;
+--off:#f5f8fb;
+--blue:#7fc9ff;
+--blue-strong:#4daef2;
+--blue-soft:#eaf6ff;
+--green:#25a55f;
+--green-soft:#eaf8f0;
+--yellow:#f3c84b;
+--yellow-soft:#fff8df;
+--text:#15171a;
+--muted:#66717d;
+--border:#dfe7ee;
+--shadow:0 18px 50px rgba(0,0,0,.08);
+--radius:22px;
+}
+{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+margin:0;
+font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+background:var(--off);
+color:var(--text);
+line-height:1.55;
+}
+a{
+color:inherit;
+text-decoration:none
+}
+button,
+input,
+textarea,
+select{
+font:inherit
+}
+.container{
+width:min(1180px,calc(100% - 34px));
+margin:auto
+}
 
+/* CABEÇALHO /
+.topbar{
+background:var(--black);
+color:#d8e9f6;
+padding:9px 14px;
+text-align:center;
+font-size:.88rem;
+letter-spacing:.01em;
+}
+.header{
+position:sticky;
+top:0;
+z-index:50;
+background:rgba(255,255,255,.95);
+backdrop-filter:blur(12px);
+border-bottom:1px solid var(--border);
+}
+.nav{
+min-height:76px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:20px;
+}
+.brand{
+display:flex;
+align-items:center;
+gap:13px;
+font-weight:950;
+color:var(--black)
+}
+.logo{
+width:48px;
+height:48px;
+border-radius:14px;
+display:grid;
+place-items:center;
+background:var(--black);
+color:var(--blue);
+border:2px solid var(--blue);
+font-weight:1000;
+box-shadow:0 8px 20px rgba(0,0,0,.10)
+}
+.brand small{
+display:block;
+color:var(--muted);
+font-size:.72rem;
+letter-spacing:.035em
+}
+.links{
+display:flex;
+gap:18px;
+align-items:center;
+font-weight:850;
+color:#2b343c
+}
+.links a:hover{
+color:#0b7fc8
+}
+.links a.active-page{
+color:#1598e8;
+border-bottom:3px solid #1598e8;
+padding-bottom:5px;
+}
+.links .nav-cta{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+background:var(--black);
+color:white;
+padding:10px 14px;
+border-radius:10px;
+border:1px solid var(--black);
+white-space:nowrap;
+text-align:center;
+font-size:.92rem;
+}
+.links .nav-cta:hover{
+background:#23262b;
+color:white
+}
+.brasil-love{
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+min-width:76px;
+margin-left:2px;
+line-height:1;
+}
+.brasil-flag{
+font-size:34px;
+line-height:1;
+}
+.brasil-text{
+margin-top:5px;
+color:#0b4f8a;
+font-size:.72rem;
+font-weight:950;
+white-space:nowrap;
+}
+.menu{
+display:none;
+border:1px solid var(--border);
+background:white;
+color:var(--black);
+border-radius:10px;
+padding:9px 12px;
+font-weight:900;
+cursor:pointer
+}
+
+/* ABERTURA /
+.page-hero{
+padding:58px 0 46px;
+background:linear-gradient(180deg,#fff,#f5f8fb);
+border-bottom:1px solid var(--border)
+}
+.page-hero h1{
+font-size:clamp(2.25rem,4.6vw,3.9rem);
+margin:0 0 9px;
+letter-spacing:-.04em
+}
+.page-hero p{
+max-width:900px;
+color:var(--muted);
+font-size:1.05rem
+}
+.breadcrumb{
+color:#118ed8;
+font-weight:900;
+font-size:.9rem;
+margin-bottom:12px
+}
+
+/* CONTEÚDO /
+.section{
+padding:72px 0
+}
+.section.white{
+background:white
+}
+.split{
+display:grid;
+grid-template-columns:1.25fr .75fr;
+gap:28px;
+align-items:start
+}
+.form,
+.card,
+.soft{
+background:white;
+border:1px solid var(--border);
+border-radius:var(--radius);
+box-shadow:0 8px 30px rgba(0,0,0,.045)
+}
+.form{
+padding:26px
+}
+.soft{
+background:#eef8ff;
+border:1px solid #cde9fb;
+padding:24px
+}
+.card{
+padding:22px
+}
+.head{
+max-width:860px;
+margin-bottom:30px
+}
+.head h2{
+font-size:clamp(2rem,3.4vw,3.1rem);
+line-height:1.06;
+letter-spacing:-.03em;
+margin:0 0 10px
+}
+.head p{
+margin:0;
+color:var(--muted);
+font-size:1.04rem
+}
+
+/* FORMULÁRIO EM UMA COLUNA /
+.form-grid{
+display:grid;
+grid-template-columns:1fr;
+gap:18px
+}
+.form-grid > div{
+width:100%;
+min-width:0
+}
+label{
+display:block;
+font-size:.9rem;
+color:#36444f;
+font-weight:850;
+margin-bottom:6px
+}
+input,
+textarea,
+select{
+width:100%;
+min-width:0;
+max-width:100%;
+border:1px solid #c9d7e1;
+border-radius:12px;
+padding:13px;
+background:white;
+color:var(--text)
+}
+textarea{
+min-height:130px;
+resize:vertical
+}
+.help{
+margin-top:6px;
+font-size:.83rem;
+color:var(--muted)
+}
+
+/* BOTÕES /
+.btn{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+min-height:50px;
+padding:0 18px;
+border-radius:13px;
+border:1px solid transparent;
+font-weight:950;
+cursor:pointer;
+transition:.18s ease
+}
+.btn:hover{
+transform:translateY(-1px);
+filter:brightness(.98)
+}
+.btn-black{
+background:var(--black);
+color:white
+}
+.btn-blue{
+background:var(--blue-strong);
+color:#06121a
+}
+.btn-green{
+background:var(--green);
+color:white
+}
+
+/* LISTAS /
+.checks{
+list-style:none;
+padding:0;
+margin:15px 0 0;
+display:grid;
+gap:13px
+}
+.checks li{
+display:flex;
+gap:10px;
+align-items:flex-start;
+color:#35414c
+}
+.check{
+width:26px;
+height:26px;
+border-radius:50%;
+display:grid;
+place-items:center;
+flex:0 0 auto;
+background:var(--green-soft);
+color:var(--green);
+font-weight:1000
+}
+.warn{
+background:var(--yellow-soft);
+border:1px solid #ead28c;
+border-radius:17px;
+padding:18px;
+color:#6f5200
+}
+.good{
+background:var(--green-soft);
+border:1px solid #bfe6ce;
+border-radius:17px;
+padding:18px;
+color:#17623d
+}
+.result{
+display:none;
+margin-top:20px
+}
+.result.show{
+display:block
+}
+
+/* RODAPÉ /
+.footer{
+background:#08090b;
+color:#d9e1e7;
+padding:46px 0 25px
+}
+.footer-grid{
+display:grid;
+grid-template-columns:1.2fr .8fr .8fr .8fr;
+gap:24px
+}
+.footer h4{
+color:white;
+margin-top:0
+}
+.footer a{
+color:#b7ddf8
+}
+.footer small{
+color:#98a7b3
+}
+.hr{
+height:1px;
+background:#2a3036;
+margin:25px 0
+}
+.legal{
+font-size:.84rem;
+color:#75838e
+}
+
+/* RESPONSIVO /
+@media(max-width:980px){
+.links{
+display:none;
+position:absolute;
+top:74px;
+left:17px;
+right:17px;
+flex-direction:column;
+align-items:stretch;
+background:white;
+border:1px solid var(--border);
+border-radius:16px;
+padding:16px;
+box-shadow:var(--shadow)
+}
+.links.open{
+display:flex
+}
+.menu{
+display:block
+}
+.split{
+grid-template-columns:1fr
+}
+.footer-grid{
+grid-template-columns:1fr 1fr
+}
+}
+@media(max-width:640px){
+.container{
+width:min(100% - 24px,1180px)
+}
+.footer-grid{
+grid-template-columns:1fr
+}
+.brand small{
+display:none
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+Treinamentos presenciais para empresas, prefeituras e instituições • Rede nacional em estruturação
+</div>
+
+<header class="header">
+<div class="container nav">
+<a class="brand" href="index.html">
+<span class="logo">
+UTB
+</span>
+<span>
+Universo Treinamentos Brasil
+<small>
+Capacitação profissional em rede nacional
+</small>
+</span>
+</a>
+
+<button class="menu" type="button">
+MENU
+</button>
+
+<nav class="links">
+<a href="index.html">
+Início
+</a>
+<a href="cursos.html">
+Cursos
+</a>
+<a href="empresas.html">
+Empresas
+</a>
+<a href="instrutores.html">
+Instrutores
+</a>
+<a href="certificados.html">
+Certificados
+</a>
+<a href="depoimentos.html">
+Depoimentos
+</a>
+<a href="sobre.html">
+Sobre
+</a>
+<a
+class="active-page"
+href="engenharia-eletrica.html"
+>
+Engenharia Elétrica
+</a>
+<a
+class="nav-cta"
+href="engenharia-eletrica.html"
+>
+Voltar à Engenharia
+</a>
+<div class="brasil-love">
+<span class="brasil-flag">
+🇧🇷
+</span>
+<span class="brasil-text">
+Ame o Brasil
+</span>
+</div>
+</nav>
+</div>
+</header>
+
+<main>
+
+<section class="page-hero">
+<div class="container">
+<div class="breadcrumb">
+<a href="index.html">
+Início
+</a>
+/
+<a href="engenharia-eletrica.html">
+Engenharia Elétrica
+</a>
+/ Parceiros
+</div>
+
+<h1>
+Seja um parceiro de Engenharia Elétrica da UTB
+</h1>
+
+<p>
+Empresas, MEIs, profissionais autônomos e eletricistas
+podem se cadastrar gratuitamente para integrar nossa
+rede privada de parceiros de serviços elétricos.
+</p>
+</div>
+</section>
+
+<section class="section">
+<div class="container split">
+
+<form
+class="form"
+id="partner-engineering-form"
+>
+<div class="head">
+<h2>
+Cadastro de parceiro
+</h2>
+<p>
+O cadastro é 100% gratuito e será analisado
+administrativamente pela UTB.
+</p>
+</div>
+
+<div class="form-grid">
+
+<div>
+<label for="tipo">
+Tipo de cadastro *
+</label>
+<select
+id="tipo"
+name="tipo"
+required
+>
+<option value="">
+Selecione
+</option>
+<option>
+Eletricista autônomo
+</option>
+<option>
+MEI
+</option>
+<option>
+Empresa individual
+</option>
+<option>
+Empresa limitada
+</option>
+<option>
+Empresa prestadora de serviços elétricos
+</option>
+<option>
+Outro profissional da área elétrica
+</option>
+</select>
+</div>
+
+<div>
+<label for="nome">
+Nome do responsável *
+</label>
+<input
+id="nome"
+name="nome"
+type="text"
+required
+>
+</div>
+
+<div>
+<label for="empresa">
+Nome da empresa / Nome profissional
+</label>
+<input
+id="empresa"
+name="empresa"
+type="text"
+>
+</div>
+
+<div>
+<label for="documento">
+CPF ou CNPJ *
+</label>
+<input
+id="documento"
+name="documento"
+type="text"
+required
+>
+</div>
+
+<div>
+<label for="telefone">
+Telefone / WhatsApp *
+</label>
+<input
+id="telefone"
+name="telefone"
+type="tel"
+required
+>
+</div>
+
+<div>
+<label for="email">
+E-mail *
+</label>
+<input
+id="email"
+name="email"
+type="email"
+required
+>
+</div>
+
+<div>
+<label for="cidade">
+Cidade *
+</label>
+<input
+id="cidade"
+name="cidade"
+type="text"
+required
+>
+</div>
+
+<div>
+<label for="uf">
+Estado / UF *
+</label>
+<select
+id="uf"
+name="uf"
+required
+>
+<option value="">
+Selecione
+</option>
+<option>AC</option>
+<option>AL</option>
+<option>AP</option>
+<option>AM</option>
+<option>BA</option>
+<option>CE</option>
+<option>DF</option>
+<option>ES</option>
+<option>GO</option>
+<option>MA</option>
+<option>MT</option>
+<option>MS</option>
+<option>MG</option>
+<option>PA</option>
+<option>PB</option>
+<option>PR</option>
+<option>PE</option>
+<option>PI</option>
+<option>RJ</option>
+<option>RN</option>
+<option>RS</option>
+<option>RO</option>
+<option>RR</option>
+<option>SC</option>
+<option>SP</option>
+<option>SE</option>
+<option>TO</option>
+</select>
+</div>
+
+<div>
+<label for="regiao">
+Região / cidades onde atende *
+</label>
+<textarea
+id="regiao"
+name="regiao"
+required
+placeholder="Ex.: Pongaí, Bauru, Lins e cidades em um raio de até 100 km."
+></textarea>
+</div>
+
+<div>
+<label for="experiencia">
+Anos de experiência
+</label>
+<input
+id="experiencia"
+name="experiencia"
+type="number"
+min="0"
+placeholder="Ex.: 10"
+>
+</div>
+
+<div>
+<label for="atuacao">
+Principais serviços realizados *
+</label>
+<textarea
+id="atuacao"
+name="atuacao"
+required
+placeholder="Ex.: instalações residenciais, comerciais, industriais, quadros, comandos, aterramento, SPDA..."
+></textarea>
+</div>
+
+<div>
+<label for="segmentos">
+Segmentos em que atua
+</label>
+<select
+id="segmentos"
+name="segmentos"
+>
+<option value="">
+Selecione o principal
+</option>
+<option>
+Residencial
+</option>
+<option>
+Comercial
+</option>
+<option>
+Industrial
+</option>
+<option>
+Rural
+</option>
+<option>
+Residencial e comercial
+</option>
+<option>
+Comercial e industrial
+</option>
+<option>
+Todos
+</option>
+</select>
+</div>
+
+<div>
+<label for="equipe">
+Possui equipe própria?
+</label>
+<select
+id="equipe"
+name="equipe"
+>
+<option value="">
+Selecione
+</option>
+<option>
+Trabalho sozinho
+</option>
+<option>
+Sim, possuo equipe
+</option>
+<option>
+Contrato ajudantes conforme o serviço
+</option>
+</select>
+</div>
+
+<div>
+<label for="deslocamento">
+Disponibilidade para deslocamento
+</label>
+<select
+id="deslocamento"
+name="deslocamento"
+>
+<option value="">
+Selecione
+</option>
+<option>
+Somente minha cidade
+</option>
+<option>
+Até 50 km
+</option>
+<option>
+Até 100 km
+</option>
+<option>
+Até 200 km
+</option>
+<option>
+Todo o estado
+</option>
+<option>
+Outros estados
+</option>
+</select>
+</div>
+
+<div>
+<label for="referencias">
+Referências profissionais
+</label>
+<textarea
+id="referencias"
+name="referencias"
+placeholder="Informe empresas ou clientes para os quais já prestou serviços, se desejar."
+></textarea>
+</div>
+
+<div>
+<label for="observacoes">
+Apresentação / observações
+</label>
+<textarea
+id="observacoes"
+name="observacoes"
+placeholder="Conte um pouco sobre sua experiência, estrutura e serviços que executa."
+></textarea>
+</div>
+
+<div>
+<label>
+<input
+type="checkbox"
+id="aceite"
+name="aceite"
+required
+style="width:auto;margin-right:8px;"
+>
+Declaro que as informações fornecidas são verdadeiras
+e autorizo a UTB a armazenar meus dados para análise
+e eventual contato profissional.
+</label>
+</div>
+
+<div>
+<button
+class="btn btn-black"
+type="submit"
+>
+Enviar cadastro de parceiro
+</button>
+</div>
+
+</div>
+
+<div
+class="result good"
+id="form-result"
+>
+<strong>
+Cadastro preparado.
+</strong>
+<p>
+Nesta primeira etapa, os dados serão enviados
+pelo WhatsApp da UTB para conferência.
+</p>
+</div>
+
+</form>
+
+<aside>
+
+<div class="soft">
+<h2>
+Como funciona a parceria
+</h2>
+
+<ul class="checks">
+<li>
+<span class="check">✓</span>
+<span>
+Cadastro totalmente gratuito.
+</span>
+</li>
+
+<li>
+<span class="check">✓</span>
+<span>
+Eletricistas autônomos, MEIs e empresas podem participar.
+</span>
+</li>
+
+<li>
+<span class="check">✓</span>
+<span>
+Os dados não serão exibidos em um banco público de profissionais.
+</span>
+</li>
+
+<li>
+<span class="check">✓</span>
+<span>
+A UTB poderá localizar parceiros de acordo com cidade,
+região, experiência e tipo de serviço.
+</span>
+</li>
+
+<li>
+<span class="check">✓</span>
+<span>
+Quando surgir uma oportunidade compatível,
+o profissional poderá ser consultado.
+</span>
+</li>
+
+<li>
+<span class="check">✓</span>
+<span>
+Cada serviço terá condições, valores,
+responsabilidades e disponibilidade definidos separadamente.
+</span>
+</li>
+</ul>
+</div>
+
+<div
+class="warn"
+style="margin-top:18px;"
+>
+<strong>
+Cadastro não garante serviço
+</strong>
+<p>
+Fazer parte da rede não significa contratação
+imediata, volume mínimo de serviços ou exclusividade.
+</p>
+<p>
+A convocação dependerá da existência de demanda,
+localização da obra, experiência, documentação,
+disponibilidade e perfil necessário para cada serviço.
+</p>
+</div>
+
+<div
+class="card"
+style="margin-top:18px;"
+>
+<h3>
+Rede privada
+</h3>
+<p>
+Os cadastros serão destinados à administração
+interna da UTB e não serão disponibilizados
+como lista pública de profissionais.
+</p>
+<p>
+Posteriormente, documentos e referências poderão
+ser solicitados para análise e aprovação.
+</p>
+</div>
+
+</aside>
+
+</div>
+</section>
+
+</main>
+
+<footer class="footer">
+<div class="container">
+<div class="footer-grid">
+
+<div>
+<h4>
+Universo Treinamentos Brasil
+</h4>
+<p>
+Treinamentos profissionais presenciais
+e serviços de Engenharia Elétrica.
+</p>
+</div>
+
+<div>
+<h4>
+Engenharia
+</h4>
+<p>
+<a href="engenharia-eletrica.html">
+Engenharia Elétrica
+</a>
+</p>
+<p>
+<a href="solicitar-engenharia.html">
+Solicitar serviço
+</a>
+</p>
+<p>
+<a href="parceiros-engenharia.html">
+Seja um parceiro
+</a>
+</p>
+</div>
+
+<div>
+<h4>
+Treinamentos
+</h4>
+<p>
+<a href="cursos.html">
+Cursos
+</a>
+</p>
+<p>
+<a href="contato.html#proposta">
+Proposta de treinamento
+</a>
+</p>
+</div>
+
+<div>
+<h4>
+Contato
+</h4>
+<p>
+<a href="https://wa.me/5514996716626">
+WhatsApp
+</a>
+</p>
+<p>
+<a href="mailto:engenheirojoaomanoel@yahoo.com.br">
+E-mail
+</a>
+</p>
+</div>
+
+</div>
+
+<div class="hr"></div>
+
+<small>
+© <span data-year></span>
+Universo Treinamentos Brasil.
+Todos os direitos reservados.
+</small>
+
+<p class="legal">
+O cadastro de parceiro não cria vínculo empregatício,
+exclusividade, obrigação de contratação ou garantia
+de recebimento de serviços.
+</p>
+
+</div>
+</footer>
+
+<script>
+const CONFIG = {
+whatsapp: "5514996716626"
+};
+
+const menu =
+document.querySelector(".menu");
+
+const links =
+document.querySelector(".links");
+
+if(menu && links){
+menu.addEventListener(
+"click",
+() => links.classList.toggle("open")
+);
+
+document
+.querySelectorAll(".links a")
+.forEach(link => {
+link.addEventListener(
+"click",
+() => links.classList.remove("open")
+);
+});
+}
+
+document
+.querySelectorAll("[data-year]")
+.forEach(el => {
+el.textContent =
+new Date().getFullYear();
+});
+
+const form =
+document.getElementById(
+"partner-engineering-form"
+);
+
+if(form){
+form.addEventListener(
+"submit",
+function(e){
+e.preventDefault();
+
+const data =
+Object.fromEntries(
+new FormData(form).entries()
+);
+
+const mensagem = [
+"NOVO CADASTRO - PARCEIRO DE ENGENHARIA ELÉTRICA UTB",
+"",
+`Tipo: ${data.tipo || ""}`,
+`Responsável: ${data.nome || ""}`,
+`Empresa / Nome profissional: ${data.empresa || ""}`,
+`CPF / CNPJ: ${data.documento || ""}`,
+`Telefone: ${data.telefone || ""}`,
+`E-mail: ${data.email || ""}`,
+`Cidade / UF: ${data.cidade || ""} / ${data.uf || ""}`,
+`Região onde atende: ${data.regiao || ""}`,
+`Experiência: ${data.experiencia || ""} anos`,
+`Serviços realizados: ${data.atuacao || ""}`,
+`Segmento principal: ${data.segmentos || ""}`,
+`Equipe: ${data.equipe || ""}`,
+`Deslocamento: ${data.deslocamento || ""}`,
+`Referências: ${data.referencias || ""}`,
+`Observações: ${data.observacoes || ""}`
+].join("
+");
+
+const link =
+`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(mensagem)}`;
+
+const result =
+document.getElementById(
+"form-result"
+);
+
+if(result){
+result.classList.add("show");
+}
+
+window.open(
+link,
+"_blank",
+"noopener"
+);
+}
+);
+}
+</script>
+
+</body>
+</html>
