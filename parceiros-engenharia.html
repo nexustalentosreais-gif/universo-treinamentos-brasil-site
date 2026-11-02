@@ -1580,10 +1580,9 @@ partnerForm.addEventListener("submit", async function(e){
         erro
       );
 
-      alert(
-        "Não foi possível gravar o cadastro no banco de dados. " +
-        "O WhatsApp não será aberto. Tente novamente."
-      );
+    alert(
+  "ERRO DO SUPABASE:\n\n" + erro
+);
 
       return;
     }
