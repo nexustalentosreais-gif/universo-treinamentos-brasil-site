@@ -1553,7 +1553,8 @@ partnerForm.addEventListener("submit", async function(e){
     deslocamento: data.deslocamento || null,
     referencias: data.referencias || null,
     observacoes: data.observacoes || null,
-    aceite: document.getElementById("aceite").checked
+    aceite: document.getElementById("aceite").checked,
+    status: "pendente"
   };
 
   try {
@@ -1565,7 +1566,7 @@ partnerForm.addEventListener("submit", async function(e){
         headers: {
           "apikey": SUPABASE_KEY,
           "Content-Type": "application/json",
-          "Prefer": "return=minimal"
+          "Prefer": "missing=default, return=minimal"
         },
         body: JSON.stringify(cadastro)
       }
