@@ -835,11 +835,7 @@ throw new Error(erro);
 }
 await carregarParceiros();
 }catch(erro){
-alert(
-"Não foi possível alterar o status.
-" +
-erro.message
-);
+alert("Não foi possível alterar o status. " + erro.message);
 }
 }
 function editarParceiro(id){
