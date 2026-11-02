@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+<title>Parceiros da Engenharia Elétrica | Administração UTB</title>
+<script>
+if (!sessionStorage.getItem("utb_access_token")) {
+window.location.replace("admin-instrutores.html");
+}
+</script>
+<style>
+{
+box-sizing:border-box;
+}
+body{
+margin:0;
+font-family:Arial,Helvetica,sans-serif;
+background:#f4f7fb;
+color:#172033;
+}
+header{
+background:#0b1f44;
+color:white;
+padding:22px;
+}
+.topo{
+max-width:1200px;
+margin:auto;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:20px;
+flex-wrap:wrap;
+}
+h1{
+margin:0;
+font-size:27px;
+}
+.subtitulo{
+margin-top:6px;
+opacity:.85;
+}
+.acoes-topo{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+button{
+border:0;
+border-radius:9px;
+padding:11px 15px;
+font-weight:bold;
+cursor:pointer;
+font-size:14px;
+}
+.azul{
+background:#1565c0;
+color:white;
+}
+.verde{
+background:#15803d;
+color:white;
+}
+.vermelho{
+background:#b91c1c;
+color:white;
+}
+.cinza{
+background:#64748b;
+color:white;
+}
+.escuro{
+background:#111827;
+color:white;
+}
+main{
+max-width:1200px;
+margin:30px auto;
+padding:0 20px 50px;
+}
+.resumo{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+margin-bottom:25px;
+}
+.resumo-card,
+.painel,
+.parceiro,
+.edicao{
+background:white;
+border:1px solid #dbe3ee;
+border-radius:13px;
+box-shadow:0 3px 12px rgba(0,0,0,.05);
+}
+.resumo-card{
+padding:20px;
+}
+.resumo-card span{
+display:block;
+color:#64748b;
+margin-bottom:8px;
+font-size:14px;
+}
+.resumo-card strong{
+font-size:29px;
+color:#0d47a1;
+}
+.painel{
+padding:22px;
+margin-bottom:22px;
+}
+.filtros{
+display:grid;
+grid-template-columns:2fr 1fr 1fr 1fr;
+gap:12px;
+align-items:end;
+}
+label{
+font-weight:bold;
+display:block;
+margin-bottom:6px;
+font-size:14px;
+}
+input,
+select,
+textarea{
+width:100%;
+padding:11px;
+border:1px solid #cbd5e1;
+border-radius:8px;
+font:inherit;
+background:white;
+}
+textarea{
+min-height:95px;
+resize:vertical;
+}
+.botoes-filtro{
+display:flex;
+gap:10px;
+margin-top:16px;
+flex-wrap:wrap;
+}
+.parceiro{
+padding:22px;
+margin-bottom:18px;
+}
+.cabecalho-parceiro{
+display:flex;
+justify-content:space-between;
+gap:15px;
+flex-wrap:wrap;
+align-items:flex-start;
+}
+.cabecalho-parceiro h2{
+margin:0 0 5px;
+color:#0b1f44;
+font-size:21px;
+}
+.cabecalho-parceiro p{
+margin:0;
+color:#64748b;
+}
+.status{
+display:inline-block;
+padding:6px 11px;
+border-radius:20px;
+font-size:12px;
+font-weight:bold;
+}
+.status-pendente{
+background:#fef3c7;
+color:#92400e;
+}
+.status-aprovado{
+background:#dcfce7;
+color:#166534;
+}
+.status-reprovado{
+background:#fee2e2;
+color:#991b1b;
+}
+.detalhes{
+display:none;
+margin-top:20px;
+border-top:1px solid #e5e7eb;
+padding-top:18px;
+}
+.detalhes.ativo{
+display:block;
+}
+.grade{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:14px 20px;
+}
+.campo{
+background:#f8fafc;
+padding:12px;
+border-radius:8px;
+}
+.campo strong{
+display:block;
+color:#0d47a1;
+font-size:13px;
+margin-bottom:5px;
+}
+.campo-completo{
+grid-column:1 / -1;
+}
+.acoes{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-top:18px;
+}
+.edicao{
+padding:22px;
+margin-bottom:24px;
+display:none;
+}
+.edicao.ativa{
+display:block;
+}
+.edicao h2{
+margin-top:0;
+color:#0d47a1;
+}
+.acoes-edicao{
+display:flex;
+justify-content:flex-end;
+gap:10px;
+margin-top:20px;
+}
+.mensagem{
+margin:15px 0;
+font-weight:bold;
+}
+.erro{
+color:#b91c1c;
+}
+.sucesso{
+color:#15803d;
+}
+.vazio{
+text-align:center;
+padding:35px;
+background:white;
+border-radius:12px;
+color:#64748b;
+}
+@media(max-width:850px){
+.resumo{
+grid-template-columns:repeat(2,1fr);
+}
+.filtros{
+grid-template-columns:1fr 1fr;
+}
+.grade{
+grid-template-columns:1fr;
+}
+.campo-completo{
+grid-column:auto;
+}
+}
+@media(max-width:520px){
+.resumo,
+.filtros{
+grid-template-columns:1fr;
+}
+}
+</style>
+</head>
+<body>
+<header>
+<div class="topo">
+<div>
+<h1>Parceiros da Engenharia Elétrica</h1>
+<div class="subtitulo">
+Administração UTB — banco privado de parceiros
+</div>
+</div>
+<div class="acoes-topo">
+<button
+class="azul"
+onclick="window.location.href='admin.html'"
+>
+VOLTAR AO PAINEL
+</button>
+<button
+class="escuro"
+onclick="sair()"
+>
+SAIR
+</button>
+</div>
+</div>
+</header>
+<main>
+<section class="resumo">
+<div class="resumo-card">
+<span>Total de parceiros</span>
+<strong id="total">0</strong>
+</div>
+<div class="resumo-card">
+<span>Pendentes</span>
+<strong id="pendentes">0</strong>
+</div>
+<div class="resumo-card">
+<span>Aprovados</span>
+<strong id="aprovados">0</strong>
+</div>
+<div class="resumo-card">
+<span>Reprovados</span>
+<strong id="reprovados">0</strong>
+</div>
+</section>
+<section class="painel">
+<div class="filtros">
+<div>
+<label>Buscar parceiro</label>
+<input
+id="busca"
+placeholder="Nome, empresa, e-mail ou cidade"
+>
+</div>
+<div>
+<label>Status</label>
+<select id="filtroStatus">
+<option value="">Todos</option>
+<option value="pendente">Pendente</option>
+<option value="aprovado">Aprovado</option>
+<option value="reprovado">Reprovado</option>
+</select>
+</div>
+<div>
+<label>UF</label>
+<input
+id="filtroUf"
+maxlength="2"
+placeholder="Ex.: SP"
+>
+</div>
+<div>
+<label>Data do cadastro</label>
+<input
+type="date"
+id="filtroData"
+>
+</div>
+</div>
+<div class="botoes-filtro">
+<button
+class="azul"
+onclick="aplicarFiltros()"
+>
+FILTRAR
+</button>
+<button
+class="cinza"
+onclick="limparFiltros()"
+>
+LIMPAR FILTROS
+</button>
+<button
+class="escuro"
+onclick="carregarParceiros()"
+>
+ATUALIZAR LISTA
+</button>
+</div>
+</section>
+<section
+id="areaEdicao"
+class="edicao"
+>
+<h2>Editar parceiro</h2>
+<input
+type="hidden"
+id="editId"
+>
+<div class="grade">
+<div>
+<label>Tipo de parceiro</label>
+<input id="editTipo">
+</div>
+<div>
+<label>Responsável</label>
+<input id="editResponsavel">
+</div>
+<div>
+<label>Empresa / Nome profissional</label>
+<input id="editEmpresa">
+</div>
+<div>
+<label>CPF / CNPJ</label>
+<input id="editDocumento">
+</div>
+<div>
+<label>Telefone / WhatsApp</label>
+<input id="editTelefone">
+</div>
+<div>
+<label>E-mail</label>
+<input
+type="email"
+id="editEmail"
+>
+</div>
+<div>
+<label>Cidade</label>
+<input id="editCidade">
+</div>
+<div>
+<label>UF</label>
+<input
+id="editUf"
+maxlength="2"
+>
+</div>
+<div>
+<label>Região atendida</label>
+<input id="editRegiao">
+</div>
+<div>
+<label>Experiência</label>
+<input id="editExperiencia">
+</div>
+<div class="campo-completo">
+<label>Área principal</label>
+<input id="editArea">
+</div>
+<div class="campo-completo">
+<label>Serviços realizados</label>
+<textarea id="editServicos"></textarea>
+</div>
+<div class="campo-completo">
+<label>Estrutura de trabalho</label>
+<textarea id="editEstrutura"></textarea>
+</div>
+<div>
+<label>Deslocamento</label>
+<input id="editDeslocamento">
+</div>
+<div>
+<label>Status</label>
+<select id="editStatus">
+<option value="pendente">Pendente</option>
+<option value="aprovado">Aprovado</option>
+<option value="reprovado">Reprovado</option>
+</select>
+</div>
+<div class="campo-completo">
+<label>Referências</label>
+<textarea id="editReferencias"></textarea>
+</div>
+<div class="campo-completo">
+<label>Observações</label>
+<textarea id="editObservacoes"></textarea>
+</div>
+</div>
+<div id="msgEdicao"></div>
+<div class="acoes-edicao">
+<button
+class="cinza"
+onclick="fecharEdicao()"
+>
+CANCELAR
+</button>
+<button
+class="azul"
+onclick="salvarEdicao()"
+>
+SALVAR ALTERAÇÕES
+</button>
+</div>
+</section>
+<div id="lista">
+Carregando parceiros...
+</div>
+</main>
+<script>
+const SUPABASE_URL =
+"https://xkxlgmmssvllcmhymibj.supabase.co";
+const SUPABASE_KEY =
+"sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV";
+let accessToken =
+sessionStorage.getItem("utb_access_token") || "";
+let parceiros = [];
+function esc(valor){
+const div = document.createElement("div");
+div.textContent =
+valor === null || valor === undefined
+? ""
+: String(valor);
+return div.innerHTML;
+}
+function formatarData(valor){
+if(!valor){
+return "";
+}
+const data = new Date(valor);
+return data.toLocaleString("pt-BR");
+}
+async function carregarParceiros(){
+const lista =
+document.getElementById("lista");
+lista.innerHTML =
+"Carregando parceiros...";
+try{
+const resposta = await fetch(
+`${SUPABASE_URL}/rest/v1/parceiros_engenharia?select=&order=criado_em.desc`,
+{
+headers:{
+"apikey":SUPABASE_KEY,
+"Authorization":`Bearer ${accessToken}`
+}
+}
+);
+if(
+resposta.status === 401 ||
+resposta.status === 403
+){
+throw new Error(
+"Sessão sem permissão para consultar parceiros."
+);
+}
+if(!resposta.ok){
+const erro =
+await resposta.text();
+throw new Error(erro);
+}
+parceiros =
+await resposta.json();
+atualizarResumo();
+aplicarFiltros();
+}catch(erro){
+lista.innerHTML =
+`<p class="erro">
+${esc(erro.message)}
+</p>`;
+}
+}
+function atualizarResumo(){
+document.getElementById("total")
+.textContent =
+parceiros.length;
+document.getElementById("pendentes")
+.textContent =
+parceiros.filter(
+p => p.status === "pendente"
+).length;
+document.getElementById("aprovados")
+.textContent =
+parceiros.filter(
+p => p.status === "aprovado"
+).length;
+document.getElementById("reprovados")
+.textContent =
+parceiros.filter(
+p => p.status === "reprovado"
+).length;
+}
+function aplicarFiltros(){
+const busca =
+document.getElementById("busca")
+.value
+.trim()
+.toLowerCase();
+const status =
+document.getElementById("filtroStatus")
+.value;
+const uf =
+document.getElementById("filtroUf")
+.value
+.trim()
+.toUpperCase();
+const data =
+document.getElementById("filtroData")
+.value;
+const filtrados =
+parceiros.filter(p => {
+const texto = [
+p.responsavel,
+p.nome_empresa_profissional,
+p.email,
+p.cidade,
+p.telefone_whatsapp
+]
+.join(" ")
+.toLowerCase();
+if(
+busca &&
+!texto.includes(busca)
+){
+return false;
+}
+if(
+status &&
+p.status !== status
+){
+return false;
+}
+if(
+uf &&
+String(p.uf || "")
+.toUpperCase() !== uf
+){
+return false;
+}
+if(data){
+const criado =
+String(p.criado_em || "")
+.slice(0,10);
+if(criado !== data){
+return false;
+}
+}
+return true;
+});
+renderizar(filtrados);
+}
+function limparFiltros(){
+document.getElementById("busca")
+.value = "";
+document.getElementById("filtroStatus")
+.value = "";
+document.getElementById("filtroUf")
+.value = "";
+document.getElementById("filtroData")
+.value = "";
+renderizar(parceiros);
+}
+function renderizar(listaParceiros){
+const lista =
+document.getElementById("lista");
+if(!listaParceiros.length){
+lista.innerHTML = `
+<div class="vazio">
+Nenhum parceiro encontrado.
+</div>
+`;
+return;
+}
+lista.innerHTML =
+listaParceiros
+.map(p => {
+const status =
+p.status || "pendente";
+return `
+<article class="parceiro">
+<div class="cabecalho-parceiro">
+<div>
+<h2>
+${esc(p.responsavel)}
+</h2>
+<p>
+${esc(p.nome_empresa_profissional)}
+${p.cidade ? " • " + esc(p.cidade) : ""}
+${p.uf ? "/" + esc(p.uf) : ""}
+</p>
+</div>
+<span
+class="status status-${esc(status)}"
+>
+${esc(status.toUpperCase())}
+</span>
+</div>
+<div class="acoes">
+<button
+class="azul"
+onclick="alternarDetalhes('${p.id}')"
+>
+CONSULTAR
+</button>
+<button
+class="verde"
+onclick="alterarStatus(
+'${p.id}',
+'aprovado'
+)"
+>
+APROVAR
+</button>
+<button
+class="vermelho"
+onclick="alterarStatus(
+'${p.id}',
+'reprovado'
+)"
+>
+REPROVAR
+</button>
+<button
+class="cinza"
+onclick="editarParceiro('${p.id}')"
+>
+EDITAR
+</button>
+</div>
+<div
+id="detalhes_${p.id}"
+class="detalhes"
+>
+<div class="grade">
+${campo(
+"Tipo de parceiro",
+p.tipo_parceiro
+)}
+${campo(
+"CPF / CNPJ",
+p.cpf_cnpj
+)}
+${campo(
+"Telefone / WhatsApp",
+p.telefone_whatsapp
+)}
+${campo(
+"E-mail",
+p.email
+)}
+${campo(
+"Cidade / UF",
+`${p.cidade || ""} / ${p.uf || ""}`
+)}
+${campo(
+"Região atendida",
+p.regiao_atendida
+)}
+${campo(
+"Experiência",
+p.experiencia
+)}
+${campo(
+"Área principal",
+p.area_principal
+)}
+${campo(
+"Serviços realizados",
+p.servicos_realizados,
+true
+)}
+${campo(
+"Estrutura de trabalho",
+p.estrutura_trabalho,
+true
+)}
+${campo(
+"Deslocamento",
+p.deslocamento
+)}
+${campo(
+"Referências",
+p.referencias,
+true
+)}
+${campo(
+"Observações",
+p.observacoes,
+true
+)}
+${campo(
+"Aceite",
+p.aceite ? "Sim" : "Não"
+)}
+${campo(
+"Cadastrado em",
+formatarData(p.criado_em)
+)}
+${campo(
+"Atualizado em",
+formatarData(p.atualizado_em)
+)}
+</div>
+</div>
+</article>
+`;
+})
+.join("");
+}
+function campo(
+titulo,
+valor,
+completo = false
+){
+return `
+<div
+class="campo
+${completo ? "campo-completo" : ""}"
+>
+<strong>
+${esc(titulo)}
+</strong>
+${esc(valor)}
+</div>
+`;
+}
+function alternarDetalhes(id){
+document
+.getElementById(`detalhes_${id}`)
+.classList
+.toggle("ativo");
+}
+async function alterarStatus(
+id,
+status
+){
+try{
+const resposta = await fetch(
+`${SUPABASE_URL}/rest/v1/parceiros_engenharia?id=eq.${id}`,
+{
+method:"PATCH",
+headers:{
+"apikey":SUPABASE_KEY,
+"Authorization":`Bearer ${accessToken}`,
+"Content-Type":"application/json",
+"Prefer":"return=minimal"
+},
+body:JSON.stringify({
+status,
+atualizado_em:
+new Date().toISOString()
+})
+}
+);
+if(!resposta.ok){
+const erro =
+await resposta.text();
+throw new Error(erro);
+}
+await carregarParceiros();
+}catch(erro){
+alert(
+"Não foi possível alterar o status.
+" +
+erro.message
+);
+}
+}
+function editarParceiro(id){
+const p =
+parceiros.find(
+item => item.id === id
+);
+if(!p){
+return;
+}
+document.getElementById("editId")
+.value = p.id;
+document.getElementById("editTipo")
+.value = p.tipo_parceiro || "";
+document.getElementById("editResponsavel")
+.value = p.responsavel || "";
+document.getElementById("editEmpresa")
+.value =
+p.nome_empresa_profissional || "";
+document.getElementById("editDocumento")
+.value = p.cpf_cnpj || "";
+document.getElementById("editTelefone")
+.value = p.telefone_whatsapp || "";
+document.getElementById("editEmail")
+.value = p.email || "";
+document.getElementById("editCidade")
+.value = p.cidade || "";
+document.getElementById("editUf")
+.value = p.uf || "";
+document.getElementById("editRegiao")
+.value = p.regiao_atendida || "";
+document.getElementById("editExperiencia")
+.value = p.experiencia || "";
+document.getElementById("editArea")
+.value = p.area_principal || "";
+document.getElementById("editServicos")
+.value = p.servicos_realizados || "";
+document.getElementById("editEstrutura")
+.value = p.estrutura_trabalho || "";
+document.getElementById("editDeslocamento")
+.value = p.deslocamento || "";
+document.getElementById("editReferencias")
+.value = p.referencias || "";
+document.getElementById("editObservacoes")
+.value = p.observacoes || "";
+document.getElementById("editStatus")
+.value = p.status || "pendente";
+document.getElementById("msgEdicao")
+.innerHTML = "";
+document.getElementById("areaEdicao")
+.classList.add("ativa");
+window.scrollTo({
+top:
+document
+.getElementById("areaEdicao")
+.offsetTop - 20,
+behavior:"smooth"
+});
+}
+function fecharEdicao(){
+document.getElementById("areaEdicao")
+.classList.remove("ativa");
+}
+async function salvarEdicao(){
+const id =
+document.getElementById("editId")
+.value;
+const msg =
+document.getElementById("msgEdicao");
+msg.innerHTML =
+'<p class="mensagem">Salvando...</p>';
+const dados = {
+tipo_parceiro:
+document.getElementById("editTipo")
+.value.trim(),
+responsavel:
+document.getElementById("editResponsavel")
+.value.trim(),
+nome_empresa_profissional:
+document.getElementById("editEmpresa")
+.value.trim(),
+cpf_cnpj:
+document.getElementById("editDocumento")
+.value.trim(),
+telefone_whatsapp:
+document.getElementById("editTelefone")
+.value.trim(),
+email:
+document.getElementById("editEmail")
+.value.trim(),
+cidade:
+document.getElementById("editCidade")
+.value.trim(),
+uf:
+document.getElementById("editUf")
+.value.trim().toUpperCase(),
+regiao_atendida:
+document.getElementById("editRegiao")
+.value.trim(),
+experiencia:
+document.getElementById("editExperiencia")
+.value.trim(),
+area_principal:
+document.getElementById("editArea")
+.value.trim(),
+servicos_realizados:
+document.getElementById("editServicos")
+.value.trim(),
+estrutura_trabalho:
+document.getElementById("editEstrutura")
+.value.trim(),
+deslocamento:
+document.getElementById("editDeslocamento")
+.value.trim(),
+referencias:
+document.getElementById("editReferencias")
+.value.trim(),
+observacoes:
+document.getElementById("editObservacoes")
+.value.trim(),
+status:
+document.getElementById("editStatus")
+.value,
+atualizado_em:
+new Date().toISOString()
+};
+try{
+const resposta = await fetch(
+`${SUPABASE_URL}/rest/v1/parceiros_engenharia?id=eq.${id}`,
+{
+method:"PATCH",
+headers:{
+"apikey":SUPABASE_KEY,
+"Authorization":`Bearer ${accessToken}`,
+"Content-Type":"application/json",
+"Prefer":"return=minimal"
+},
+body:
+JSON.stringify(dados)
+}
+);
+if(!resposta.ok){
+const erro =
+await resposta.text();
+throw new Error(erro);
+}
+msg.innerHTML =
+'<p class="sucesso">Alterações salvas com sucesso.</p>';
+await carregarParceiros();
+setTimeout(
+fecharEdicao,
+800
+);
+}catch(erro){
+msg.innerHTML =
+`<p class="erro">
+${esc(erro.message)}
+</p>`;
+}
+}
+function sair(){
+sessionStorage.removeItem(
+"utb_access_token"
+);
+window.location.href =
+"admin-instrutores.html";
+}
+carregarParceiros();
+</script>
+</body>
+</html>
