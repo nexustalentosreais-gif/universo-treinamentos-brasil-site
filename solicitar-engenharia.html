@@ -1386,6 +1386,9 @@ email: "engenheirojoaomanoel@yahoo.com.br",
 cnpj: "35.885.883/0001-49"
 };
 
+const SUPABASE_URL = "https://xkxlgmmssvllcmhymibj.supabase.co";
+const SUPABASE_KEY = "sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV";
+  
 const $ = s =>
 document.querySelector(s);
 
@@ -1431,14 +1434,60 @@ $("#engineering-form");
 if(engineeringForm){
 engineeringForm.addEventListener(
 "submit",
-e => {
+async e => {
 e.preventDefault();
 
 const data =
 Object.fromEntries(
 new FormData(engineeringForm).entries()
 );
+  
+const pedido = {
+  nome: data.nome?.trim() || "",
+  tipo_cliente: data.tipoCliente || null,
+  empresa: data.empresa || null,
+  documento: data.documento || null,
+  telefone: data.telefone?.trim() || "",
+  email: data.email?.trim() || "",
+  cidade: data.cidade?.trim() || "",
+  uf: data.uf || "",
+  endereco: data.endereco || null,
+  imovel: data.imovel || null,
+  servico: data.servico || "",
+  situacao: data.situacao || null,
+  planta: data.planta || null,
+  visita: data.visita || null,
+  prioridade: data.prioridade || "Normal",
+  descricao: data.descricao?.trim() || "",
+  observacoes: data.observacoes || null
+};
 
+try {
+  const resposta = await fetch(
+    `${SUPABASE_URL}/rest/v1/solicitacoes_engenharia`,
+    {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal"
+      },
+      body: JSON.stringify(pedido)
+    }
+  );
+
+  if (!resposta.ok) {
+    throw new Error("Falha ao registrar solicitação");
+  }
+
+} catch (erro) {
+  alert(
+    "Não foi possível registrar a solicitação. " +
+    "Tente novamente."
+  );
+  return;
+}
+  
 const mensagem = [
 "Olá! Gostaria de solicitar um serviço de Engenharia Elétrica da Universo Treinamentos Brasil.",
 "",
@@ -1476,11 +1525,7 @@ if(box){
 box.classList.add("show");
 }
 
-window.open(
-link,
-"_blank",
-"noopener"
-);
+window.location.assign(link);
 }
 );
 }
