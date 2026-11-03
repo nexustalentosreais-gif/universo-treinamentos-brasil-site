@@ -1,1 +1,733 @@
-b
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solicitações de Engenharia Elétrica | UTB</title>
+<style>
+
+    {
+        box-sizing: border-box;
+    }
+
+body {
+margin: 0;
+font-family: Arial, Helvetica, sans-serif;
+background: #f4f7fb;
+color: #172033;
+font-size: 16px;
+}
+header {
+background: #0b1f44;
+color: white;
+padding: 24px 18px;
+}
+.topo, main {
+max-width: 1200px;
+margin: auto;
+}
+.topo {
+display: flex;
+justify-content: space-between;
+align-items: center;
+flex-wrap: wrap;
+gap: 16px;
+}
+h1 {
+margin: 0 0 8px;
+font-size: 27px;
+}
+h2 {
+font-size: 20px;
+margin: 0;
+}
+main {
+padding: 24px 16px 60px;
+}
+.painel, .pedido {
+background: white;
+border: 1px solid #dbe3ee;
+border-radius: 14px;
+padding: 20px;
+margin-bottom: 18px;
+}
+.acoes {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+margin-bottom: 18px;
+}
+button, .botao {
+border: 0;
+border-radius: 9px;
+padding: 12px 16px;
+font-size: 15px;
+font-weight: bold;
+cursor: pointer;
+text-decoration: none;
+display: inline-block;
+}
+button:disabled {
+opacity: 0.55;
+cursor: wait;
+}
+.azul {
+background: #1565c0;
+color: white;
+}
+.cinza {
+background: #e7eef8;
+color: #17345a;
+}
+.verde {
+background: #137c41;
+color: white;
+}
+.filtros {
+display: grid;
+grid-template-columns: 2fr 1fr 1fr 1fr;
+gap: 12px;
+}
+label {
+display: block;
+font-weight: bold;
+margin-bottom: 6px;
+}
+input, select {
+width: 100%;
+padding: 11px;
+border: 1px solid #b7c8d9;
+border-radius: 8px;
+font: inherit;
+background: white;
+color: #172033;
+}
+#aviso {
+padding: 14px;
+border-radius: 9px;
+background: #eaf2ff;
+margin-bottom: 18px;
+}
+#aviso.erro {
+background: #ffeeee;
+color: #8b1818;
+}
+#resumo {
+font-weight: bold;
+margin-bottom: 15px;
+}
+.pedido-topo {
+display: flex;
+justify-content: space-between;
+gap: 12px;
+flex-wrap: wrap;
+align-items: center;
+}
+.menos {
+color: #576779;
+line-height: 1.6;
+}
+.etiqueta {
+background: #eaf2ff;
+color: #163969;
+border-radius: 18px;
+padding: 7px 12px;
+font-weight: bold;
+}
+.campos {
+display: grid;
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 10px;
+margin: 16px 0;
+}
+.campo {
+padding: 12px;
+border: 1px solid #e0e7ef;
+border-radius: 8px;
+background: #f7faff;
+overflow-wrap: anywhere;
+}
+.campo strong {
+display: block;
+margin-bottom: 6px;
+color: #174a82;
+}
+.edicao {
+display: grid;
+grid-template-columns: 1fr 2fr auto;
+gap: 12px;
+align-items: end;
+margin-top: 18px;
+}
+details {
+margin-top: 16px;
+border-top: 1px solid #e0e6ef;
+padding-top: 16px;
+}
+summary {
+cursor: pointer;
+color: #1565c0;
+font-weight: bold;
+}
+[hidden] {
+display: none !important;
+}
+@media (max-width: 800px) {
+.filtros, .campos, .edicao {
+grid-template-columns: 1fr;
+}
+h1 {
+font-size: 23px;
+}
+}
+</style>
+</head>
+<body>
+<header>
+<div class="topo">
+<div>
+<h1>Solicitações de Engenharia Elétrica</h1>
+<div>
+Universo Treinamentos Brasil — Administração
+</div>
+</div>
+<div style="text-align:center">
+<div style="font-size:30px">🇧🇷</div>
+<strong>Ame o Brasil</strong>
+</div>
+</div>
+</header>
+<main>
+<div id="aviso" role="status">
+Verificando sua sessão administrativa...
+</div>
+<div id="area" hidden>
+<section class="painel">
+<div class="acoes">
+<button id="atualizar" class="azul" type="button">
+ATUALIZAR LISTA
+</button>
+<button id="limpar" class="cinza" type="button">
+LIMPAR FILTROS
+</button>
+<a href="admin.html" class="botao cinza">
+PAINEL CENTRAL
+</a>
+<a
+href="admin-parceiros-engenharia.html"
+class="botao cinza">
+PARCEIROS
+</a>
+<button id="sair" class="cinza" type="button">
+SAIR
+</button>
+</div>
+<div class="filtros">
+<div>
+<label for="busca">Buscar solicitação</label>
+<input
+id="busca"
+placeholder="Número, nome, cidade ou serviço">
+</div>
+<div>
+<label for="filtroStatus">Status</label>
+<select id="filtroStatus">
+<option value="">Todos os status</option>
+</select>
+</div>
+<div>
+<label for="filtroUf">Estado / UF</label>
+<input id="filtroUf" maxlength="2" placeholder="SP">
+</div>
+<div>
+<label for="filtroData">Data</label>
+<input id="filtroData" type="date">
+</div>
+</div>
+<p class="menos">
+Clique em ATUALIZAR LISTA para consultar
+as solicitações recebidas.
+São carregados até 200 pedidos recentes.
+</p>
+</section>
+<div id="resumo">
+Nenhuma consulta realizada.
+</div>
+<div id="lista"></div>
+</div>
+</main>
+<script>
+"use strict";
+// CONEXÃO COM O SUPABASE UTB-SITE-001
+const SUPABASE_URL =
+"https://xkxlgmmssvllcmhymibj.supabase.co";
+const SUPABASE_KEY =
+"sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV";
+// LOGIN ÚNICO JÁ EXISTENTE NA UTB
+const accessToken =
+sessionStorage.getItem("utb_access_token") || "";
+const STATUS = {
+pendente: "Pendente",
+em_analise: "Em análise",
+atribuida: "Atribuída",
+em_execucao: "Em execução",
+concluida: "Concluída",
+cancelada: "Cancelada"
+};
+let solicitacoes = [];
+let parceiros = [];
+let consultaRealizada = false;
+const obter = id => document.getElementById(id);
+function mensagem(valor, erro = false) {
+obter("aviso").textContent = valor;
+obter("aviso").classList.toggle("erro", erro);
+}
+function criar(tag, classe = "", conteudo) {
+const elemento = document.createElement(tag);
+if (classe) {
+elemento.className = classe;
+}
+if (conteudo !== undefined) {
+elemento.textContent = conteudo;
+}
+return elemento;
+}
+function texto(valor) {
+return valor === null ||
+valor === undefined ||
+valor === ""
+? "—"
+: String(valor);
+}
+function formatarData(valor) {
+if (!valor) return "—";
+const data = new Date(valor);
+return isNaN(data.getTime())
+? "—"
+: data.toLocaleString("pt-BR");
+}
+function dataLocal(valor) {
+if (!valor) return "";
+const data = new Date(valor);
+if (isNaN(data.getTime())) return "";
+const partes = new Intl.DateTimeFormat(
+"pt-BR",
+{
+timeZone: "America/Sao_Paulo",
+year: "numeric",
+month: "2-digit",
+day: "2-digit"
+}
+).formatToParts(data);
+const parte = tipo =>
+partes.find(p => p.type === tipo)?.value || "";
+return [
+parte("year"),
+parte("month"),
+parte("day")
+].join("-");
+}
+function voltarLogin() {
+sessionStorage.removeItem("utb_access_token");
+window.location.replace("admin-instrutores.html");
+}
+// COMUNICAÇÃO AUTENTICADA COM O SUPABASE
+async function consultarAPI(caminho, opcoes = {}) {
+const resposta = await fetch(
+SUPABASE_URL + "/rest/v1/" + caminho,
+{
+...opcoes,
+headers: {
+apikey: SUPABASE_KEY,
+Authorization: "Bearer " + accessToken,
+...(opcoes.headers || {})
+}
+}
+);
+if (resposta.status === 401) {
+voltarLogin();
+throw new Error("Sessão expirada.");
+}
+if (!resposta.ok) {
+const detalhe = await resposta.text();
+throw new Error(
+"Erro " + resposta.status + ": " +
+detalhe.slice(0, 180)
+);
+}
+if (resposta.status === 204) {
+return null;
+}
+return await resposta.json();
+}
+// VERIFICAR SE O USUÁRIO É ADMINISTRADOR
+async function iniciar() {
+if (!accessToken) {
+voltarLogin();
+return;
+}
+try {
+const administradores = await consultarAPI(
+"utb_admins?select=user_id&limit=1"
+);
+if (!administradores.length) {
+mensagem(
+"Acesso restrito aos administradores da UTB.",
+true
+);
+return;
+}
+obter("area").hidden = false;
+mensagem(
+"Acesso autorizado. Clique em ATUALIZAR LISTA."
+);
+} catch (erro) {
+mensagem(
+"Falha na verificação de acesso: " +
+erro.message,
+true
+);
+}
+}
+// CARREGAR SOLICITAÇÕES E PARCEIROS APROVADOS
+async function carregarSolicitacoes() {
+const botao = obter("atualizar");
+botao.disabled = true;
+mensagem("Consultando solicitações e parceiros...");
+try {
+const resultados = await Promise.all([
+consultarAPI(
+"solicitacoes_engenharia?select=" +
+"&order=criado_em.desc&limit=200"
+),
+consultarAPI(
+"parceiros_engenharia?select=" +
+"&status=eq.aprovado&limit=500"
+)
+]);
+solicitacoes = resultados[0];
+parceiros = resultados[1];
+consultaRealizada = true;
+mensagem("Consulta realizada com sucesso.");
+aplicarFiltros();
+} catch (erro) {
+mensagem(
+"Não foi possível consultar: " +
+erro.message,
+true
+);
+} finally {
+botao.disabled = false;
+}
+}
+// FILTRAR SOLICITAÇÕES
+function aplicarFiltros() {
+if (!consultaRealizada) return;
+const busca = obter("busca")
+.value.trim().toLocaleLowerCase("pt-BR");
+const status = obter("filtroStatus").value;
+const uf = obter("filtroUf")
+.value.trim().toUpperCase();
+const data = obter("filtroData").value;
+const filtradas = solicitacoes.filter(p => {
+const conteudo = [
+p.numero,
+p.nome,
+p.empresa,
+p.cidade,
+p.servico,
+p.telefone
+].map(texto).join(" ").toLocaleLowerCase("pt-BR");
+return (
+(!busca || conteudo.includes(busca)) &&
+(!status || p.status === status) &&
+(!uf ||
+String(p.uf || "").toUpperCase() === uf) &&
+(!data || dataLocal(p.criado_em) === data)
+);
+});
+obter("resumo").textContent =
+filtradas.length + " de " +
+solicitacoes.length + " solicitações exibidas.";
+const lista = obter("lista");
+lista.replaceChildren();
+if (!filtradas.length) {
+lista.append(
+criar(
+"div",
+"painel",
+"Nenhuma solicitação encontrada."
+)
+);
+return;
+}
+filtradas.forEach(p => {
+lista.append(criarPedido(p));
+});
+}
+// EXIBIR DADOS SEM INTERPRETAR HTML DO CLIENTE
+function adicionarCampo(destino, titulo, valor) {
+const campo = criar("div", "campo");
+campo.append(
+criar("strong", "", titulo),
+criar("div", "", texto(valor))
+);
+destino.append(campo);
+}
+// IDENTIFICAR PARCEIROS APROVADOS
+function nomeParceiro(parceiro) {
+return (
+parceiro.responsavel ||
+parceiro.nome_completo ||
+parceiro.nome ||
+parceiro.nome_empresa_profissional ||
+parceiro.empresa ||
+parceiro.razao_social ||
+"Parceiro cadastrado"
+);
+}
+// MONTAR CADA PEDIDO
+function criarPedido(p) {
+const card = criar("article", "pedido");
+const topo = criar("div", "pedido-topo");
+topo.append(
+criar(
+"h2",
+"",
+"Pedido nº " + texto(p.numero) +
+" — " + texto(p.nome)
+),
+criar(
+"span",
+"etiqueta",
+STATUS[p.status] || texto(p.status)
+)
+);
+card.append(
+topo,
+criar(
+"p",
+"menos",
+formatarData(p.criado_em) + " | " +
+texto(p.cidade) + "/" +
+texto(p.uf) + " | " +
+texto(p.servico)
+)
+);
+const detalhes = criar("details");
+const resumo = criar(
+"summary",
+"",
+"CONSULTAR DETALHES E GERENCIAR"
+);
+detalhes.append(resumo);
+const grade = criar("div", "campos");
+const campos = [
+["Número", p.numero],
+["Nome", p.nome],
+["Tipo de cliente", p.tipo_cliente],
+["Empresa", p.empresa],
+["CPF/CNPJ", p.documento],
+["Telefone", p.telefone],
+["E-mail", p.email],
+["Cidade", p.cidade],
+["UF", p.uf],
+["Endereço", p.endereco],
+["Imóvel", p.imovel],
+["Serviço solicitado", p.servico],
+["Situação da instalação", p.situacao],
+["Possui planta/projeto", p.planta],
+["Visita técnica", p.visita],
+["Prioridade", p.prioridade],
+["Descrição", p.descricao],
+["Observações", p.observacoes]
+];
+campos.forEach(item => {
+adicionarCampo(grade, item[0], item[1]);
+});
+detalhes.append(grade);
+const edicao = criar("div", "edicao");
+// STATUS DO PEDIDO
+const grupoStatus = criar("div");
+const labelStatus = criar("label", "", "Status");
+const selectStatus = criar("select");
+selectStatus.id = "status-" + p.id;
+labelStatus.htmlFor = selectStatus.id;
+Object.entries(STATUS).forEach(([codigo, nome]) => {
+selectStatus.add(new Option(nome, codigo));
+});
+selectStatus.value = p.status;
+grupoStatus.append(labelStatus, selectStatus);
+// ASSOCIAÇÃO COM PARCEIRO APROVADO
+const grupoParceiro = criar("div");
+const labelParceiro = criar(
+"label",
+"",
+"Parceiro aprovado responsável"
+);
+const selectParceiro = criar("select");
+selectParceiro.id = "parceiro-" + p.id;
+labelParceiro.htmlFor = selectParceiro.id;
+selectParceiro.add(
+new Option("Nenhum parceiro associado", "")
+);
+parceiros.forEach(parceiro => {
+const identificacao =
+nomeParceiro(parceiro) + " — " +
+texto(parceiro.cidade) + "/" +
+texto(parceiro.uf);
+selectParceiro.add(
+new Option(identificacao, parceiro.id)
+);
+});
+if (
+p.parceiro_id &&
+!parceiros.some(pr => pr.id === p.parceiro_id)
+) {
+selectParceiro.add(
+new Option(
+"Parceiro anterior (não está aprovado)",
+p.parceiro_id
+)
+);
+}
+selectParceiro.value = p.parceiro_id || "";
+grupoParceiro.append(labelParceiro, selectParceiro);
+// SALVAR STATUS E PARCEIRO
+const botaoSalvar = criar(
+"button",
+"verde",
+"SALVAR ALTERAÇÕES"
+);
+botaoSalvar.type = "button";
+botaoSalvar.addEventListener("click", () => {
+salvarPedido(
+p,
+selectStatus.value,
+selectParceiro.value,
+botaoSalvar
+);
+});
+edicao.append(
+grupoStatus,
+grupoParceiro,
+botaoSalvar
+);
+detalhes.append(edicao);
+card.append(detalhes);
+return card;
+}
+// GRAVAR ALTERAÇÕES NO SUPABASE
+async function salvarPedido(
+pedido,
+novoStatus,
+parceiroId,
+botao
+) {
+if (
+parceiroId &&
+!parceiros.some(p => p.id === parceiroId)
+) {
+mensagem(
+"Selecione um parceiro aprovado.",
+true
+);
+return;
+}
+const novoParceiro = parceiroId || null;
+if (
+novoStatus === pedido.status &&
+novoParceiro === (pedido.parceiro_id || null)
+) {
+mensagem("Nenhuma alteração realizada.");
+return;
+}
+botao.disabled = true;
+try {
+const registros = await consultarAPI(
+"solicitacoes_engenharia?id=eq." +
+encodeURIComponent(pedido.id) +
+"&select=id,status,parceiro_id",
+{
+method: "PATCH",
+headers: {
+"Content-Type": "application/json",
+"Prefer": "return=representation"
+},
+body: JSON.stringify({
+status: novoStatus,
+parceiro_id: novoParceiro
+})
+}
+);
+if (
+!Array.isArray(registros) ||
+registros.length !== 1
+) {
+throw new Error(
+"O Supabase não confirmou a atualização."
+);
+}
+pedido.status = registros[0].status;
+pedido.parceiro_id = registros[0].parceiro_id;
+mensagem(
+"Solicitação nº " + pedido.numero +
+" atualizada com sucesso."
+);
+aplicarFiltros();
+} catch (erro) {
+mensagem(
+"Erro ao salvar: " + erro.message,
+true
+);
+} finally {
+botao.disabled = false;
+}
+}
+// PREENCHER FILTRO DE STATUS
+Object.entries(STATUS).forEach(([codigo, nome]) => {
+obter("filtroStatus").add(
+new Option(nome, codigo)
+);
+});
+// EVENTOS DOS FILTROS
+["busca", "filtroUf"].forEach(id => {
+obter(id).addEventListener(
+"input",
+aplicarFiltros
+);
+});
+["filtroStatus", "filtroData"].forEach(id => {
+obter(id).addEventListener(
+"change",
+aplicarFiltros
+);
+});
+// BOTÃO ATUALIZAR
+obter("atualizar").addEventListener(
+"click",
+carregarSolicitacoes
+);
+// BOTÃO LIMPAR FILTROS
+obter("limpar").addEventListener("click", () => {
+[
+"busca",
+"filtroStatus",
+"filtroUf",
+"filtroData"
+].forEach(id => {
+obter(id).value = "";
+});
+aplicarFiltros();
+});
+// BOTÃO SAIR
+obter("sair").addEventListener(
+"click",
+voltarLogin
+);
+// INICIAR VERIFICAÇÃO DE ACESSO
+iniciar();
+</script>
+</body>
+</html>
+
