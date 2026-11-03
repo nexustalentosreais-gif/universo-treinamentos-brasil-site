@@ -1512,8 +1512,7 @@ const mensagem = [
 `Descrição: ${data.descricao || ""}`,
 "",
 `Observações: ${data.observacoes || ""}`
-].join("
-");
+].join("\n");
 
 const link =
 `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(mensagem)}`;
