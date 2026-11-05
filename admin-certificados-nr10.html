@@ -97,7 +97,11 @@ body{background:white;color:#102e57}
 <label>Registro profissional (quando aplicável)<input id="registro" maxlength="80" placeholder="Ex.: CREA-SP ..."></label>
 </div>
 <label class="nota"><input id="confirmacao" type="checkbox" required style="display:inline;width:auto;margin-right:8px">Confirmo que as informações são verdadeiras e que o treinamento foi realizado e concluído.</label>
-<div class="acoes"><button type="submit" id="salvar">Cadastrar certificado NR-10</button><button type="button" id="imprimir" disabled>Imprimir / Salvar PDF</button></div>
+<div class="acoes">
+  <button type="submit" id="salvar">Cadastrar certificado NR-10</button>
+  <button type="button" id="imprimir" disabled>Imprimir / Salvar PDF</button>
+  <button type="button" id="visualizarTeste">Visualizar PDF de teste</button>
+</div>
 </form>
 <div id="mensagem" class="mensagem" role="status">Após cadastrar, o PDF será preparado com frente, verso, programa e espaços de assinatura.</div>
 <p class="nota"><strong>Importante:</strong> o QR Code verifica o registro, mas não substitui as assinaturas do trabalhador e do responsável técnico. A versão assinada deve ser entregue e arquivada conforme as exigências aplicáveis.</p>
@@ -290,6 +294,87 @@ $('modalidade').addEventListener('change',()=>{
 });
 $('imprimir').addEventListener('click',()=>{if(certificadoAtual)window.print()});
 $('atualizar').addEventListener('click',listar);
+ $('visualizarTeste').addEventListener('click', () => {
+  const v = id => $(id).value.trim();
+  const curso = v('modalidade') || 'NR-10 Básico';
+  const participante = v('participante') || 'ALUNO FICTÍCIO - TESTE NR10';
+  const carga = v('carga') || '40';
+  const inicio = v('inicio') || '2026-10-26';
+  const conclusao = v('conclusao') || '2026-10-30';
+  const emissao = v('emissao') || hoje();
+  const local = v('local') || 'UNIDADE FICTÍCIA - PONGAÍ/SP';
+  const empresa = v('empresa') || 'EMPRESA FICTÍCIA - TESTE UTB';
+  const conteudo = v('conteudo') ||
+    PROGRAMAS_NR10[curso] || PROGRAMAS_NR10['NR-10 Básico'];
+  const instrutores = v('instrutores') || 'INSTRUTOR FICTÍCIO - TESTE';
+  const tecnico = v('tecnico') || 'RESPONSÁVEL FICTÍCIO - TESTE';
+  const qualificacao = v('qualificacao') || 'EXEMPLO';
+  const registro = v('registro');
+
+  texto('pdf-participante', participante);
+  texto('pdf-curso', curso);
+  texto('pdf-dados',
+    'Carga horária: ' + carga + ' horas\n' +
+    'Início: ' + dataBR(inicio) +
+    ' | Conclusão: ' + dataBR(conclusao) +
+    ' | Emissão: ' + dataBR(emissao) +
+    '\nLocal: ' + local
+  );
+  $('pdf-dados').style.whiteSpace = 'pre-line';
+
+  texto('pdf-codigo', 'SIMULAÇÃO - SEM CÓDIGO DE VALIDAÇÃO');
+  $('qr').replaceChildren();
+
+  texto('pdf-resumo',
+    'SIMULAÇÃO - SEM VALIDADE\n' +
+    'Participante: ' + participante +
+    '\nCurso: ' + curso + ' | ' + carga + ' horas' +
+    '\nEmpresa: ' + empresa +
+    '\nPeríodo: ' + dataBR(inicio) + ' a ' + dataBR(conclusao) +
+    '\nLocal: ' + local
+  );
+  $('pdf-resumo').style.whiteSpace = 'pre-line';
+
+  texto('pdf-conteudo', conteudo);
+  texto('pdf-instrutores', instrutores);
+  texto('ass-participante', participante);
+  texto('ass-tecnico', tecnico);
+  texto('ass-qualificacao',
+    qualificacao + (registro ? ' - ' + registro : '')
+  );
+
+  certificadoAtual = null;
+  $('imprimir').disabled = true;
+  $('impressao').classList.add('simulacao');
+
+  if (!document.getElementById('estilo-simulacao')) {
+    const estilo = document.createElement('style');
+    estilo.id = 'estilo-simulacao';
+    estilo.textContent = `
+      @media print {
+        #impressao.simulacao .folha::after {
+          content: "SIMULAÇÃO - SEM VALIDADE";
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%) rotate(-28deg);
+          font: bold 32pt Arial, sans-serif;
+          color: rgba(170, 30, 30, 0.22);
+          white-space: nowrap;
+          pointer-events: none;
+        }
+      }
+    `;
+    document.head.appendChild(estilo);
+  }
+
+  window.print();
+});
+
+window.addEventListener('afterprint', () => {
+  $('impressao').classList.remove('simulacao');
+});
+
 (async()=>{
  $('emissao').value=hoje();
  try{const a=await api('utb_admins?select=user_id&limit=1');if(!Array.isArray(a)||!a.length)throw Error('Sem autorização');document.documentElement.style.visibility='visible';await listar()}
