@@ -1,0 +1,153 @@
+ <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Administração de Certificados | UTB</title>
+<script>
+if (!sessionStorage.getItem("utb_access_token")) {
+window.location.replace("admin-instrutores.html");
+}
+</script>
+<style>
+
+    { box-sizing: border-box; }
+
+body {
+margin: 0;
+font-family: Arial, sans-serif;
+background: #f4f7fb;
+color: #172b4d;
+font-size: 18px;
+}
+header {
+background: white;
+border-bottom: 2px solid #dbe5f1;
+padding: 22px;
+}
+.topo {
+max-width: 1100px;
+margin: auto;
+}
+h1 { color: #123a75; }
+h2 { color: #174b90; }
+main {
+max-width: 1100px;
+margin: 30px auto;
+padding: 15px;
+}
+.card {
+background: white;
+padding: 26px;
+border-radius: 12px;
+margin-bottom: 22px;
+border: 1px solid #dbe5f1;
+}
+label {
+display: block;
+font-weight: bold;
+margin-top: 17px;
+}
+input, select {
+width: 100%;
+padding: 13px;
+font-size: 18px;
+border: 1px solid #aabbd1;
+border-radius: 7px;
+margin-top: 7px;
+}
+button, .botao {
+display: inline-block;
+background: #145bb5;
+color: white;
+border: none;
+border-radius: 8px;
+padding: 14px 22px;
+font-size: 18px;
+cursor: pointer;
+margin-top: 20px;
+text-decoration: none;
+}
+.aviso {
+background: #eef5ff;
+padding: 16px;
+border-left: 5px solid #145bb5;
+border-radius: 6px;
+}
+#resultado {
+display: none;
+white-space: pre-line;
+line-height: 1.7;
+}
+</style>
+</head>
+<body>
+<header>
+<div class="topo">
+<h1>Universo Treinamentos Brasil</h1>
+<p>Administração de Certificados Digitais</p>
+<p>🇧🇷 Ame o Brasil</p>
+<a class="botao" href="admin.html">
+Voltar ao Painel Central
+</a>
+</div>
+</header>
+<main>
+<section class="card">
+<h2>Painel de Certificados</h2>
+<p>Cadastro, consulta e futura emissão de certificados digitais da UTB.</p>
+<div class="aviso">
+Esta é a etapa inicial do painel.
+A emissão e a gravação no banco de dados
+permanecerão desabilitadas até a
+configuração da autorização administrativa segura.
+</div>
+</section>
+<section class="card">
+<h2>Dados do certificado</h2>
+<form id="form-certificado">
+<label for="participante">Nome do participante</label>
+<input id="participante" required maxlength="200">
+<label for="curso">Nome do curso</label>
+<input id="curso" required maxlength="200">
+<label for="carga">Carga horária (horas)</label>
+<input id="carga" type="number" min="1" required>
+<label for="conclusao">Data de conclusão</label>
+<input id="conclusao" type="date">
+<label for="emissao">Data de emissão</label>
+<input id="emissao" type="date">
+<button type="submit">
+Pré-visualizar dados
+</button>
+</form>
+</section>
+<section class="card">
+<h2>Pré-visualização</h2>
+<p>Esta prévia não emite, registra ou valida certificados.</p>
+<div id="resultado" class="aviso"></div>
+</section>
+</main>
+<script>
+const form = document.getElementById("form-certificado");
+const resultado = document.getElementById("resultado");
+form.addEventListener("submit", function(event) {
+event.preventDefault();
+const participante = document.getElementById("participante").value.trim();
+const curso = document.getElementById("curso").value.trim();
+const carga = document.getElementById("carga").value;
+const conclusao = document.getElementById("conclusao").value;
+const emissao = document.getElementById("emissao").value;
+resultado.textContent = [
+    "PRÉ-VISUALIZAÇÃO - NÃO É UM CERTIFICADO",
+    "",
+    "Participante: " + participante,
+    "Curso: " + curso,
+    "Carga horária: " + carga + " horas",
+    "Conclusão: " + (conclusao || "Não informada"),
+    "Emissão: " + (emissao || "Não informada")
+  ].join(String.fromCharCode(10));
+  resultado.style.display = "block";
+});
+</script>
+</body>
+</html>
