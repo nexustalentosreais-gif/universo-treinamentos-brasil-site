@@ -46,7 +46,52 @@
         #qr-impressao img, #qr-impressao canvas { width: 125px !important; height: 125px !important; }
         .rodape { font-size: 14px; overflow-wrap: anywhere; }
         }
-        </style>
+ @page {
+  size: A4 landscape;
+  margin: 6mm;
+}
+
+@media print {
+  .folha {
+    width: 100%;
+    height: 183mm;
+    min-height: 0;
+    padding: 9mm 12mm;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    text-align: center;
+    border: 5px double #145bb5;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .folha h1 {
+    font-size: 43px;
+    margin: 4px 0;
+  }
+
+  .folha h2 {
+    font-size: 28px;
+    margin: 4px 0;
+  }
+
+  .folha p {
+    margin: 3px 0;
+  }
+
+  #qr-impressao img,
+  #qr-impressao canvas {
+    width: 140px !important;
+    height: 140px !important;
+  }
+
+  .rodape {
+    font-size: 15px;
+  }
+}       
+</style>
     </head>
     <body>
     <header>
