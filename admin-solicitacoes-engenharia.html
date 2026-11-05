@@ -397,11 +397,11 @@ mensagem("Consultando solicitações e parceiros...");
 try {
 const resultados = await Promise.all([
 consultarAPI(
-"solicitacoes_engenharia?select=" +
+"solicitacoes_engenharia?select=*" +
 "&order=criado_em.desc&limit=200"
 ),
 consultarAPI(
-"parceiros_engenharia?select=" +
+"parceiros_engenharia?select=*" +
 "&status=eq.aprovado&limit=500"
 )
 ]);
