@@ -202,8 +202,11 @@ return;
 certificadoParaImprimir = c;
 $('pdf-participante').textContent = c.participante_nome;
 $('pdf-curso').textContent = c.curso_nome;
-$('pdf-dados').textContent = 'Carga horária: ' + c.carga_horaria + ' horas | Conclusão: ' + (c.data_conclusao || 'Não informada') + ' | Emissão: ' + (c.data_emissao || 'Não informada');
-$('pdf-codigo').textContent = 'Código único: ' + c.codigo;
+$('pdf-dados').textContent =
+  'Carga horária: ' + c.carga_horaria + ' horas | Conclusão: ' +
+  (c.data_conclusao ? c.data_conclusao.split('-').reverse().join('/') : 'Não informada') +
+  ' | Emissão: ' +
+  (c.data_emissao ? c.data_emissao.split('-').reverse().join('/') : 'Não informada');
 const destino = 'https://universotreinamentosbrasil.com.br/certificados.html?codigo=' + encodeURIComponent(c.codigo);
 $('qr-impressao').replaceChildren();
 new QRCode($('qr-impressao'), { text: destino, width: 150, height: 150, correctLevel: QRCode.CorrectLevel.M });
