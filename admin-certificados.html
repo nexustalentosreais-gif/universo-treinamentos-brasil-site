@@ -1,150 +1,269 @@
- <!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Administração de Certificados | UTB</title>
- <script> document.documentElement.style.visibility = "hidden"; async function verificarAdministrador() { const token = sessionStorage.getItem("utb_access_token"); if (!token) { window.location.replace("admin-instrutores.html"); return; } try { const resposta = await fetch( "https://xkxlgmmssvllcmhymibj.supabase.co/rest/v1/utb_admins?select=user_id&limit=1", { method: "GET", headers: { "apikey": "sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV", "Authorization": "Bearer " + token }, cache: "no-store" } ); if (!resposta.ok) { throw new Error("Sessão inválida"); } const admins = await resposta.json(); if (!Array.isArray(admins) || admins.length === 0) { throw new Error("Acesso não autorizado"); } document.documentElement.style.visibility = "visible"; } catch (erro) { sessionStorage.removeItem("utb_access_token"); window.location.replace("admin-instrutores.html"); } } verificarAdministrador(); </script>
+<script>document.documentElement.style.visibility = 'hidden';</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+<style>
 
- <style>
+        { box-sizing: border-box; }
+        body { margin: 0; background: #f3f7fc; color: #17345b; font: 18px Arial, sans-serif; }
+        header { padding: 22px 5%; background: #fff; border-bottom: 2px solid #dae5f4; }
+        main { max-width: 1120px; padding: 20px; margin: 0 auto; }
+        h1, h2 { color: #103e7c; }
+        h1 { margin: 0 0 8px; font-size: 30px; }
+        h2 { margin-top: 0; font-size: 24px; }
+        .card { background: white; border: 1px solid #dae5f4; border-radius: 12px; padding: 24px; margin: 18px 0; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .field { display: block; font-weight: bold; }
+        input { display: block; width: 100%; padding: 13px; border: 1px solid #9eb2ce; border-radius: 7px; font: inherit; margin-top: 6px; }
+        button, .btn { background: #145bb5; color: white; border: none; border-radius: 8px; padding: 12px 18px; font: inherit; cursor: pointer; text-decoration: none; display: inline-block; }
+        button:disabled { opacity: .55; cursor: not-allowed; }
+        .secundario { background: #456581; }
+        .perigo { background: #a32626; }
+        .acoes { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+        .mensagem { padding: 14px; background: #e9f3ff; border-left: 5px solid #145bb5; margin-top: 16px; border-radius: 5px; }
+        .erro { background: #fff0ef; border-color: #b32626; }
+        .lista { display: grid; gap: 12px; }
+        .item { border: 1px solid #dae5f4; padding: 16px; border-radius: 9px; }
+        .item p { margin: 6px 0; overflow-wrap: anywhere; }
+        .codigo { font-family: monospace; font-weight: bold; }
+        .aviso { color: #4b6179; font-size: 16px; }
+        #area-impressao { display: none; }
+        @media (max-width: 680px) { .grid { grid-template-columns: 1fr; } }
+        @page { size: A4 landscape; margin: 12mm; }
+        @media print {
+        header, main { display: none !important; }
+        body { background: #fff; }
+        #area-impressao { display: block !important; color: #123b71; }
+        .folha { border: 6px double #145bb5; min-height: 170mm; padding: 12mm; text-align: center; }
+        .folha h1 { font-size: 42px; margin: 14px 0 18px; }
+        .folha h2 { font-size: 27px; margin: 16px 0; }
+        .folha p { margin: 10px 0; }
+        #qr-impressao { display: flex; justify-content: center; padding: 8px; }
+        #qr-impressao img, #qr-impressao canvas { width: 125px !important; height: 125px !important; }
+        .rodape { font-size: 14px; overflow-wrap: anywhere; }
+        }
+        </style>
+    </head>
+    <body>
+    <header>
+        <h1>Universo Treinamentos Brasil</h1>
+        <div>Administração de Certificados Digitais · 🇧🇷 Ame o Brasil</div>
+        <div class="acoes"><a href="admin.html" class="btn">Voltar ao Painel Central</a></div>
+    </header>
+    <main>
+        <section class="card">
+        <h2>Emitir certificado</h2>
+        <p class="aviso">O cadastro é feito no Supabase. O PDF só é preparado depois da confirmação do registro.</p>
+        <form id="form-certificado">
+        <label class="field">Nome do participante<input id="participante" required maxlength="200" autocomplete="off"></label>
+        <div class="grid">
+        <label class="field">Nome do curso<input id="curso" required maxlength="200"></label>
+        <label class="field">Carga horária (horas)<input id="carga" type="number" min="1" max="9999" step="1" required></label>
+        <label class="field">Data de conclusão<input id="conclusao" type="date" required></label>
+        <label class="field">Data de emissão<input id="emissao" type="date" required></label>
+        </div>
+        <div class="acoes"><button id="salvar" type="submit">Cadastrar certificado</button></div>
+        </form>
+        <div id="mensagem" class="mensagem" role="status">Informe somente dados de cursos realmente concluídos.</div>
+        <div class="acoes"><button id="imprimir" type="button" disabled>Imprimir / Salvar PDF com QR Code</button></div>
+        </section>
+        <section class="card">
+        <h2>Certificados cadastrados</h2>
+        <div class="acoes"><button id="atualizar" type="button" class="secundario">Atualizar lista</button></div>
+        <p class="aviso">Últimos 50 registros. Certificados cancelados permanecem no histórico.</p>
+        <div id="lista" class="lista">Carregando...</div>
+        </section>
+    </main>
+    <section id="area-impressao" aria-label="Certificado para impressão">
+        <div class="folha">
+        <div style="font-size:24px;font-weight:bold">UNIVERSO TREINAMENTOS BRASIL</div>
+        <p>🇧🇷 Ame o Brasil</p>
+        <h1>CERTIFICADO</h1>
+        <p>Certificamos que</p>
+        <h2 id="pdf-participante"></h2>
+        <p>concluiu o curso</p>
+        <h2 id="pdf-curso"></h2>
+        <p id="pdf-dados"></p>
+        <div id="qr-impressao"></div>
+        <p class="rodape" id="pdf-codigo"></p>
+        <p class="rodape">Verificação de autenticidade: universotreinamentosbrasil.com.br/certificados.html</p>
+        <p class="rodape">Documento gerado a partir do registro digital da UTB. Confira o status pelo código ou QR Code.</p>
+        </div>
+    </section>
+    <script>
+    const URL_SUPABASE = 'https://xkxlgmmssvllcmhymibj.supabase.co';
+    const CHAVE_PUBLICA = 'sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV';
+    const $ = id => document.getElementById(id);
+    let certificados = [];
+    let certificadoParaImprimir = null;
 
-    { box-sizing: border-box; }
-
-body {
-margin: 0;
-font-family: Arial, sans-serif;
-background: #f4f7fb;
-color: #172b4d;
-font-size: 18px;
+function hojeLocal() {
+const d = new Date();
+return [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('-');
 }
-header {
-background: white;
-border-bottom: 2px solid #dbe5f1;
-padding: 22px;
+function mensagem(texto, erro = false) {
+$('mensagem').textContent = texto;
+$('mensagem').className = 'mensagem' + (erro ? ' erro' : '');
 }
-.topo {
-max-width: 1100px;
-margin: auto;
-}
-h1 { color: #123a75; }
-h2 { color: #174b90; }
-main {
-max-width: 1100px;
-margin: 30px auto;
-padding: 15px;
-}
-.card {
-background: white;
-padding: 26px;
-border-radius: 12px;
-margin-bottom: 22px;
-border: 1px solid #dbe5f1;
-}
-label {
-display: block;
-font-weight: bold;
-margin-top: 17px;
-}
-input, select {
-width: 100%;
-padding: 13px;
-font-size: 18px;
-border: 1px solid #aabbd1;
-border-radius: 7px;
-margin-top: 7px;
-}
-button, .botao {
-display: inline-block;
-background: #145bb5;
-color: white;
-border: none;
-border-radius: 8px;
-padding: 14px 22px;
-font-size: 18px;
-cursor: pointer;
-margin-top: 20px;
-text-decoration: none;
-}
-.aviso {
-background: #eef5ff;
-padding: 16px;
-border-left: 5px solid #145bb5;
-border-radius: 6px;
-}
-#resultado {
-display: none;
-white-space: pre-line;
-line-height: 1.7;
-}
-</style>
-</head>
-<body>
-<header>
-<div class="topo">
-<h1>Universo Treinamentos Brasil</h1>
-<p>Administração de Certificados Digitais</p>
-<p>🇧🇷 Ame o Brasil</p>
-<a class="botao" href="admin.html">
-Voltar ao Painel Central
-</a>
-</div>
-</header>
-<main>
-<section class="card">
-<h2>Painel de Certificados</h2>
-<p>Cadastro, consulta e futura emissão de certificados digitais da UTB.</p>
-<div class="aviso">
-Esta é a etapa inicial do painel.
-A emissão e a gravação no banco de dados
-permanecerão desabilitadas até a
-configuração da autorização administrativa segura.
-</div>
-</section>
-<section class="card">
-<h2>Dados do certificado</h2>
-<form id="form-certificado">
-<label for="participante">Nome do participante</label>
-<input id="participante" required maxlength="200">
-<label for="curso">Nome do curso</label>
-<input id="curso" required maxlength="200">
-<label for="carga">Carga horária (horas)</label>
-<input id="carga" type="number" min="1" required>
-<label for="conclusao">Data de conclusão</label>
-<input id="conclusao" type="date">
-<label for="emissao">Data de emissão</label>
-<input id="emissao" type="date">
-<button type="submit">
-Pré-visualizar dados
-</button>
-</form>
-</section>
-<section class="card">
-<h2>Pré-visualização</h2>
-<p>Esta prévia não emite, registra ou valida certificados.</p>
-<div id="resultado" class="aviso"></div>
-</section>
-</main>
-<script>
-const form = document.getElementById("form-certificado");
-const resultado = document.getElementById("resultado");
-form.addEventListener("submit", function(event) {
-event.preventDefault();
-const participante = document.getElementById("participante").value.trim();
-const curso = document.getElementById("curso").value.trim();
-const carga = document.getElementById("carga").value;
-const conclusao = document.getElementById("conclusao").value;
-const emissao = document.getElementById("emissao").value;
-resultado.textContent = [
-    "PRÉ-VISUALIZAÇÃO - NÃO É UM CERTIFICADO",
-    "",
-    "Participante: " + participante,
-    "Curso: " + curso,
-    "Carga horária: " + carga + " horas",
-    "Conclusão: " + (conclusao || "Não informada"),
-    "Emissão: " + (emissao || "Não informada")
-  ].join(String.fromCharCode(10));
-  resultado.style.display = "block";
+async function requisicao(caminho, opcoes = {}) {
+const token = sessionStorage.getItem('utb_access_token');
+if (!token) throw new Error('Sessão encerrada. Entre novamente no painel administrativo.');
+const resposta = await fetch(URL_SUPABASE + '/rest/v1/' + caminho, {
+...opcoes,
+headers: {
+apikey: CHAVE_PUBLICA,
+Authorization: 'Bearer ' + token,
+'Content-Type': 'application/json',
+...(opcoes.headers || {})
+},
+cache: 'no-store'
 });
+if (!resposta.ok) {
+const erro = await resposta.json().catch(() => ({}));
+throw new Error(erro.message || 'Falha na consulta ao Supabase (HTTP ' + resposta.status + ').');
+}
+return resposta.status === 204 ? null : resposta.json();
+}
+function linhaTexto(container, texto) {
+const p = document.createElement('p');
+p.textContent = texto;
+container.appendChild(p);
+}
+function botao(container, texto, classe, acao) {
+const b = document.createElement('button');
+b.type = 'button';
+b.className = classe;
+b.textContent = texto;
+b.addEventListener('click', acao);
+container.appendChild(b);
+}
+async function carregarLista() {
+$('lista').textContent = 'Carregando...';
+try {
+certificados = await requisicao('certificados?select=id,codigo,participante_nome,curso_nome,carga_horaria,data_conclusao,data_emissao,status,criado_em&order=criado_em.desc&limit=50');
+$('lista').replaceChildren();
+if (!certificados.length) {
+$('lista').textContent = 'Nenhum certificado cadastrado.';
+return;
+}
+for (const c of certificados) {
+const item = document.createElement('div');
+item.className = 'item';
+linhaTexto(item, c.participante_nome + ' — ' + c.curso_nome);
+linhaTexto(item, 'Código: ' + c.codigo);
+linhaTexto(item, 'Carga horária: ' + c.carga_horaria + ' horas · Situação: ' + c.status);
+const acoes = document.createElement('div');
+acoes.className = 'acoes';
+if (c.status === 'valido') {
+botao(acoes, 'Preparar PDF / QR', '', () => prepararCertificado(c));
+botao(acoes, 'Cancelar certificado', 'perigo', () => cancelarCertificado(c));
+}
+item.appendChild(acoes);
+$('lista').appendChild(item);
+}
+} catch (erro) {
+$('lista').textContent = 'Erro ao carregar: ' + erro.message;
+}
+}
+async function cancelarCertificado(c) {
+if (!confirm('Cancelar definitivamente o certificado ' + c.codigo + '?')) return;
+try {
+await requisicao('certificados?id=eq.' + encodeURIComponent(c.id), {
+method: 'PATCH',
+headers: { Prefer: 'return=minimal' },
+body: JSON.stringify({ status: 'cancelado' })
+});
+certificadoParaImprimir = null;
+$('imprimir').disabled = true;
+mensagem('Certificado cancelado. A validação pública mostrará que ele não é válido.');
+await carregarLista();
+} catch (erro) {
+mensagem('Não foi possível cancelar: ' + erro.message, true);
+}
+}
+function prepararCertificado(c) {
+if (c.status !== 'valido') return;
+if (typeof QRCode === 'undefined') {
+mensagem('Não foi possível carregar o gerador de QR Code. Verifique a conexão.', true);
+return;
+}
+certificadoParaImprimir = c;
+$('pdf-participante').textContent = c.participante_nome;
+$('pdf-curso').textContent = c.curso_nome;
+$('pdf-dados').textContent = 'Carga horária: ' + c.carga_horaria + ' horas | Conclusão: ' + (c.data_conclusao || 'Não informada') + ' | Emissão: ' + (c.data_emissao || 'Não informada');
+$('pdf-codigo').textContent = 'Código único: ' + c.codigo;
+const destino = 'https://universotreinamentosbrasil.com.br/certificados.html?codigo=' + encodeURIComponent(c.codigo);
+$('qr-impressao').replaceChildren();
+new QRCode($('qr-impressao'), { text: destino, width: 150, height: 150, correctLevel: QRCode.CorrectLevel.M });
+$('imprimir').disabled = false;
+mensagem('Certificado ' + c.codigo + ' pronto para imprimir. Use “Imprimir / Salvar PDF”.');
+}
+$('form-certificado').addEventListener('submit', async evento => {
+evento.preventDefault();
+const nome = $('participante').value.trim();
+const curso = $('curso').value.trim();
+const carga = Number($('carga').value);
+const conclusao = $('conclusao').value;
+const emissao = $('emissao').value;
+if (!nome || !curso || !Number.isInteger(carga) || carga < 1 || !conclusao || !emissao || conclusao > emissao) {
+mensagem('Preencha os dados corretamente. A conclusão não pode ser posterior à emissão.', true);
+return;
+}
+if (!confirm('Confirma a emissão do certificado para ' + nome + '?')) return;
+$('salvar').disabled = true;
+mensagem('Registrando certificado no Supabase...');
+try {
+const criados = await requisicao('certificados?select=id,codigo,participante_nome,curso_nome,carga_horaria,data_conclusao,data_emissao,status,criado_em', {
+method: 'POST',
+headers: { Prefer: 'return=representation' },
+body: JSON.stringify({
+participante_nome: nome,
+curso_nome: curso,
+carga_horaria: carga,
+data_conclusao: conclusao,
+data_emissao: emissao,
+status: 'valido'
+})
+});
+const novo = criados && criados[0];
+if (!novo || !novo.codigo) throw new Error('Cadastro sem retorno de código. Confira a lista antes de tentar novamente.');
+$('form-certificado').reset();
+$('emissao').value = hojeLocal();
+await carregarLista();
+prepararCertificado(novo);
+} catch (erro) {
+mensagem('Não foi possível concluir o cadastro: ' + erro.message, true);
+} finally {
+$('salvar').disabled = false;
+}
+});
+$('imprimir').addEventListener('click', () => {
+if (certificadoParaImprimir) window.print();
+});
+$('atualizar').addEventListener('click', carregarLista);
+async function iniciar() {
+$('emissao').value = hojeLocal();
+try {
+const admins = await requisicao('utb_admins?select=user_id&limit=1');
+if (!Array.isArray(admins) || admins.length === 0) throw new Error('Acesso não autorizado.');
+document.documentElement.style.visibility = 'visible';
+await carregarLista();
+} catch (erro) {
+document.documentElement.style.visibility = 'visible';
+document.querySelector('main').replaceChildren();
+const aviso = document.createElement('div');
+aviso.className = 'card';
+aviso.textContent = 'Acesso negado ou sessão expirada. Entre novamente no painel administrativo.';
+document.querySelector('main').appendChild(aviso);
+sessionStorage.removeItem('utb_access_token');
+setTimeout(() => { window.location.replace('admin-instrutores.html'); }, 1400);
+}
+}
+iniciar();
 </script>
 </body>
 </html>
