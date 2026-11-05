@@ -73,15 +73,18 @@ body{background:white;color:#102e57}
 <form id="form">
 <label>Nome completo do participante<input id="participante" required maxlength="200"></label>
 <div class="grid">
-<label>Modalidade do treinamento
+ <label>Modalidade do treinamento
 <select id="modalidade" required>
-<option value="">Selecione</option>
-<option value="NR-10 Básico">NR-10 Básico — 40 horas</option>
-<option value="NR-10 SEP">NR-10 SEP — 40 horas</option>
-<option value="NR-10 Reciclagem Básico">NR-10 Reciclagem Básico</option>
-<option value="NR-10 Reciclagem SEP">NR-10 Reciclagem SEP</option>
-</select></label>
-<label>Carga horária realizada (horas)<input id="carga" type="number" required min="1" max="500" step="1"></label>
+  <option value="">Selecione</option>
+  <option value="NR-10 Básico" data-horas="40">NR-10 Básico — 40 horas</option>
+  <option value="NR-10 SEP" data-horas="40">NR-10 SEP — 40 horas</option>
+  <option value="NR-10 Reciclagem Básico" data-horas="8">NR-10 Reciclagem Básico — 8 horas</option>
+  <option value="NR-10 Reciclagem Básico" data-horas="16">NR-10 Reciclagem Básico — 16 horas</option>
+  <option value="NR-10 Reciclagem SEP" data-horas="8">NR-10 Reciclagem SEP — 8 horas</option>
+  <option value="NR-10 Reciclagem SEP" data-horas="16">NR-10 Reciclagem SEP — 16 horas</option>
+</select>
+</label>
+<input id="carga" type="hidden" value="">
 <label>Data de início<input id="inicio" type="date" required></label>
 <label>Data de conclusão<input id="conclusao" type="date" required></label>
 <label>Data de emissão<input id="emissao" type="date" required></label>
@@ -275,18 +278,14 @@ async function listar(){
   ].join('\n')
 };
 
-$('modalidade').addEventListener('change',()=>{
-  const nome = $('modalidade').value;
+ $('modalidade').addEventListener('change', () => {
+  const seletor = $('modalidade');
+  const opcao = seletor.options[seletor.selectedIndex];
 
-  if (nome === 'NR-10 Básico' || nome === 'NR-10 SEP') {
-    $('carga').value = '40';
-  } else {
-    $('carga').value = '';
-  }
-
-  $('conteudo').value = PROGRAMAS_NR10[nome] || '';
+  $('carga').value = opcao.dataset.horas || '';
+  $('conteudo').value = PROGRAMAS_NR10[seletor.value] || '';
 });
- $('form').addEventListener('submit',async e=>{
+$('form').addEventListener('submit',async e=>{
  e.preventDefault();
  const valor=id=>$(id).value.trim();
  const modalidade=valor('modalidade'),carga=Number(valor('carga'));
