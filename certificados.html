@@ -592,8 +592,19 @@ if (certForm) {
     }
   });
 }
+const codigoDaUrl = new URLSearchParams(window.location.search).get("codigo");
+
+if (codigoDaUrl) {
+  const campoCodigo = document.getElementById("cert-code");
+  const formularioCodigo = document.getElementById("cert-form");
+
+  if (campoCodigo && formularioCodigo) {
+    campoCodigo.value = codigoDaUrl.trim();
+    formularioCodigo.requestSubmit();
+  }
+}
+
 </script>
 
 </body>
-</html>
 </html>
