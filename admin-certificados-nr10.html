@@ -193,11 +193,85 @@ async function listar(){
   }
  }catch(e){$('lista').textContent='Não foi possível carregar: '+e.message}
 }
+ const PROGRAMAS_NR10 = {
+  'NR-10 Básico': [
+    '1. Introdução à segurança com eletricidade.',
+    '2. Riscos elétricos: choque, arco elétrico, queimaduras, quedas e campos eletromagnéticos.',
+    '3. Técnicas de análise de riscos.',
+    '4. Controle dos riscos elétricos: desenergização, aterramento, equipotencialização, seccionamento, proteção diferencial, barreiras, bloqueios, isolação e separação elétrica.',
+    '5. Normas técnicas brasileiras: NBR 5410, NBR 14039 e correlatas.',
+    '6. Regulamentações de segurança: NRs, NR-10, qualificação, habilitação, capacitação e autorização.',
+    '7. Equipamentos de proteção coletiva (EPC).',
+    '8. Equipamentos de proteção individual (EPI).',
+    '9. Procedimentos de trabalho: desenergização, liberação, sinalização e inspeções.',
+    '10. Documentação de instalações elétricas.',
+    '11. Riscos adicionais: altura, espaços confinados, áreas classificadas, umidade e condições atmosféricas.',
+    '12. Prevenção e combate a incêndios, inclusive práticas.',
+    '13. Acidentes elétricos: causas e estudos de casos.',
+    '14. Primeiros socorros e práticas de atendimento a acidentados.',
+    '15. Responsabilidades profissionais e legais.'
+  ].join('\n'),
+
+  'NR-10 SEP': [
+    '1. Organização do Sistema Elétrico de Potência (SEP).',
+    '2. Organização do trabalho: planejamento, equipes, prontuários, métodos e comunicação.',
+    '3. Aspectos comportamentais.',
+    '4. Condições impeditivas para serviços.',
+    '5. Riscos no SEP: proximidade, indução, descargas atmosféricas, eletricidade estática, campos eletromagnéticos e trabalhos especiais.',
+    '6. Técnicas de análise de riscos no SEP.',
+    '7. Procedimentos de trabalho: análise e discussão.',
+    '8. Técnicas de trabalho sob tensão: linha viva, ao potencial, a distância, instalações internas, trabalho noturno e subterrâneo.',
+    '9. Equipamentos e ferramentas: seleção, uso, conservação, inspeção e ensaios.',
+    '10. Sistemas de proteção coletiva.',
+    '11. Equipamentos de proteção individual.',
+    '12. Posturas e vestimentas de trabalho.',
+    '13. Segurança com veículos e transporte de pessoas, materiais e equipamentos.',
+    '14. Sinalização e isolamento das áreas de trabalho.',
+    '15. Liberação de instalações para serviço, operação e utilização.',
+    '16. Técnicas de remoção, atendimento e transporte de acidentados.',
+    '17. Acidentes típicos: análise, discussão e medidas preventivas.',
+    '18. Responsabilidades profissionais e legais.'
+  ].join('\n'),
+
+  'NR-10 Reciclagem Básico': [
+    'ROTEIRO SUGERIDO — AJUSTAR AO TREINAMENTO REALIZADO.',
+    '1. Revisão dos riscos elétricos e prevenção de acidentes.',
+    '2. Atualização da NR-10 e normas técnicas aplicáveis.',
+    '3. Análise de riscos e medidas preventivas.',
+    '4. Desenergização, bloqueios, aterramento e procedimentos seguros.',
+    '5. EPC, EPI e inspeção de equipamentos.',
+    '6. Riscos adicionais e segurança nas atividades.',
+    '7. Prevenção e combate a incêndios.',
+    '8. Primeiros socorros e atendimento de emergências.',
+    '9. Análise de acidentes, responsabilidades e atividades práticas.'
+  ].join('\n'),
+
+  'NR-10 Reciclagem SEP': [
+    'ROTEIRO SUGERIDO — AJUSTAR AO TREINAMENTO REALIZADO.',
+    '1. Revisão da segurança no Sistema Elétrico de Potência.',
+    '2. Atualização das normas e procedimentos aplicáveis.',
+    '3. Análise de riscos específicos do SEP.',
+    '4. Planejamento, comunicação e organização das equipes.',
+    '5. Técnicas seguras de trabalho e controle de energização.',
+    '6. Ferramentas, EPC, EPI e ensaios.',
+    '7. Sinalização, isolamento e liberação de instalações.',
+    '8. Emergências, resgate e primeiros socorros.',
+    '9. Estudo de acidentes, responsabilidades e práticas.'
+  ].join('\n')
+};
+
 $('modalidade').addEventListener('change',()=>{
- const nome=$('modalidade').value;
- if(nome==='NR-10 Básico'||nome==='NR-10 SEP')$('carga').value='40';else $('carga').value='';
+  const nome = $('modalidade').value;
+
+  if (nome === 'NR-10 Básico' || nome === 'NR-10 SEP') {
+    $('carga').value = '40';
+  } else {
+    $('carga').value = '';
+  }
+
+  $('conteudo').value = PROGRAMAS_NR10[nome] || '';
 });
-$('form').addEventListener('submit',async e=>{
+ $('form').addEventListener('submit',async e=>{
  e.preventDefault();
  const valor=id=>$(id).value.trim();
  const modalidade=valor('modalidade'),carga=Number(valor('carga'));
