@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Certificados NR-10 | Universo Treinamentos Brasil</title>
+<script>document.documentElement.style.visibility='hidden';</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f7fc;color:#17345b;font:18px Arial,sans-serif}
+header{background:white;border-bottom:2px solid #dae5f4;padding:22px 5%}
+header h1{margin:0;color:#103e7c;font-size:29px}
+main{max-width:1080px;margin:auto;padding:20px}
+.card{background:white;border:1px solid #dae5f4;border-radius:12px;padding:24px;margin:18px 0}
+h2{margin:0 0 16px;color:#103e7c;font-size:24px}
+h3{color:#103e7c;font-size:20px;margin:22px 0 12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+label{display:block;font-weight:bold;margin:13px 0}
+input,select,textarea{display:block;width:100%;padding:12px;margin-top:6px;font:inherit;color:#17345b;background:white;border:1px solid #9eb2ce;border-radius:7px}
+textarea{resize:vertical;min-height:100px}
+button,.btn{display:inline-block;background:#145bb5;color:white;border:0;border-radius:8px;padding:12px 18px;font:inherit;text-decoration:none;cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+.acoes{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0}
+.nota{font-size:16px;color:#4c5f76;line-height:1.5}
+.mensagem{background:#e9f3ff;border-left:5px solid #145bb5;padding:13px;border-radius:5px;line-height:1.45}
+.erro{background:#fff0ef;border-color:#b32626}
+.item{padding:15px;border:1px solid #dae5f4;border-radius:9px;margin:10px 0}
+.item p{margin:6px 0;overflow-wrap:anywhere}
+#impressao{display:none}
+@media(max-width:700px){
+.grid{grid-template-columns:1fr}
+.card{padding:16px}
+}
+@page{size:A4 portrait;margin:10mm}
+@media print{
+header,main{display:none!important}
+body{background:white;color:#102e57}
+#impressao{display:block!important}
+.folha{width:100%;height:277mm;border:4px double #145bb5;padding:12mm;page-break-after:always;break-after:page;position:relative;overflow:hidden}
+.folha:last-child{page-break-after:auto;break-after:auto}
+.cabeca{text-align:center;border-bottom:2px solid #145bb5;padding-bottom:10mm}
+.cabeca h1{font-size:23px;margin:0;color:#103e7c}
+.cabeca p{margin:5px 0;font-size:12px}
+.frente{text-align:center;display:flex;flex-direction:column}
+.frente h2{font-size:32px;margin:18mm 0 12mm}
+.frente .aluno{font-weight:bold;font-size:25px;margin:8mm 0}
+.frente .curso{font-size:23px;font-weight:bold;margin:8mm 0}
+.frente .dados{font-size:14px;line-height:1.65}
+.frente .fim{margin-top:auto;font-size:11px}
+#qr{display:flex;justify-content:center;margin:5mm}
+#qr img,#qr canvas{width:105px!important;height:105px!important}
+.verso h2{text-align:center;font-size:21px;margin:10mm 0}
+.verso .dados{font-size:12px;line-height:1.5}
+.verso .programa{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.35}
+.verso h3{font-size:14px;margin:6mm 0 2mm}
+.verso .assinaturas{position:absolute;left:12mm;right:12mm;bottom:13mm;display:grid;grid-template-columns:1fr 1fr;gap:11mm 7mm;text-align:center;font-size:11px}
+.linha{border-top:1px solid #334b6b;padding-top:3mm}
+.codigo{overflow-wrap:anywhere;font-size:10px}
+}
+</style>
+</head>
+<body>
+<header>
+<h1>Universo Treinamentos Brasil</h1>
+<p>Emissão de certificados NR-10 · 🇧🇷 Ame o Brasil</p>
+<a class="btn" href="admin-certificados.html">Voltar aos certificados comuns</a>
+</header>
+<main>
+<section class="card">
+<h2>Emitir certificado NR-10</h2>
+<p class="nota">Página exclusiva para NR-10. Os campos abaixo são registrados juntamente com o certificado, preservando a consulta pública pelo QR Code. Utilize somente dados de treinamentos concluídos.</p>
+<form id="form">
+<label>Nome completo do participante<input id="participante" required maxlength="200"></label>
+<div class="grid">
+<label>Modalidade do treinamento
+<select id="modalidade" required>
+<option value="">Selecione</option>
+<option value="NR-10 Básico">NR-10 Básico — 40 horas</option>
+<option value="NR-10 SEP">NR-10 SEP — 40 horas</option>
+<option value="NR-10 Reciclagem Básico">NR-10 Reciclagem Básico</option>
+<option value="NR-10 Reciclagem SEP">NR-10 Reciclagem SEP</option>
+</select></label>
+<label>Carga horária realizada (horas)<input id="carga" type="number" required min="1" max="500" step="1"></label>
+<label>Data de início<input id="inicio" type="date" required></label>
+<label>Data de conclusão<input id="conclusao" type="date" required></label>
+<label>Data de emissão<input id="emissao" type="date" required></label>
+<label>Empresa / organização participante<input id="empresa" maxlength="200" placeholder="Empresa vinculada ao treinamento"></label>
+</div>
+<label>Local de realização (cidade, UF e endereço ou unidade)<input id="local" required maxlength="260"></label>
+<label>Conteúdo programático efetivamente ministrado<textarea id="conteudo" required maxlength="1600" rows="9" placeholder="Escreva os tópicos reais, um por linha. Não declare conteúdo que não foi ministrado."></textarea></label>
+<label>Instrutores e suas qualificações<textarea id="instrutores" required maxlength="600" rows="4" placeholder="Um por linha: Nome completo — qualificação profissional"></textarea></label>
+<h3>Responsável técnico pelo treinamento</h3>
+<div class="grid">
+<label>Nome completo<input id="tecnico" required maxlength="200"></label>
+<label>Qualificação profissional<input id="qualificacao" required maxlength="200"></label>
+<label>Registro profissional (quando aplicável)<input id="registro" maxlength="80" placeholder="Ex.: CREA-SP ..."></label>
+</div>
+<label class="nota"><input id="confirmacao" type="checkbox" required style="display:inline;width:auto;margin-right:8px">Confirmo que as informações são verdadeiras e que o treinamento foi realizado e concluído.</label>
+<div class="acoes"><button type="submit" id="salvar">Cadastrar certificado NR-10</button><button type="button" id="imprimir" disabled>Imprimir / Salvar PDF</button></div>
+</form>
+<div id="mensagem" class="mensagem" role="status">Após cadastrar, o PDF será preparado com frente, verso, programa e espaços de assinatura.</div>
+<p class="nota"><strong>Importante:</strong> o QR Code verifica o registro, mas não substitui as assinaturas do trabalhador e do responsável técnico. A versão assinada deve ser entregue e arquivada conforme as exigências aplicáveis.</p>
+</section>
+<section class="card">
+<h2>Certificados NR-10 cadastrados</h2>
+<div class="acoes"><button id="atualizar" type="button">Atualizar lista</button></div>
+<div id="lista" class="nota">Carregando...</div>
+</section>
+</main>
+<section id="impressao" aria-hidden="true">
+<article class="folha frente">
+<div class="cabeca"><h1>UNIVERSO TREINAMENTOS BRASIL</h1><p>🇧🇷 Ame o Brasil · Capacitação profissional</p></div>
+<h2>CERTIFICADO NR-10</h2>
+<p>Certificamos que</p>
+<div id="pdf-participante" class="aluno"></div>
+<p>concluiu o treinamento de segurança em instalações e serviços com eletricidade:</p>
+<div id="pdf-curso" class="curso"></div>
+<div id="pdf-dados" class="dados"></div>
+<div class="fim"><div id="qr"></div><p class="codigo" id="pdf-codigo"></p><p>Autenticidade: universotreinamentosbrasil.com.br/certificados.html</p><p>O conteúdo programático e as assinaturas constam no verso.</p></div>
+</article>
+<article class="folha verso">
+<div class="cabeca"><h1>UNIVERSO TREINAMENTOS BRASIL</h1><p>Certificado NR-10 · Conteúdo programático e identificação dos responsáveis</p></div>
+<h2>INFORMAÇÕES DO TREINAMENTO</h2>
+<div id="pdf-resumo" class="dados"></div>
+<h3>Conteúdo programático ministrado</h3>
+<div id="pdf-conteudo" class="programa"></div>
+<h3>Instrutores e qualificações</h3>
+<div id="pdf-instrutores" class="programa"></div>
+<div class="assinaturas">
+<div class="linha">Assinatura do participante<br><span id="ass-participante"></span></div>
+<div class="linha">Assinatura do responsável técnico<br><span id="ass-tecnico"></span><br><span id="ass-qualificacao"></span></div>
+</div>
+</article>
+</section>
+<script>
+const URL_SUPABASE='https://xkxlgmmssvllcmhymibj.supabase.co';
+const CHAVE_PUBLICA='sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV';
+const $=id=>document.getElementById(id);
+let certificadoAtual=null;
+function hoje(){const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')}
+function dataBR(s){return s?s.split('-').reverse().join('/'):'—'}
+function aviso(t,erro=false){$('mensagem').textContent=t;$('mensagem').className='mensagem'+(erro?' erro':'')}
+async function api(caminho,opcoes={}){
+ const token=sessionStorage.getItem('utb_access_token');
+ if(!token)throw new Error('Sessão administrativa expirada. Entre novamente.');
+ const r=await fetch(URL_SUPABASE+'/rest/v1/'+caminho,{...opcoes,headers:{apikey:CHAVE_PUBLICA,Authorization:'Bearer '+token,'Content-Type':'application/json',...(opcoes.headers||{})},cache:'no-store'});
+ if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.message||'Falha no Supabase ('+r.status+').')}
+ return r.status===204?null:r.json();
+}
+function texto(id,valor){$(id).textContent=valor||''}
+function elemento(tag,conteudo){const e=document.createElement(tag);e.textContent=conteudo;return e}
+function preparar(c){
+ if(c.status!=='valido')return aviso('Este certificado está cancelado.',true);
+ if(typeof QRCode==='undefined')return aviso('Não foi possível carregar o QR Code. Verifique a conexão.',true);
+ if(!c.nr10_dados)return aviso('Os dados completos deste certificado não foram encontrados.',true);
+ const d=c.nr10_dados;
+ certificadoAtual=c;
+ texto('pdf-participante',c.participante_nome);
+ texto('pdf-curso',c.curso_nome);
+ texto('pdf-dados','Carga horária: '+c.carga_horaria+' horas\nInício: '+dataBR(d.inicio)+' | Conclusão: '+dataBR(c.data_conclusao)+' | Emissão: '+dataBR(c.data_emissao)+'\nLocal: '+d.local);
+ $('pdf-dados').style.whiteSpace='pre-line';
+ texto('pdf-codigo','Código de verificação: '+c.codigo);
+ texto('pdf-resumo','Participante: '+c.participante_nome+'\nCurso: '+c.curso_nome+' | '+c.carga_horaria+' horas\nEmpresa: '+(d.empresa||'Não informada')+'\nPeríodo: '+dataBR(d.inicio)+' a '+dataBR(c.data_conclusao)+'\nLocal: '+d.local);
+ $('pdf-resumo').style.whiteSpace='pre-line';
+ texto('pdf-conteudo',d.conteudo);
+ texto('pdf-instrutores',d.instrutores);
+ texto('ass-participante',c.participante_nome);
+ texto('ass-tecnico',d.tecnico);
+ texto('ass-qualificacao',d.qualificacao+(d.registro?' · '+d.registro:''));
+ $('qr').replaceChildren();
+ new QRCode($('qr'),{text:'https://universotreinamentosbrasil.com.br/certificados.html?codigo='+encodeURIComponent(c.codigo),width:105,height:105,correctLevel:QRCode.CorrectLevel.M});
+ $('imprimir').disabled=false;
+ aviso('Certificado '+c.codigo+' preparado. Clique em Imprimir / Salvar PDF.');
+}
+async function listar(){
+ $('lista').textContent='Carregando certificados NR-10...';
+ try{
+  const dados=await api('certificados?select=id,codigo,participante_nome,curso_nome,carga_horaria,data_conclusao,data_emissao,status,nr10_dados,criado_em&nr10_dados=not.is.null&order=criado_em.desc&limit=50');
+  $('lista').replaceChildren();
+  if(!dados.length){$('lista').textContent='Nenhum certificado NR-10 cadastrado.';return}
+  for(const c of dados){
+   const item=document.createElement('div');item.className='item';
+   item.appendChild(elemento('p',c.participante_nome+' — '+c.curso_nome));
+   item.appendChild(elemento('p','Código: '+c.codigo+' | Situação: '+c.status));
+   if(c.status==='valido'){
+    const b=elemento('button','Preparar PDF / QR');b.type='button';b.addEventListener('click',()=>preparar(c));item.appendChild(b);
+    const cancelar=elemento('button','Cancelar certificado');cancelar.type='button';cancelar.style.marginLeft='8px';cancelar.style.background='#a32626';
+    cancelar.addEventListener('click',async()=>{if(!confirm('Cancelar o certificado '+c.codigo+'?'))return;try{await api('certificados?id=eq.'+encodeURIComponent(c.id),{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({status:'cancelado'})});certificadoAtual=null;$('imprimir').disabled=true;aviso('Certificado cancelado.');await listar()}catch(e){aviso(e.message,true)}});
+    item.appendChild(cancelar);
+   }
+   $('lista').appendChild(item);
+  }
+ }catch(e){$('lista').textContent='Não foi possível carregar: '+e.message}
+}
+$('modalidade').addEventListener('change',()=>{
+ const nome=$('modalidade').value;
+ if(nome==='NR-10 Básico'||nome==='NR-10 SEP')$('carga').value='40';else $('carga').value='';
+});
+$('form').addEventListener('submit',async e=>{
+ e.preventDefault();
+ const valor=id=>$(id).value.trim();
+ const modalidade=valor('modalidade'),carga=Number(valor('carga'));
+ if(!modalidade||!Number.isInteger(carga)||carga<1)return aviso('Informe uma modalidade e carga horária válida.',true);
+ if((modalidade==='NR-10 Básico'||modalidade==='NR-10 SEP')&&carga<40)return aviso('Para curso inicial Básico ou SEP, informe ao menos 40 horas.',true);
+ if(valor('inicio')>valor('conclusao')||valor('conclusao')>valor('emissao'))return aviso('Confira a ordem das datas.',true);
+ if(!valor('instrutores').includes('—')&&!valor('instrutores').includes('-'))return aviso('Informe nome e qualificação de cada instrutor.',true);
+ if(!confirm('Confirma que o treinamento NR-10 foi concluído e que os dados são verdadeiros?'))return;
+ const detalhes={modalidade,empresa:valor('empresa'),local:valor('local'),inicio:valor('inicio'),conteudo:valor('conteudo'),instrutores:valor('instrutores'),tecnico:valor('tecnico'),qualificacao:valor('qualificacao'),registro:valor('registro')};
+ $('salvar').disabled=true;aviso('Registrando no Supabase...');
+ try{
+  const criados=await api('certificados?select=id,codigo,participante_nome,curso_nome,carga_horaria,data_conclusao,data_emissao,status,nr10_dados,criado_em',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify({participante_nome:valor('participante'),curso_nome:modalidade,carga_horaria:carga,data_conclusao:valor('conclusao'),data_emissao:valor('emissao'),status:'valido',nr10_dados:detalhes})});
+  const c=criados&&criados[0];if(!c||!c.codigo)throw new Error('Cadastro sem retorno de código; confira a lista antes de tentar novamente.');
+  $('form').reset();$('emissao').value=hoje();await listar();preparar(c);
+ }catch(err){aviso('Não foi possível registrar: '+err.message,true)}finally{$('salvar').disabled=false}
+});
+$('imprimir').addEventListener('click',()=>{if(certificadoAtual)window.print()});
+$('atualizar').addEventListener('click',listar);
+(async()=>{
+ $('emissao').value=hoje();
+ try{const a=await api('utb_admins?select=user_id&limit=1');if(!Array.isArray(a)||!a.length)throw Error('Sem autorização');document.documentElement.style.visibility='visible';await listar()}
+ catch(e){document.documentElement.style.visibility='visible';document.querySelector('main').replaceChildren(elemento('div','Acesso não autorizado ou sessão expirada. Entre novamente no painel administrativo.'));sessionStorage.removeItem('utb_access_token');setTimeout(()=>location.replace('admin-instrutores.html'),1500)}
+})();
+</script>
+</body>
+</html>
