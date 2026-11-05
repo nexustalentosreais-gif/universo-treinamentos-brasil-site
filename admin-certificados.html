@@ -4,12 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Administração de Certificados | UTB</title>
-<script>
-if (!sessionStorage.getItem("utb_access_token")) {
-window.location.replace("admin-instrutores.html");
-}
-</script>
-<style>
+ <script> document.documentElement.style.visibility = "hidden"; async function verificarAdministrador() { const token = sessionStorage.getItem("utb_access_token"); if (!token) { window.location.replace("admin-instrutores.html"); return; } try { const resposta = await fetch( "https://xkxlgmmssvllcmhymibj.supabase.co/rest/v1/utb_admins?select=user_id&limit=1", { method: "GET", headers: { "apikey": "sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV", "Authorization": "Bearer " + token }, cache: "no-store" } ); if (!resposta.ok) { throw new Error("Sessão inválida"); } const admins = await resposta.json(); if (!Array.isArray(admins) || admins.length === 0) { throw new Error("Acesso não autorizado"); } document.documentElement.style.visibility = "visible"; } catch (erro) { sessionStorage.removeItem("utb_access_token"); window.location.replace("admin-instrutores.html"); } } verificarAdministrador(); </script>
+
+ <style>
 
     { box-sizing: border-box; }
 
