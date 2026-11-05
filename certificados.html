@@ -503,29 +503,96 @@ if(testimonialForm){
   });
 }
 
-const certForm=$("#cert-form");
-if(certForm){
-  certForm.addEventListener("submit",e=>{
+const certForm = $("#cert-form");
+
+if (certForm) {
+  certForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const code=$("#cert-code").value.trim().toUpperCase();
-    const box=$("#cert-result");
-    box.classList.add("show");
-    if(code==="UT-DEMO-0001"){
-      box.className="result show good";
-      box.innerHTML=`
-        <strong>Certificado válido</strong>
-        <p><b>Participante:</b> Exemplo de Aluno</p>
-        <p><b>Curso:</b> Instalações Elétricas de Baixa Tensão</p>
-        <p><b>Carga horária:</b> 32 horas</p>
-        <p><b>Código:</b> UT-DEMO-0001</p>
-        <p><b>Status:</b> válido</p>`;
-    }else{
-      box.className="result show warn";
-      box.innerHTML="<strong>Validação real ainda não conectada.</strong><p>Esta versão é demonstrativa. Para testar a interface, use <b>UT-DEMO-0001</b>.</p>";
+
+    const code = $("#cert-code").value.trim().toUpperCase();
+    const box = $("#cert-result");
+
+    function mostrar(titulo, linhas = [], valido = false) {
+      box.className = `result show ${valido ? "good" : "warn"}`;
+      box.replaceChildren();
+
+      const tituloEl = document.createElement("strong");
+      tituloEl.textContent = titulo;
+      box.appendChild(tituloEl);
+
+      linhas.forEach(([rotulo, valor]) => {
+        const p = document.createElement("p");
+        const b = document.createElement("b");
+        b.textContent = rotulo + ": ";
+        p.append(b, document.createTextNode(String(valor)));
+        box.appendChild(p);
+      });
+    }
+
+    if (!code || code.length > 100) {
+      mostrar("Informe um código de certificado válido.");
+      return;
+    }
+
+    mostrar("Consultando certificado...");
+
+    try {
+      const resposta = await fetch(
+        "https://xkxlgmmssvllcmhymibj.supabase.co/rest/v1/rpc/consultar_certificado_utb",
+        {
+          method: "POST",
+          headers: {
+            "apikey": "sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ p_codigo: code })
+        }
+      );
+
+      if (!resposta.ok) {
+        throw new Error("Falha na consulta");
+      }
+
+      const dados = await resposta.json();
+      const cert = Array.isArray(dados) ? dados[0] : null;
+
+      if (!cert) {
+        mostrar("Certificado não encontrado.");
+        return;
+      }
+
+      if (cert.status !== "valido") {
+        mostrar("Certificado sem validade", [
+          ["Código", cert.codigo],
+          ["Situação", cert.status]
+        ]);
+        return;
+      }
+
+      const linhas = [
+        ["Participante", cert.participante_nome],
+        ["Curso", cert.curso_nome],
+        ["Carga horária", cert.carga_horaria + " horas"],
+        ["Código", cert.codigo],
+        ["Situação", "Válido"]
+      ];
+
+      if (cert.data_conclusao) {
+        linhas.push(["Conclusão", cert.data_conclusao]);
+      }
+
+      if (cert.data_emissao) {
+        linhas.push(["Emissão", cert.data_emissao]);
+      }
+
+      mostrar("Certificado válido", linhas, true);
+
+    } catch (erro) {
+      console.error(erro);
+      mostrar("Não foi possível consultar o certificado agora.");
     }
   });
 }
-
 </script>
 
 </body>
