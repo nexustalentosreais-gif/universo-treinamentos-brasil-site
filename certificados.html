@@ -577,11 +577,11 @@ if (certForm) {
       ];
 
       if (cert.data_conclusao) {
-        linhas.push(["Conclusão", cert.data_conclusao]);
+linhas.push(["Conclusão", cert.data_conclusao.split("-").reverse().join("/")]);
       }
 
       if (cert.data_emissao) {
-        linhas.push(["Emissão", cert.data_emissao]);
+linhas.push(["Emissão", cert.data_emissao.split("-").reverse().join("/")]);
       }
 
       mostrar("Certificado válido", linhas, true);
