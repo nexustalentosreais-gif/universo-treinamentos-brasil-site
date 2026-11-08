@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Turmas, Presenças e Evidências | UTB</title>
+<style>
+
+    { box-sizing: border-box; }
+
+body {
+margin: 0;
+font: 17px Arial, sans-serif;
+background: #f3f7fc;
+color: #17345b;
+}
+header {
+background: white;
+padding: 22px 5%;
+border-bottom: 2px solid #d8e5f5;
+}
+header h1 {
+margin: 0;
+color: #103e7c;
+font-size: 27px;
+}
+header p { margin: 9px 0 18px; }
+main {
+max-width: 1150px;
+margin: auto;
+padding: 20px;
+}
+.card {
+background: white;
+border: 1px solid #d8e5f5;
+border-radius: 12px;
+padding: 22px;
+margin-bottom: 18px;
+}
+h2 {
+color: #103e7c;
+font-size: 23px;
+margin-top: 0;
+}
+label {
+display: block;
+font-weight: bold;
+margin: 10px 0;
+}
+input, select {
+display: block;
+width: 100%;
+min-width: 0;
+padding: 12px;
+margin-top: 6px;
+background: white;
+color: #17345b;
+border: 1px solid #9db2ce;
+border-radius: 8px;
+font: inherit;
+}
+button, .btn {
+display: inline-block;
+background: #145bb5;
+color: white;
+border: 0;
+border-radius: 8px;
+padding: 12px 17px;
+font: inherit;
+font-weight: bold;
+cursor: pointer;
+text-decoration: none;
+}
+button:disabled {
+opacity: .5;
+cursor: not-allowed;
+}
+.grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 14px;
+}
+.acoes {
+display: flex;
+gap: 12px;
+flex-wrap: wrap;
+align-items: center;
+margin: 16px 0;
+}
+.info {
+padding: 13px;
+background: #e9f3ff;
+border-left: 5px solid #145bb5;
+border-radius: 6px;
+line-height: 1.5;
+margin-bottom: 15px;
+}
+.erro {
+background: #fff0f0;
+border-left-color: #bb2222;
+}
+.nota {
+font-size: 15px;
+color: #405775;
+}
+.tabela {
+overflow-x: auto;
+}
+table {
+width: 100%;
+border-collapse: collapse;
+font-size: 15px;
+}
+th, td {
+padding: 10px;
+border-bottom: 1px solid #d9e3ef;
+text-align: left;
+vertical-align: top;
+}
+th { background: #e9f3ff; }
+td select { min-width: 130px; }
+td button {
+padding: 9px;
+font-size: 14px;
+}
+#arquivoFoto, #relatorio {
+display: none;
+}
+#fotoImagem {
+display: none;
+max-width: 100%;
+max-height: 400px;
+margin-top: 12px;
+border-radius: 8px;
+}
+@media (max-width: 700px) {
+.grid { grid-template-columns: 1fr; }
+.card { padding: 15px; }
+header h1 { font-size: 23px; }
+}
+@page {
+size: A4 portrait;
+margin: 12mm;
+}
+@media print {
+header, main { display: none !important; }
+#relatorio {
+display: block !important;
+color: black;
+background: white;
+font: 11px Arial, sans-serif;
+}
+#relatorio h1 {
+text-align: center;
+font-size: 18px;
+}
+#relatorio h2 { font-size: 15px; }
+#relatorio table {
+width: 100%;
+font-size: 9px;
+table-layout: fixed;
+border-collapse: collapse;
+}
+#relatorio th, #relatorio td {
+border: 1px solid #555;
+padding: 5px;
+overflow-wrap: anywhere;
+}
+#relatorio .assinaturas {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 25px;
+margin-top: 48px;
+break-inside: avoid;
+}
+#relatorio .assinaturas div {
+border-top: 1px solid black;
+padding-top: 7px;
+text-align: center;
+}
+}
+</style>
+</head>
+<body>
+<header>
+<h1>Universo Treinamentos Brasil</h1>
+<p>Turmas, Presenças e Evidências — 🇧🇷 Ame o Brasil</p>
+<a class="btn" href="admin.html">Voltar ao painel administrativo</a>
+</header>
+<main id="aplicativo" hidden>
+<div id="mensagem" class="info">Carregando...</div>
+<section class="card">
+<h2>1. Cadastrar turma</h2>
+<form id="formTurma">
+<div class="grid">
+<label>Nome do curso
+<input id="curso" required maxlength="200">
+</label>
+<label>Carga horária total
+<input id="carga" type="number" min="4" step="4" required>
+</label>
+<label>Empresa / Prefeitura / Contratante
+<input id="contratante" required maxlength="200">
+</label>
+<label>Data de início
+<input id="inicio" type="date" required>
+</label>
+<label>Data de conclusão
+<input id="fim" type="date">
+</label>
+<label>Instrutor responsável
+<input id="instrutor" maxlength="200">
+</label>
+<label>CPF do instrutor
+<input id="cpfInstrutor" inputmode="numeric" maxlength="14">
+</label>
+<label>Representante do contratante
+<input id="representante" maxlength="200">
+</label>
+<label>CPF do representante
+<input id="cpfRepresentante" inputmode="numeric" maxlength="14">
+</label>
+</div>
+<button type="submit">Cadastrar turma</button>
+</form>
+</section>
+<section class="card">
+<h2>2. Selecionar turma</h2>
+<label>Turmas cadastradas
+<select id="turmas">
+<option value="">Selecione uma turma</option>
+</select>
+</label>
+<button id="atualizarTurmas" type="button">Atualizar lista</button>
+<div id="detalhesTurma" class="info" hidden></div>
+<div id="controleStatus" hidden>
+<label>Situação da turma
+<select id="statusTurma">
+<option value="planejada">Planejada</option>
+<option value="em_andamento">Em andamento</option>
+<option value="concluida">Concluída</option>
+<option value="cancelada">Cancelada</option>
+</select>
+</label>
+<button id="salvarStatus" type="button">Salvar situação</button>
+</div>
+</section>
+<div id="areaTurma" hidden>
+<section class="card">
+<h2>3. Cadastro dos alunos</h2>
+<form id="formAluno">
+<div class="grid">
+<label>Nome completo
+<input id="alunoNome" required>
+</label>
+<label>RG
+<input id="alunoRG" required>
+</label>
+<label>CPF
+<input id="alunoCPF" required inputmode="numeric">
+</label>
+<label>Telefone
+<input id="alunoTelefone" required>
+</label>
+<label>Endereço
+<input id="alunoEndereco" required>
+</label>
+</div>
+<button type="submit">Cadastrar aluno</button>
+</form>
+<h3>Alunos cadastrados e avaliação</h3>
+<div class="tabela">
+<table>
+<thead>
+<tr>
+<th>Aluno</th>
+<th>CPF</th>
+<th>Horas presentes</th>
+<th>Frequência</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody id="listaAlunos"></tbody>
+</table>
+</div>
+</section>
+<section class="card">
+<h2>4. Controle de presenças</h2>
+<div class="grid">
+<label>Data da aula
+<input id="dataAula" type="date">
+</label>
+<label>Turno de 4 horas
+<select id="turno">
+<option value="manha">Manhã — 4 horas</option>
+<option value="tarde">Tarde — 4 horas</option>
+</select>
+</label>
+</div>
+<div id="listaPresencas"></div>
+<button id="salvarPresencas" type="button">
+Salvar presenças
+</button>
+</section>
+<section class="card">
+<h2>5. Fotografia da turma</h2>
+<p class="nota">
+Pelo celular, utilize o botão Fotografar turma.
+Após confirmar a fotografia, ela será enviada
+ao armazenamento privado no Supabase.
+</p>
+<div class="acoes">
+<button id="botaoFoto" type="button">
+📷 Fotografar turma
+</button>
+<input
+id="arquivoFoto"
+type="file"
+accept="image/jpeg,image/png,image/webp"
+capture="environment"
+>
+<button id="verFoto" type="button" hidden>
+Visualizar fotografia registrada
+</button>
+</div>
+<div id="fotoEstado" class="info">
+Nenhuma fotografia consultada.
+</div>
+<img id="fotoImagem" alt="Fotografia da turma">
+</section>
+<section class="card">
+<h2>6. Relatório de frequência</h2>
+<p>
+Relatório parcial ou final, com presenças,
+frequência, resultados e campos para assinaturas.
+</p>
+<button id="imprimir" type="button">
+Imprimir / Salvar PDF A4
+</button>
+</section>
+</div>
+</main>
+<section id="relatorio"></section>
+<script>
+"use strict";
+const URL_SUPABASE =
+"https://xkxlgmmssvllcmhymibj.supabase.co";
+const CHAVE =
+"sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV";
+const BUCKET = "utb-evidencias-turmas";
+const $ = id => document.getElementById(id);
+let token = sessionStorage.getItem("utb_access_token") || "";
+let usuario = null;
+let turmas = [];
+let turma = null;
+let alunos = [];
+let frequencias = [];
+let fotoAtual = null;
+let fotoURL = null;
+const valor = id => $(id).value.trim();
+function cpf(s) {
+return s.replace(/\D/g, "");
+}
+function dataBR(s) {
+return s ? s.split("-").reverse().join("/") : "—";
+}
+function hoje() {
+const d = new Date();
+return [
+d.getFullYear(),
+String(d.getMonth() + 1).padStart(2, "0"),
+String(d.getDate()).padStart(2, "0")
+].join("-");
+}
+function esc(s) {
+return String(s ?? "").replace(/[&<>"']/g, c => ({
+"&": "&amp;",
+"<": "&lt;",
+">": "&gt;",
+'"': "&quot;",
+"'": "&#39;"
+}[c]));
+}
+function aviso(s, erro = false) {
+$("mensagem").textContent = s;
+$("mensagem").className = "info" + (erro ? " erro" : "");
+}
+function headers(extra = {}) {
+return {
+apikey: CHAVE,
+Authorization: "Bearer " + token,
+...extra
+};
+}
+async function api(caminho, op = {}) {
+const r = await fetch(
+URL_SUPABASE + "/rest/v1/" + caminho,
+{
+...op,
+headers: headers({
+"Content-Type": "application/json",
+...(op.headers || {})
+}),
+cache: "no-store"
+}
+);
+if (!r.ok) {
+const e = await r.json().catch(() => ({}));
+throw Error(
+e.message ||
+e.error ||
+"Falha no Supabase: " + r.status
+);
+}
+if (r.status === 204 || r.status === 205) return null;
+const t = await r.text();
+return t ? JSON.parse(t) : null;
+}
+async function seguro(fn) {
+try {
+await fn();
+} catch (e) {
+aviso(e.message || "Erro na operação.", true);
+}
+}
+function exigirTurma() {
+if (!turma) throw Error("Selecione uma turma.");
+return turma;
+}
+function exigirData() {
+const d = valor("dataAula");
+if (!d) throw Error("Informe a data da aula.");
+if (turma.data_inicio && d < turma.data_inicio) {
+throw Error("Data anterior ao início da turma.");
+}
+if (turma.data_fim && d > turma.data_fim) {
+throw Error("Data posterior ao término da turma.");
+}
+return d;
+}
+async function carregarTurmas(selecionarId) {
+turmas = await api(
+"utb_turmas?select=&order=data_inicio.desc&limit=200"
+) || [];
+const caixa = $("turmas");
+caixa.replaceChildren(new Option("Selecione uma turma", ""));
+turmas.forEach(t => {
+caixa.add(new Option(
+t.curso_nome + " — " +
+t.contratante_nome + " — " +
+dataBR(t.data_inicio),
+t.id
+));
+});
+if (selecionarId && turmas.some(t => t.id === selecionarId)) {
+caixa.value = selecionarId;
+}
+await selecionarTurma();
+}
+async function selecionarTurma() {
+turma = turmas.find(t => t.id === $("turmas").value) || null;
+$("areaTurma").hidden = !turma;
+$("detalhesTurma").hidden = !turma;
+$("controleStatus").hidden = !turma;
+if (!turma) {
+alunos = [];
+frequencias = [];
+return;
+}
+$("detalhesTurma").textContent =
+turma.curso_nome + " | " +
+turma.carga_horaria_horas + " horas | " +
+turma.contratante_nome + " | " +
+dataBR(turma.data_inicio) + " a " +
+dataBR(turma.data_fim);
+$("statusTurma").value = turma.status;
+$("dataAula").value = hoje();
+await carregarAlunos();
+}
+async function cadastrarTurma(e) {
+e.preventDefault();
+await seguro(async () => {
+const inicio = valor("inicio");
+const fim = valor("fim");
+const carga = Number(valor("carga"));
+if (fim && fim < inicio) {
+throw Error("Confira as datas da turma.");
+}
+if (!Number.isInteger(carga) ||
+carga < 4 || carga % 4 !== 0) {
+throw Error("A carga horária deve ser múltipla de 4.");
+}
+const dados = {
+curso_nome: valor("curso"),
+carga_horaria_horas: carga,
+contratante_nome: valor("contratante"),
+data_inicio: inicio,
+data_fim: fim || null,
+instrutor_nome: valor("instrutor") || null,
+instrutor_cpf: cpf(valor("cpfInstrutor")) || null,
+representante_nome: valor("representante") || null,
+representante_cpf: cpf(valor("cpfRepresentante")) || null
+};
+const r = await api("utb_turmas", {
+method: "POST",
+headers: { Prefer: "return=representation" },
+body: JSON.stringify(dados)
+});
+$("formTurma").reset();
+await carregarTurmas(r[0].id);
+aviso("Turma cadastrada com sucesso.");
+});
+}
+async function salvarStatus() {
+await seguro(async () => {
+exigirTurma();
+const status = valor("statusTurma");
+await api("utb_turmas?id=eq." + turma.id, {
+method: "PATCH",
+headers: { Prefer: "return=minimal" },
+body: JSON.stringify({ status })
+});
+turma.status = status;
+aviso("Situação atualizada.");
+});
+}
+async function cadastrarAluno(e) {
+e.preventDefault();
+await seguro(async () => {
+exigirTurma();
+if (alunos.length >= 16) {
+throw Error("Limite de 16 alunos por turma.");
+}
+const numero = cpf(valor("alunoCPF"));
+if (numero.length !== 11) {
+throw Error("O CPF deve ter 11 dígitos.");
+}
+await api("utb_alunos", {
+method: "POST",
+headers: { Prefer: "return=minimal" },
+body: JSON.stringify({
+turma_id: turma.id,
+nome_completo: valor("alunoNome"),
+rg: valor("alunoRG"),
+cpf: numero,
+telefone: valor("alunoTelefone"),
+endereco: valor("alunoEndereco")
+})
+});
+$("formAluno").reset();
+await carregarAlunos();
+aviso("Aluno cadastrado com sucesso.");
+});
+}
+async function carregarAlunos() {
+const id = turma.id;
+const dados = await Promise.all([
+api(
+"utb_alunos?select=id,nome_completo,cpf,resultado" +
+"&turma_id=eq." + id +
+"&order=nome_completo.asc"
+),
+api(
+"utb_frequencias?select=aluno_id,horas_presentes," +
+"frequencia_percentual&turma_id=eq." + id
+)
+]);
+if (turma.id !== id) return;
+alunos = dados[0] || [];
+frequencias = dados[1] || [];
+const mapa = new Map(
+frequencias.map(f => [f.aluno_id, f])
+);
+$("listaAlunos").innerHTML = alunos.map(a => {
+const f = mapa.get(a.id) || {
+horas_presentes: 0,
+frequencia_percentual: 0
+};
+return `
+<tr>
+<td>${esc(a.nome_completo)}</td>
+<td>${esc(a.cpf)}</td>
+<td>${esc(f.horas_presentes)} h</td>
+<td>${esc(f.frequencia_percentual)}%</td>
+<td>
+<select id="resultado_${a.id}">
+<option value="pendente"
+${a.resultado === "pendente" ? "selected" : ""}>
+Pendente
+</option>
+<option value="aprovado"
+${a.resultado === "aprovado" ? "selected" : ""}>
+Aprovado
+</option>
+<option value="reprovado"
+${a.resultado === "reprovado" ? "selected" : ""}>
+Reprovado
+</option>
+</select>
+<button type="button"
+class="salvarResultado"
+data-aluno="${a.id}">
+Salvar
+</button>
+</td>
+</tr>
+`;
+}).join("") ||
+'<tr><td colspan="5">Nenhum aluno cadastrado.</td></tr>';
+await carregarTurno();
+}
+async function salvarResultado(id) {
+await seguro(async () => {
+const a = alunos.find(x => x.id === id);
+if (!a) throw Error("Aluno não encontrado.");
+const resultado = $("resultado_" + id).value;
+await api("utb_alunos?id=eq." + id, {
+method: "PATCH",
+headers: { Prefer: "return=minimal" },
+body: JSON.stringify({
+resultado,
+avaliado_em: resultado === "pendente"
+? null : new Date().toISOString(),
+avaliado_por: resultado === "pendente"
+? null : usuario.id
+})
+});
+a.resultado = resultado;
+aviso("Resultado salvo.");
+});
+}
+async function carregarTurno() {
+if (!turma) return;
+const dia = valor("dataAula");
+const turno = valor("turno");
+if (!dia || !alunos.length) {
+$("listaPresencas").textContent =
+"Cadastre os alunos para marcar as presenças.";
+await consultarFoto();
+return;
+}
+const ids = alunos.map(a => a.id).join(",");
+const registros = await api(
+"utb_presencas?select=aluno_id,presente" +
+"&data_aula=eq." + dia +
+"&turno=eq." + turno +
+"&aluno_id=in.(" + ids + ")"
+);
+const mapa = new Map(
+(registros || []).map(p => [p.aluno_id, p.presente])
+);
+$("listaPresencas").innerHTML =
+'<div class="tabela"><table>' +
+'<thead><tr><th>Aluno</th><th>Presença</th></tr></thead>' +
+'<tbody>' +
+alunos.map(a => {
+const v = mapa.has(a.id)
+? String(mapa.get(a.id)) : "";
+return `
+<tr>
+<td>${esc(a.nome_completo)}</td>
+<td>
+<select class="presenca" data-aluno="${a.id}">
+<option value=""
+${v === "" ? "selected" : ""}>
+Sem registro
+</option>
+<option value="true"
+${v === "true" ? "selected" : ""}>
+Presente — 4 horas
+</option>
+<option value="false"
+${v === "false" ? "selected" : ""}>
+Falta — 0 horas
+</option>
+</select>
+</td>
+</tr>
+`;
+}).join("") +
+'</tbody></table></div>';
+await consultarFoto();
+}
+async function salvarPresencas() {
+await seguro(async () => {
+exigirTurma();
+const dia = exigirData();
+const seletores = [
+...document.querySelectorAll(".presenca")
+];
+if (!seletores.length) {
+throw Error("Não existem alunos cadastrados.");
+}
+if (seletores.some(s => s.value === "")) {
+throw Error(
+"Marque presença ou falta para todos os alunos."
+);
+}
+const registros = seletores.map(s => ({
+aluno_id: s.dataset.aluno,
+data_aula: dia,
+turno: valor("turno"),
+horas_turno: 4,
+presente: s.value === "true",
+registrado_por: usuario.id,
+registrado_em: new Date().toISOString()
+}));
+await api(
+"utb_presencas?on_conflict=aluno_id,data_aula,turno",
+{
+method: "POST",
+headers: {
+Prefer: "resolution=merge-duplicates,return=minimal"
+},
+body: JSON.stringify(registros)
+}
+);
+await carregarAlunos();
+aviso("Presenças salvas com sucesso.");
+});
+}
+async function consultarFoto() {
+if (fotoURL) {
+URL.revokeObjectURL(fotoURL);
+fotoURL = null;
+}
+$("fotoImagem").style.display = "none";
+$("fotoImagem").removeAttribute("src");
+$("verFoto").hidden = true;
+fotoAtual = null;
+if (!turma || !valor("dataAula")) return;
+const dia = valor("dataAula");
+const turno = valor("turno");
+const r = await api(
+"utb_fotos_turmas?select=id,caminho_arquivo,registrado_em" +
+"&turma_id=eq." + turma.id +
+"&data_aula=eq." + dia +
+"&turno=eq." + turno +
+"&limit=1"
+);
+if (!turma ||
+valor("dataAula") !== dia ||
+valor("turno") !== turno) return;
+fotoAtual = r[0] || null;
+$("fotoEstado").textContent = fotoAtual
+? "Fotografia registrada em " +
+new Date(fotoAtual.registrado_em).toLocaleString("pt-BR")
+: "Nenhuma fotografia registrada neste turno.";
+$("verFoto").hidden = !fotoAtual;
+}
+function caminhoSeguro(s) {
+return s.split("/").map(encodeURIComponent).join("/");
+}
+async function visualizarFoto() {
+await seguro(async () => {
+if (!fotoAtual) throw Error("Nenhuma fotografia registrada.");
+const r = await fetch(
+URL_SUPABASE +
+"/storage/v1/object/authenticated/" +
+BUCKET + "/" +
+caminhoSeguro(fotoAtual.caminho_arquivo),
+{ headers: headers() }
+);
+if (!r.ok) {
+throw Error("Não foi possível abrir a fotografia.");
+}
+if (fotoURL) URL.revokeObjectURL(fotoURL);
+fotoURL = URL.createObjectURL(await r.blob());
+$("fotoImagem").src = fotoURL;
+$("fotoImagem").style.display = "block";
+});
+}
+async function fotografar(file) {
+await seguro(async () => {
+exigirTurma();
+const dia = exigirData();
+const turno = valor("turno");
+if (dia !== hoje()) {
+throw Error(
+"Selecione a data de hoje para registrar a fotografia."
+);
+}
+if (fotoAtual) {
+throw Error("Já existe fotografia para este turno.");
+}
+const tipos = {
+"image/jpeg": "jpg",
+"image/png": "png",
+"image/webp": "webp"
+};
+if (!tipos[file.type]) {
+throw Error("Use imagem JPG, PNG ou WEBP.");
+}
+if (file.size > 10 * 1024 * 1024) {
+throw Error("Tamanho máximo: 10 MB.");
+}
+const existente = await api(
+"utb_fotos_turmas?select=id" +
+"&turma_id=eq." + turma.id +
+"&data_aula=eq." + dia +
+"&turno=eq." + turno +
+"&limit=1"
+);
+if (existente.length) {
+throw Error("Fotografia deste turno já registrada.");
+}
+const caminho =
+turma.id + "/" + dia + "/" + turno + "/" +
+crypto.randomUUID() + "." + tipos[file.type];
+aviso("Enviando fotografia ao Supabase...");
+const resposta = await fetch(
+URL_SUPABASE +
+"/storage/v1/object/" +
+BUCKET + "/" + caminhoSeguro(caminho),
+{
+method: "POST",
+headers: headers({
+"Content-Type": file.type,
+"x-upsert": "false"
+}),
+body: file
+}
+);
+if (!resposta.ok) {
+const e = await resposta.json().catch(() => ({}));
+throw Error(
+e.message || "Não foi possível armazenar a fotografia."
+);
+}
+await api("utb_fotos_turmas", {
+method: "POST",
+headers: { Prefer: "return=minimal" },
+body: JSON.stringify({
+turma_id: turma.id,
+data_aula: dia,
+turno,
+caminho_arquivo: caminho,
+registrado_por: usuario.id
+})
+});
+await consultarFoto();
+aviso(
+"Fotografia armazenada no Supabase e vinculada à turma."
+);
+});
+}
+async function imprimirRelatorio() {
+await seguro(async () => {
+exigirTurma();
+if (!alunos.length) {
+throw Error("Cadastre os alunos antes de imprimir.");
+}
+const ids = alunos.map(a => a.id).join(",");
+const registros = await api(
+"utb_presencas?select=aluno_id,data_aula,turno,presente" +
+"&aluno_id=in.(" + ids + ")" +
+"&order=data_aula.asc"
+);
+const mapa = new Map(
+frequencias.map(f => [f.aluno_id, f])
+);
+const linhas = alunos.map(a => {
+const f = mapa.get(a.id) || {
+horas_presentes: 0,
+frequencia_percentual: 0
+};
+const dias = (registros || [])
+.filter(p => p.aluno_id === a.id)
+.map(p =>
+dataBR(p.data_aula) + " " +
+(p.turno === "manha" ? "M" : "T") +
+": " + (p.presente ? "P" : "F")
+)
+.join("; ");
+return `
+<tr>
+<td>${esc(a.nome_completo)}<br>CPF: ${esc(a.cpf)}</td>
+<td>${esc(dias || "Sem registros")}</td>
+<td>${esc(f.horas_presentes)} h</td>
+<td>${esc(f.frequencia_percentual)}%</td>
+<td>${esc(a.resultado)}</td>
+</tr>
+`;
+}).join("");
+const tipo = turma.status === "concluida"
+? "RELATÓRIO FINAL"
+: "RELATÓRIO PARCIAL";
+$("relatorio").innerHTML = `
+<h1>UNIVERSO TREINAMENTOS BRASIL</h1>
+<p style="text-align:center">
+🇧🇷 Ame o Brasil
+</p>
+<h2>${tipo} DE FREQUÊNCIA</h2>
+<p>
+<b>Curso:</b> ${esc(turma.curso_nome)}<br>
+<b>Carga horária:</b> ${turma.carga_horaria_horas} h<br>
+<b>Contratante:</b> ${esc(turma.contratante_nome)}<br>
+<b>Início:</b> ${dataBR(turma.data_inicio)}<br>
+<b>Término:</b> ${dataBR(turma.data_fim)}<br>
+<b>Emissão:</b> ${dataBR(hoje())}
+</p>
+<p>
+<b>Legenda:</b>
+M = Manhã; T = Tarde;
+P = Presente; F = Falta.
+Cada turno corresponde a 4 horas.
+</p>
+<table>
+<thead>
+<tr>
+<th style="width:24%">Aluno</th>
+<th style="width:42%">Presenças</th>
+<th style="width:10%">Horas</th>
+<th style="width:11%">Freq.</th>
+<th style="width:13%">Resultado</th>
+</tr>
+</thead>
+<tbody>${linhas}</tbody>
+</table>
+<div class="assinaturas">
+<div>
+<b>Instrutor responsável</b><br>
+${esc(turma.instrutor_nome || "Nome: __________")}<br>
+CPF: ${esc(turma.instrutor_cpf || "__________")}
+</div>
+<div>
+<b>Representante do contratante</b><br>
+${esc(turma.representante_nome || "Nome: __________")}<br>
+CPF: ${esc(turma.representante_cpf || "__________")}
+</div>
+</div>
+`;
+window.print();
+aviso("Relatório preparado para impressão ou PDF.");
+});
+}
+async function iniciar() {
+if (!token) {
+location.replace("admin-instrutores.html");
+return;
+}
+try {
+const r = await fetch(
+URL_SUPABASE + "/auth/v1/user",
+{ headers: headers() }
+);
+if (!r.ok) {
+sessionStorage.removeItem("utb_access_token");
+location.replace("admin-instrutores.html");
+return;
+}
+usuario = await r.json();
+if (!usuario.id) {
+throw Error("Usuário não identificado.");
+}
+$("aplicativo").hidden = false;
+$("dataAula").value = hoje();
+await carregarTurmas();
+aviso("Área administrativa carregada.");
+} catch (e) {
+$("aplicativo").hidden = false;
+aviso(e.message || "Não foi possível carregar.", true);
+}
+}
+$("formTurma").addEventListener("submit", cadastrarTurma);
+$("formAluno").addEventListener("submit", cadastrarAluno);
+$("turmas").addEventListener("change", () =>
+seguro(selecionarTurma)
+);
+$("atualizarTurmas").addEventListener("click", () =>
+seguro(async () => {
+await carregarTurmas(turma ? turma.id : null);
+aviso("Lista atualizada.");
+})
+);
+$("salvarStatus").addEventListener("click", salvarStatus);
+$("listaAlunos").addEventListener("click", e => {
+if (e.target.matches(".salvarResultado")) {
+salvarResultado(e.target.dataset.aluno);
+}
+});
+$("dataAula").addEventListener("change", () =>
+seguro(carregarTurno)
+);
+$("turno").addEventListener("change", () =>
+seguro(carregarTurno)
+);
+$("salvarPresencas").addEventListener(
+"click", salvarPresencas
+);
+$("botaoFoto").addEventListener("click", () =>
+seguro(async () => {
+exigirTurma();
+exigirData();
+if (valor("dataAula") !== hoje()) {
+throw Error("Selecione a data de hoje para fotografar.");
+}
+if (fotoAtual) {
+throw Error("Já existe fotografia deste turno.");
+}
+$("arquivoFoto").click();
+})
+);
+$("arquivoFoto").addEventListener("change", async e => {
+const file = e.target.files[0];
+if (file) await fotografar(file);
+e.target.value = "";
+});
+$("verFoto").addEventListener("click", visualizarFoto);
+$("imprimir").addEventListener("click", imprimirRelatorio);
+iniciar();
+</script>
+</body>
+</html>
