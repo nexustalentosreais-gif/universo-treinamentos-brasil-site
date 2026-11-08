@@ -440,7 +440,7 @@ return d;
 }
 async function carregarTurmas(selecionarId) {
 turmas = await api(
-"utb_turmas?select=&order=data_inicio.desc&limit=200"
+"utb_turmas?select=*&order=data_inicio.desc&limit=200"
 ) || [];
 const caixa = $("turmas");
 caixa.replaceChildren(new Option("Selecione uma turma", ""));
