@@ -88,8 +88,34 @@
     <label>E-mail</label>
     <input id="email" type="email">
 
-    <label>Senha</label>
-    <input id="senha" type="password">
+   <label>Senha</label>
+
+<div style="display:flex; align-items:center; gap:8px;">
+
+  <input
+    id="senha"
+    type="password"
+    style="flex:1; min-width:0;"
+  >
+
+  <button
+    type="button"
+    aria-label="Mostrar senha"
+    aria-pressed="false"
+    style="width:55px; flex:none; background:#eaf3ff;
+           color:#145bb5; border:1px solid #9db2ce;"
+    onclick="
+      const campo = document.getElementById('senha');
+      const mostrar = campo.type === 'password';
+      campo.type = mostrar ? 'text' : 'password';
+      this.setAttribute('aria-label',
+        mostrar ? 'Ocultar senha' : 'Mostrar senha');
+      this.setAttribute('aria-pressed', String(mostrar));
+    "
+  >👁️</button>
+
+</div>
+
 
     <button id="entrar">ENTRAR</button>
 
