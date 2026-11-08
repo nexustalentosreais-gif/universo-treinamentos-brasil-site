@@ -193,21 +193,79 @@ text-align: center;
 <h2>1. Cadastrar turma</h2>
 <form id="formTurma">
 <div class="grid">
-<label>Nome do curso
-<input id="curso" required maxlength="200">
-</label>
-<label>Carga horária total
-<input id="carga" type="number" min="4" step="4" required>
-</label>
-<label>Empresa / Prefeitura / Contratante
-<input id="contratante" required maxlength="200">
-</label>
-<label>Data de início
-<input id="inicio" type="date" required>
-</label>
-<label>Data de conclusão
-<input id="fim" type="date">
-</label>
+
+  <label style="grid-column: 1 / -1;">
+    Nome do curso
+    <select id="curso" required
+      onchange="document.getElementById('carga').value =
+      this.selectedOptions[0].dataset.horas || ''">
+
+      <option value="">Selecione o curso</option>
+
+      <optgroup label="NR-10">
+        <option value="NR-10 Básico" data-horas="40">NR-10 Básico — 40h</option>
+        <option value="NR-10 SEP" data-horas="40">NR-10 SEP — 40h</option>
+        <option value="NR-10 Reciclagem Básico" data-horas="8">Reciclagem Básico — 8h</option>
+        <option value="NR-10 Reciclagem Básico" data-horas="16">Reciclagem Básico — 16h</option>
+        <option value="NR-10 Reciclagem SEP" data-horas="8">Reciclagem SEP — 8h</option>
+        <option value="NR-10 Reciclagem SEP" data-horas="16">Reciclagem SEP — 16h</option>
+      </optgroup>
+
+      <optgroup label="Instalações elétricas">
+        <option value="Instalações Elétricas de Baixa Tensão" data-horas="16">Instalações BT — 16h</option>
+        <option value="Instalações Elétricas de Baixa Tensão" data-horas="24">Instalações BT — 24h</option>
+        <option value="Instalações Elétricas de Baixa Tensão" data-horas="32">Instalações BT — 32h</option>
+
+        <option value="Instalações Residenciais, Comerciais e Industriais" data-horas="16">Instalações Residenciais, Comerciais e Industriais — 16h</option>
+        <option value="Instalações Residenciais, Comerciais e Industriais" data-horas="24">Instalações Residenciais, Comerciais e Industriais — 24h</option>
+        <option value="Instalações Residenciais, Comerciais e Industriais" data-horas="32">Instalações Residenciais, Comerciais e Industriais — 32h</option>
+
+        <option value="Instalações Elétricas no Meio Rural" data-horas="16">Instalações Rurais — 16h</option>
+        <option value="Instalações Elétricas no Meio Rural" data-horas="24">Instalações Rurais — 24h</option>
+        <option value="Instalações Elétricas no Meio Rural" data-horas="32">Instalações Rurais — 32h</option>
+      </optgroup>
+
+      <optgroup label="Aterramento e proteção">
+        <option value="Aterramento Elétrico Residencial, Comercial e Industrial" data-horas="16">Aterramento Elétrico R/C/I — 16h</option>
+        <option value="Quadros, DR, DPS e Aterramento" data-horas="16">Quadros, DR, DPS e Aterramento — 16h</option>
+        <option value="Quadros, DR, DPS e Aterramento" data-horas="24">Quadros, DR, DPS e Aterramento — 24h</option>
+      </optgroup>
+
+      <optgroup label="Manutenção e projetos">
+        <option value="Leitura de Projetos Elétricos" data-horas="16">Leitura de Projetos Elétricos — 16h</option>
+        <option value="Leitura de Projetos Elétricos" data-horas="24">Leitura de Projetos Elétricos — 24h</option>
+
+        <option value="Diagnóstico de Defeitos" data-horas="16">Diagnóstico de Defeitos — 16h</option>
+        <option value="Diagnóstico de Defeitos" data-horas="24">Diagnóstico de Defeitos — 24h</option>
+        <option value="Diagnóstico de Defeitos" data-horas="32">Diagnóstico de Defeitos — 32h</option>
+      </optgroup>
+
+      <optgroup label="Motores e energia">
+        <option value="Inversores de Frequência para Motores Elétricos" data-horas="24">Inversores de Frequência — 24h</option>
+        <option value="Partida Suave de Motores Elétricos (Soft Starter)" data-horas="24">Soft Starter — 24h</option>
+        <option value="Bancos de Capacitores e Correção do Fator de Potência" data-horas="24">Correção do Fator de Potência — 24h</option>
+        <option value="Energia Solar Fotovoltaica - Fundamentos e Viabilidade" data-horas="8">Energia Solar Fotovoltaica — 8h</option>
+      </optgroup>
+
+    </select>
+  </label>
+
+  <input type="hidden" id="carga">
+
+  <label style="grid-column: 1 / -1;">
+    Empresa / Prefeitura / Contratante
+    <input id="contratante" required maxlength="200">
+  </label>
+
+  <label>
+    Data de início
+    <input id="inicio" type="date" required>
+  </label>
+
+  <label>
+    Data de conclusão
+    <input id="fim" type="date">
+  </label>
 <label>Instrutor responsável
 <input id="instrutor" maxlength="200">
 </label>
