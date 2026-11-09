@@ -779,40 +779,22 @@ fecharLeitura
 );
 // Inicialização com a sessão administrativa.
 async function iniciar() {
-bloquear(true);
-try {
-if (!TOKEN) {
-aviso(
-"Sessão administrativa não encontrada. " +
-"Entre novamente pelo painel da UTB.",
-true
-);
-return;
-}
-// Conferir a sessão no Supabase Auth.
-const usuario = await requisicao(
-SUPABASE_URL + "/auth/v1/user"
-);
-if (!usuario || !usuario.id) {
-throw new Error(
-"Sessão inválida. Faça login novamente."
-);
-}
-await carregarApostilas();
-await montarCursos();
-bloquear(false);
-aviso(
-"Escolha um curso para procurar ou " +
-"adicionar uma apostila."
-);
-} catch (erro) {
-aviso(
-"Não foi possível validar o acesso: " +
-erro.message,
-true
-);
-}
-}
+  bloquear(true);
+
+  // Primeiro carregar a lista de cursos.
+  // Os cursos devem aparecer mesmo antes
+  // de consultar o banco de apostilas.
+
+  try {
+    await montarCursos();
+  } catch (erro) {
+    aviso(
+      "Falha ao carregar os cursos: " +
+      erro.message,
+      true
+    );
+    return;
+  }
 iniciar();
 </script>
 </body>
