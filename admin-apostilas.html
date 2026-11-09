@@ -795,6 +795,40 @@ async function iniciar() {
     );
     return;
   }
+  // Verificar a sessão administrativa.
+  if (!TOKEN) {
+    aviso(
+      "Sessão administrativa não encontrada. " +
+      "Entre novamente pelo painel da UTB.",
+      true
+    );
+    return;
+  }
+
+  try {
+    const usuario = await requisicao(
+      SUPABASE_URL + "/auth/v1/user"
+    );
+
+    if (!usuario || !usuario.id) {
+      throw new Error("Sessão inválida.");
+    }
+
+    await carregarApostilas();
+    await montarCursos();
+
+    bloquear(false);
+    aviso("Escolha o curso desejado.");
+
+  } catch (erro) {
+    aviso(
+      "Não foi possível acessar a biblioteca: " +
+      erro.message,
+      true
+    );
+  }
+}
+
 iniciar();
 </script>
 </body>
