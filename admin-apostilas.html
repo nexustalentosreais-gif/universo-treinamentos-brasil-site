@@ -331,5 +331,344 @@ aviso("Curso selecionado. Clique em PROCURAR.");
 });
 aviso("Página pronta. Selecione um curso e clique em PROCURAR.");
 </script>
+<script>
+(function () {
+"use strict";
+const $ = id => document.getElementById(id);
+const BASE = "https://xkxlgmmssvllcmhymibj.supabase.co";
+const CHAVE = "sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV";
+const TABELA = BASE + "/rest/v1/utb_apostilas";
+const STORAGE = BASE + "/storage/v1";
+const BUCKET = "utb-apostilas";
+function aviso(texto, erro = false) {
+$("aviso").textContent = texto;
+$("aviso").style.color = erro ? "#b4232e" : "#12602a";
+}
+function curso() {
+const nome = $("curso").value;
+if (!nome) {
+throw Error("Escolha um curso na setinha.");
+}
+return nome;
+}
+function token() {
+const valor = sessionStorage.getItem("utb_access_token");
+if (!valor) {
+throw Error(
+"Sessão administrativa não encontrada. " +
+"Entre novamente pelo painel da UTB."
+);
+}
+return valor;
+}
+function autorizacao() {
+return {
+apikey: CHAVE,
+Authorization: "Bearer " + token()
+};
+}
+async function api(url, metodo = "GET", corpo = null, extra = {}) {
+const resposta = await fetch(url, {
+method: metodo,
+body: corpo,
+cache: "no-store",
+headers: { ...autorizacao(), ...extra }
+});
+const texto = await resposta.text();
+let dados;
+try {
+dados = texto ? JSON.parse(texto) : null;
+} catch {
+dados = texto;
+}
+if (!resposta.ok) {
+throw Error(
+(dados && dados.message) ||
+(dados && dados.error) ||
+"Erro HTTP " + resposta.status
+);
+}
+return dados;
+}
+function caminho(valor) {
+return valor.split("/").map(encodeURIComponent).join("/");
+}
+function botao(texto, acao) {
+const b = document.createElement("button");
+b.type = "button";
+b.textContent = texto;
+b.onclick = acao;
+return b;
+}
+function link(texto, destino) {
+const a = document.createElement("a");
+a.className = "botao";
+a.textContent = texto;
+a.href = destino;
+if (destino.startsWith("https:")) {
+a.target = "_blank";
+a.rel = "noopener noreferrer";
+}
+return a;
+}
+async function baixar(item) {
+try {
+aviso("Preparando download...");
+const resposta = await fetch(
+STORAGE + "/object/authenticated/" +
+BUCKET + "/" + caminho(item.arquivo_caminho),
+{ headers: autorizacao() }
+);
+if (!resposta.ok) {
+throw Error("Falha no download.");
+}
+const endereco = URL.createObjectURL(
+await resposta.blob()
+);
+const a = document.createElement("a");
+a.href = endereco;
+a.download = item.arquivo_nome || "apostila.pdf";
+document.body.appendChild(a);
+a.click();
+a.remove();
+setTimeout(() => URL.revokeObjectURL(endereco), 30000);
+aviso("Download iniciado.");
+} catch (erro) {
+aviso(erro.message, true);
+}
+}
+async function procurar() {
+try {
+const nome = curso();
+aviso("Procurando apostila...");
+const encontrados = await api(
+TABELA +
+"?select=&curso_nome=eq." +
+encodeURIComponent(nome)
+);
+$("resultado").hidden = false;
+$("lista").replaceChildren();
+$("leitura").hidden = true;
+if (!encontrados.length) {
+$("lista").textContent =
+"A apostila ainda não está cadastrada.";
+aviso("Consulta concluída.");
+return;
+}
+for (const item of encontrados) {
+const caixa = document.createElement("div");
+caixa.className = "item";
+const titulo = document.createElement("h2");
+titulo.textContent = item.curso_nome;
+const arquivo = document.createElement("p");
+arquivo.textContent = item.arquivo_nome;
+caixa.append(titulo, arquivo);
+const resposta = await api(
+STORAGE + "/object/sign/" +
+BUCKET + "/" +
+caminho(item.arquivo_caminho),
+"POST",
+JSON.stringify({ expiresIn: 86400 }),
+{ "Content-Type": "application/json" }
+);
+const assinado =
+resposta.signedURL || resposta.signedUrl;
+if (!assinado) {
+throw Error("Não foi possível gerar o link do PDF.");
+}
+const endereco = /^https?:///.test(assinado)
+? assinado
+: STORAGE + "/" + assinado.replace(/^/+/, "");
+const mensagem =
+"Apostila UTB - " +
+item.curso_nome + "
+" + endereco;
+const whatsapp =
+"https://wa.me/?text=" +
+encodeURIComponent(mensagem);
+const email =
+"mailto:?subject=" +
+encodeURIComponent("Apostila UTB - " + item.curso_nome) +
+"&body=" + encodeURIComponent(mensagem);
+function abrir() {
+$("tituloLeitura").textContent =
+"Apostila - " + item.curso_nome;
+$("visualizador").src = endereco;
+$("acoesLeitura").replaceChildren(
+botao("Baixar PDF", () => baixar(item)),
+link("Enviar pelo WhatsApp", whatsapp),
+link("Enviar por e-mail", email)
+);
+$("leitura").hidden = false;
+$("leitura").scrollIntoView({
+behavior: "smooth"
+});
+}
+async function excluir() {
+if (!confirm("Excluir definitivamente esta apostila?")) {
+return;
+}
+try {
+await api(
+TABELA + "?id=eq." + encodeURIComponent(item.id),
+"DELETE"
+);
+try {
+await api(
+STORAGE + "/object/" +
+BUCKET + "/" +
+caminho(item.arquivo_caminho),
+"DELETE"
+);
+} catch (erro) {
+console.warn(erro);
+}
+await procurar();
+aviso("Apostila excluída.");
+} catch (erro) {
+aviso(erro.message, true);
+}
+}
+caixa.append(
+botao("Abrir apostila", abrir),
+botao("Baixar PDF", () => baixar(item)),
+link("Enviar pelo WhatsApp", whatsapp),
+link("Enviar por e-mail", email),
+botao("Excluir apostila", excluir)
+);
+$("lista").appendChild(caixa);
+}
+aviso("Apostila encontrada.");
+} catch (erro) {
+aviso(erro.message, true);
+}
+}
+function adicionar() {
+try {
+curso();
+token();
+$("arquivoPDF").value = "";
+$("arquivoPDF").click();
+} catch (erro) {
+aviso(erro.message, true);
+}
+}
+async function enviar() {
+const arquivo = $("arquivoPDF").files[0];
+if (!arquivo) return;
+let novo = "";
+let registrado = false;
+try {
+const nome = curso();
+if (
+!/.pdf$/i.test(arquivo.name) ||
+(arquivo.type && arquivo.type !== "application/pdf")
+) {
+throw Error("Selecione um arquivo PDF.");
+}
+aviso("Verificando biblioteca...");
+const encontrados = await api(
+TABELA +
+"?select=&curso_nome=eq." +
+encodeURIComponent(nome)
+);
+const antigo = encontrados[0];
+if (
+antigo &&
+!confirm("Já existe uma apostila. Deseja substituí-la?")
+) {
+return;
+}
+novo = crypto.randomUUID() + ".pdf";
+aviso("Enviando PDF...");
+await api(
+STORAGE + "/object/" + BUCKET + "/" + novo,
+"POST",
+arquivo,
+{
+"Content-Type": "application/pdf",
+"x-upsert": "false"
+}
+);
+const dados = {
+curso_nome: nome,
+titulo: nome,
+tipo: "apostila",
+arquivo_nome: arquivo.name,
+arquivo_caminho: novo,
+atualizado_em: new Date().toISOString()
+};
+const registros = await api(
+TABELA +
+(antigo ? "?id=eq." + encodeURIComponent(antigo.id) : ""),
+antigo ? "PATCH" : "POST",
+JSON.stringify(dados),
+{
+"Content-Type": "application/json",
+"Prefer": "return=representation"
+}
+);
+if (!Array.isArray(registros) || registros.length !== 1) {
+throw Error("Cadastro não foi confirmado.");
+}
+registrado = true;
+if (antigo) {
+try {
+await api(
+STORAGE + "/object/" +
+BUCKET + "/" +
+caminho(antigo.arquivo_caminho),
+"DELETE"
+);
+} catch (erro) {
+console.warn(erro);
+}
+}
+await procurar();
+aviso("Apostila cadastrada com sucesso!");
+} catch (erro) {
+if (novo && !registrado) {
+try {
+await api(
+STORAGE + "/object/" + BUCKET + "/" + novo,
+"DELETE"
+);
+} catch (falha) {
+console.warn(falha);
+}
+}
+aviso(erro.message, true);
+} finally {
+$("arquivoPDF").value = "";
+}
+}
+$("procurar").addEventListener(
+"click",
+evento => {
+evento.stopImmediatePropagation();
+procurar();
+},
+true
+);
+$("adicionar").addEventListener(
+"click",
+evento => {
+evento.stopImmediatePropagation();
+adicionar();
+},
+true
+);
+$("arquivoPDF").addEventListener(
+"change",
+evento => {
+evento.stopImmediatePropagation();
+enviar();
+},
+true
+);
+aviso("Selecione um curso e clique em PROCURAR.");
+})();
+</script>
+  
 </body>
 </html>
