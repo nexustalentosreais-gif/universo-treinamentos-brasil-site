@@ -307,8 +307,8 @@ async function search() {
             el("leitura").scrollIntoView({behavior:"smooth"});
           }),
           btn("Baixar PDF", () => download(doc)),
-          anchor("WhatsApp",wa),
-          anchor("E-mail",mail)
+          anchor("Enviar por WhatsApp",wa),
+          anchor("Enviar por E-mail",mail)
         );
 
       } catch(e) {
