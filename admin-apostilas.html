@@ -300,13 +300,13 @@ async function search() {
           "&body=" + encodeURIComponent(message);
 
         card.append(
-          btn("Abrir apostila", () => {
+          btn("Abrir Apostila", () => {
             el("nomeLeitura").textContent = c;
             el("visualizador").src = url;
             el("leitura").hidden = false;
             el("leitura").scrollIntoView({behavior:"smooth"});
           }),
-          btn("Baixar PDF", () => download(doc)),
+          btn("Baixar Apostila", () => download(doc)),
           anchor("Enviar por WhatsApp",wa),
           anchor("Enviar por E-mail",mail)
         );
@@ -318,7 +318,7 @@ async function search() {
       }
 
       card.appendChild(
-        btn("Excluir", () => remove(doc), "red")
+        btn("Excluir Apostila", () => remove(doc), "red")
       );
 
       el("lista").appendChild(card);
