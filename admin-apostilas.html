@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apostilas e Cartilhas | UTB</title>
+<style>
+{box-sizing:border-box}
+body{margin:0;background:#f3f6fb;color:#15243b;
+font:17px Arial,sans-serif}
+header{background:#123b71;color:white;padding:22px}
+header h1{margin:0;font-size:25px}
+header p{margin:8px 0 0}
+main{max-width:1100px;margin:auto;padding:20px}
+section{background:white;border:1px solid #dbe3ee;
+border-radius:12px;padding:20px;margin-bottom:20px}
+h2{color:#123b71;font-size:21px;margin-top:0}
+label{display:block;font-weight:bold;margin:12px 0 6px}
+input,select,textarea{width:100%;padding:12px;
+border:1px solid #aebdd0;border-radius:7px;
+font:inherit;background:white;color:#15243b}
+button,.botao{display:inline-block;background:#0759ad;
+color:white;border:0;border-radius:7px;padding:12px 15px;
+font:inherit;cursor:pointer;text-decoration:none;
+margin:5px 5px 5px 0}
+button:hover,.botao:hover{background:#003e85}
+.secundario{background:#526477}
+.perigo{background:#a72b35}
+.linha{display:flex;gap:12px;flex-wrap:wrap}
+.linha>div{flex:1;min-width:220px}
+.item{padding:16px;border:1px solid #dbe3ee;
+border-radius:9px;margin:12px 0;background:#fafcff}
+.item h3{margin:0 0 8px;color:#123b71}
+.item p{margin:5px 0}
+#aviso{font-weight:bold;min-height:24px;margin:15px 0}
+#visualizador{width:100%;height:70vh;border:1px solid #ccc}
+#leitura{display:none}
+.compartilhar{display:none;background:#edf4ff;
+padding:12px;border-radius:8px;margin-top:10px}
+small{color:#526477}
+@media(max-width:600px){
+header h1{font-size:22px}
+main{padding:10px}
+section{padding:15px}
+#visualizador{height:65vh}
+}
+</style>
+</head>
+<body>
+<header>
+<h1>Universo Treinamentos Brasil</h1>
+<p>Biblioteca de Apostilas e Cartilhas — Administração</p>
+</header>
+<main id="app" hidden>
+<a class="botao secundario" href="admin.html">
+Voltar ao Painel Administrativo
+</a>
+<p id="aviso" role="status"></p>
+<section>
+<h2>Adicionar nova apostila ou cartilha</h2>
+<form id="formulario">
+<div class="linha">
+<div>
+<label for="curso">Nome do curso</label>
+<input id="curso" required
+placeholder="Ex.: Motosserra Elétrica">
+</div>
+<div>
+<label for="tipo">Tipo de material</label>
+<select id="tipo">
+<option value="apostila">Apostila</option>
+<option value="cartilha">Cartilha</option>
+</select>
+</div>
+</div>
+<label for="titulo">Título do material</label>
+<input id="titulo" required
+placeholder="Ex.: Apostila de Motosserra Elétrica">
+<label for="descricao">Descrição (opcional)</label>
+<textarea id="descricao" rows="2"></textarea>
+<label for="arquivo">Selecionar arquivo PDF</label>
+<input id="arquivo" type="file"
+accept=".pdf,application/pdf" required>
+<p><small>Apenas arquivos PDF.</small></p>
+<button id="salvar" type="submit">
+Adicionar PDF à biblioteca
+</button>
+</form>
+</section>
+<section>
+<h2>Pesquisar apostilas e cartilhas</h2>
+<label for="busca">Pesquisar por curso ou título</label>
+<input id="busca"
+placeholder="Digite o nome da apostila ou curso">
+<button id="filtrar">Filtrar</button>
+<button class="secundario" id="limpar">Limpar filtro</button>
+<p id="quantidade"></p>
+<div id="resultados"></div>
+</section>
+<section id="leitura">
+<h2 id="tituloLeitura">Visualização do PDF</h2>
+<button class="secundario" id="fechar">
+Fechar visualização
+</button>
+<iframe id="visualizador"
+title="Visualizador de apostilas PDF"></iframe>
+</section>
+</main>
+<script>
+"use strict";
+const SUPABASE_URL =
+"https://xkxlgmmssvllcmhymibj.supabase.co";
+const API_KEY =
+"sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV";
+const REST = SUPABASE_URL + "/rest/v1";
+const STORAGE = SUPABASE_URL + "/storage/v1";
+const BUCKET = "utb-apostilas";
+const TOKEN = sessionStorage.getItem("utb_access_token");
+let apostilas = [];
+const el = id => document.getElementById(id);
+function aviso(texto, erro = false) {
+el("aviso").textContent = texto;
+el("aviso").style.color = erro ? "#a72b35" : "#12602a";
+}
+function normalizar(texto) {
+return String(texto || "")
+.normalize("NFD")
+.replace(/[\u0300-\u036f]/g, "")
+.toLowerCase();
+}
+async function requisicao(url, opcoes = {}) {
+const resposta = await fetch(url, {
+...opcoes,
+cache: "no-store",
+headers: {
+apikey: API_KEY,
+Authorization: "Bearer " + TOKEN,
+...(opcoes.headers || {})
+}
+});
+const texto = await resposta.text();
+let dados = null;
+if (texto) {
+try { dados = JSON.parse(texto); }
+catch { dados = texto; }
+}
+if (!resposta.ok) {
+const erro = typeof dados === "object" && dados
+? (dados.message || dados.error || dados.msg)
+: texto;
+throw new Error(erro || "Erro HTTP " + resposta.status);
+}
+return dados;
+}
+function caminhoPDF(caminho) {
+return caminho.split("/").map(encodeURIComponent).join("/");
+}
+function validarPDF(arquivo) {
+if (!arquivo || !/.pdf$/i.test(arquivo.name)) {
+throw new Error("Selecione um arquivo PDF válido.");
+}
+if (arquivo.type && arquivo.type !== "application/pdf") {
+throw new Error("O arquivo selecionado não é um PDF.");
+}
+}
+async function enviarPDF(arquivo, caminho) {
+validarPDF(arquivo);
+await requisicao(
+STORAGE + "/object/" + BUCKET + "/" + caminhoPDF(caminho),
+{
+method: "POST",
+headers: {
+"Content-Type": "application/pdf",
+"x-upsert": "false"
+},
+body: arquivo
+}
+);
+}
+async function apagarPDF(caminho) {
+await requisicao(
+STORAGE + "/object/" + BUCKET + "/" + caminhoPDF(caminho),
+{ method: "DELETE" }
+);
+}
+async function gerarLink(item, segundos = 86400) {
+const dados = await requisicao(
+STORAGE + "/object/sign/" + BUCKET + "/" +
+caminhoPDF(item.arquivo_caminho),
+{
+method: "POST",
+headers: {"Content-Type": "application/json"},
+body: JSON.stringify({expiresIn: segundos})
+}
+);
+const endereco = dados.signedURL || dados.signedUrl;
+if (!endereco) {
+throw new Error("Não foi possível gerar o link do PDF.");
+}
+if (/^https?:///i.test(endereco)) return endereco;
+return STORAGE + "/" + endereco.replace(/^/+/, "");
+}
+async function carregar() {
+apostilas = await requisicao(
+REST + "/utb_apostilas?select=" +
+"&order=curso_nome.asc,titulo.asc&limit=1000"
+);
+mostrarResultados();
+}
+function botao(texto, acao, classe = "") {
+const b = document.createElement("button");
+b.type = "button";
+b.textContent = texto;
+if (classe) b.className = classe;
+b.addEventListener("click", acao);
+return b;
+}
+function mostrarResultados() {
+const filtro = normalizar(el("busca").value.trim());
+const encontrados = apostilas.filter(a =>
+normalizar(a.curso_nome + " " + a.titulo +
+" " + (a.descricao || "")).includes(filtro)
+);
+el("quantidade").textContent =
+encontrados.length + " material(is) encontrado(s).";
+const lista = el("resultados");
+lista.replaceChildren();
+if (!encontrados.length) {
+const p = document.createElement("p");
+p.textContent = "Nenhuma apostila encontrada.";
+lista.appendChild(p);
+return;
+}
+encontrados.forEach(item => {
+const caixa = document.createElement("article");
+caixa.className = "item";
+const nome = document.createElement("h3");
+nome.textContent = item.titulo;
+const detalhes = document.createElement("p");
+detalhes.textContent = "Curso: " + item.curso_nome +
+" | " + item.tipo.toUpperCase();
+const arquivo = document.createElement("p");
+arquivo.textContent = "PDF: " + item.arquivo_nome;
+caixa.append(nome, detalhes, arquivo);
+if (item.descricao) {
+const descricao = document.createElement("p");
+descricao.textContent = item.descricao;
+caixa.appendChild(descricao);
+}
+caixa.appendChild(botao("Abrir PDF", async () => {
+try {
+aviso("Abrindo apostila...");
+const link = await gerarLink(item, 3600);
+el("visualizador").src = link;
+el("tituloLeitura").textContent = item.titulo;
+el("leitura").style.display = "block";
+el("leitura").scrollIntoView({behavior:"smooth"});
+aviso("Apostila aberta.");
+} catch (erro) { aviso(erro.message, true); }
+}));
+caixa.appendChild(botao("Baixar PDF", async () => {
+try {
+aviso("Preparando download...");
+const resposta = await fetch(
+STORAGE + "/object/authenticated/" + BUCKET +
+"/" + caminhoPDF(item.arquivo_caminho),
+{headers: {
+apikey: API_KEY,
+Authorization: "Bearer " + TOKEN
+}}
+);
+if (!resposta.ok) throw new Error("Falha no download.");
+const blob = await resposta.blob();
+const url = URL.createObjectURL(blob);
+const a = document.createElement("a");
+a.href = url;
+a.download = item.arquivo_nome;
+document.body.appendChild(a);
+a.click();
+a.remove();
+setTimeout(() => URL.revokeObjectURL(url), 10000);
+aviso("Download iniciado.");
+} catch (erro) { aviso(erro.message, true); }
+}));
+const compartilhar = document.createElement("div");
+compartilhar.className = "compartilhar";
+caixa.appendChild(botao("Compartilhar", async () => {
+try {
+aviso("Gerando link de compartilhamento...");
+const link = await gerarLink(item);
+compartilhar.replaceChildren();
+const explicacao = document.createElement("p");
+explicacao.textContent =
+"Link privado válido por 24 horas.";
+const mensagem =
+"UTB - " + item.titulo + "
+" + link;
+const whatsapp = document.createElement("a");
+whatsapp.className = "botao";
+whatsapp.textContent = "WhatsApp";
+whatsapp.href =
+"https://wa.me/?text=" + encodeURIComponent(mensagem);
+whatsapp.target = "_blank";
+whatsapp.rel = "noopener noreferrer";
+const email = document.createElement("a");
+email.className = "botao";
+email.textContent = "E-mail";
+email.href = "mailto:?subject=" +
+encodeURIComponent("UTB - " + item.titulo) +
+"&body=" + encodeURIComponent(mensagem);
+const copiar = botao("Copiar link", async () => {
+try {
+await navigator.clipboard.writeText(link);
+aviso("Link copiado.");
+} catch {
+window.prompt("Copie o link:", link);
+}
+}, "secundario");
+compartilhar.append(
+explicacao, whatsapp, email, copiar
+);
+compartilhar.style.display = "block";
+aviso("Escolha como compartilhar.");
+} catch (erro) { aviso(erro.message, true); }
+}));
+caixa.appendChild(compartilhar);
+const troca = document.createElement("input");
+troca.type = "file";
+troca.accept = ".pdf,application/pdf";
+troca.style.display = "none";
+troca.addEventListener("change", async () => {
+const novo = troca.files[0];
+if (!novo) return;
+let novoCaminho = null;
+let atualizado = false;
+try {
+validarPDF(novo);
+if (!confirm("Substituir o PDF desta apostila?")) return;
+aviso("Substituindo arquivo...");
+novoCaminho = crypto.randomUUID() + ".pdf";
+await enviarPDF(novo, novoCaminho);
+await requisicao(
+REST + "/utb_apostilas?id=eq." + item.id,
+{
+method: "PATCH",
+headers: {
+"Content-Type": "application/json",
+"Prefer": "return=representation"
+},
+body: JSON.stringify({
+arquivo_nome: novo.name,
+arquivo_caminho: novoCaminho,
+atualizado_em: new Date().toISOString()
+})
+}
+);
+atualizado = true;
+el("visualizador").src = "about:blank";
+el("leitura").style.display = "none";
+try {
+await apagarPDF(item.arquivo_caminho);
+} catch (e) {
+console.warn("Arquivo antigo pendente de remoção.", e);
+}
+await carregar();
+aviso("PDF substituído com sucesso.");
+} catch (erro) {
+if (novoCaminho && !atualizado) {
+try { await apagarPDF(novoCaminho); } catch {}
+}
+aviso(erro.message, true);
+}
+troca.value = "";
+});
+caixa.appendChild(troca);
+caixa.appendChild(botao("Substituir PDF", () => {
+troca.click();
+}, "secundario"));
+caixa.appendChild(botao("Excluir", async () => {
+if (!confirm(
+"Excluir definitivamente esta apostila da biblioteca?"
+)) return;
+try {
+aviso("Excluindo apostila...");
+await requisicao(
+REST + "/utb_apostilas?id=eq." + item.id,
+{method:"DELETE"}
+);
+try {
+await apagarPDF(item.arquivo_caminho);
+} catch (e) {
+console.warn("Arquivo pendente de remoção.", e);
+}
+el("visualizador").src = "about:blank";
+el("leitura").style.display = "none";
+await carregar();
+aviso("Apostila excluída da biblioteca.");
+} catch (erro) { aviso(erro.message, true); }
+}, "perigo"));
+lista.appendChild(caixa);
+});
+}
+el("formulario").addEventListener("submit", async evento => {
+evento.preventDefault();
+const arquivo = el("arquivo").files[0];
+let caminho = null;
+let gravado = false;
+try {
+validarPDF(arquivo);
+el("salvar").disabled = true;
+aviso("Enviando apostila PDF...");
+caminho = crypto.randomUUID() + ".pdf";
+await enviarPDF(arquivo, caminho);
+await requisicao(REST + "/utb_apostilas", {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+"Prefer": "return=representation"
+},
+body: JSON.stringify({
+curso_nome: el("curso").value.trim(),
+titulo: el("titulo").value.trim(),
+tipo: el("tipo").value,
+descricao: el("descricao").value.trim() || null,
+arquivo_nome: arquivo.name,
+arquivo_caminho: caminho
+})
+});
+gravado = true;
+el("formulario").reset();
+await carregar();
+aviso("Apostila cadastrada com sucesso!");
+} catch (erro) {
+if (caminho && !gravado) {
+try { await apagarPDF(caminho); } catch {}
+}
+aviso(erro.message, true);
+} finally {
+el("salvar").disabled = false;
+}
+});
+el("filtrar").addEventListener("click", mostrarResultados);
+el("busca").addEventListener("keydown", evento => {
+if (evento.key === "Enter") {
+evento.preventDefault();
+mostrarResultados();
+}
+});
+el("limpar").addEventListener("click", () => {
+el("busca").value = "";
+mostrarResultados();
+});
+el("fechar").addEventListener("click", () => {
+el("visualizador").src = "about:blank";
+el("leitura").style.display = "none";
+});
+async function iniciar() {
+if (!TOKEN) {
+location.replace("admin-instrutores.html");
+return;
+}
+try {
+const admins = await requisicao(
+REST + "/utb_admins?select=user_id&limit=1"
+);
+if (!Array.isArray(admins) || !admins.length) {
+sessionStorage.removeItem("utb_access_token");
+location.replace("admin-instrutores.html");
+return;
+}
+el("app").hidden = false;
+await carregar();
+aviso("Biblioteca de apostilas pronta.");
+} catch (erro) {
+el("app").hidden = false;
+aviso("Falha ao acessar biblioteca: " + erro.message, true);
+}
+}
+iniciar();
+</script>
+</body>
+</html>
