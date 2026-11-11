@@ -442,6 +442,11 @@ $("verFoto").hidden = !foto;
 $("fotografar").disabled = !!foto;
 }
 async function visualizar() {
+ if (!$("imagem").hidden) {
+    $("imagem").hidden = true;
+    $("verFoto").textContent = "Visualizar foto";
+    return;
+  }
 await executar(async()=>{
 if (!foto) throw Error("Não há fotografia neste turno.");
 const bearer = await token();
@@ -456,6 +461,7 @@ liberarImagem();
 fotoURL = URL.createObjectURL(await r.blob());
 $("imagem").src = fotoURL;
 $("imagem").hidden = false;
+$("verFoto").textContent = "Ocultar foto";
 });
 }
 async function fotografar(arquivo) {
