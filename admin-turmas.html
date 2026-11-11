@@ -810,6 +810,11 @@ function caminhoSeguro(s) {
 return s.split("/").map(encodeURIComponent).join("/");
 }
 async function visualizarFoto() {
+ if ($("fotoImagem").style.display === "block") {
+    $("fotoImagem").style.display = "none";
+    $("verFoto").textContent = "Visualizar fotografia registrada";
+    return;
+  }
 await seguro(async () => {
 if (!fotoAtual) throw Error("Nenhuma fotografia registrada.");
 const r = await fetch(
@@ -826,6 +831,7 @@ if (fotoURL) URL.revokeObjectURL(fotoURL);
 fotoURL = URL.createObjectURL(await r.blob());
 $("fotoImagem").src = fotoURL;
 $("fotoImagem").style.display = "block";
+$("verFoto").textContent = "Ocultar fotografia";
 });
 }
 async function fotografar(file) {
