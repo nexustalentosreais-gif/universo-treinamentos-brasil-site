@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UTB | Área do Instrutor</title>
+<style>
+:root{
+font-family:Arial,Helvetica,sans-serif;
+color:#152b47;
+background:#f4f7fb;
+}
+{box-sizing:border-box}
+body{margin:0}
+header{
+background:#103c70;
+color:white;
+padding:20px 15px;
+}
+header h1{font-size:23px;margin:0 0 5px}
+header p{margin:0;font-size:15px}
+main{
+max-width:750px;
+margin:18px auto;
+padding:0 12px 35px;
+}
+.card{
+background:white;
+border:1px solid #d8e3ee;
+border-radius:13px;
+padding:18px;
+margin-bottom:15px;
+}
+h2{font-size:21px;margin:0 0 14px}
+label{
+display:block;
+font-weight:bold;
+margin:12px 0 6px;
+}
+input,select,button{font:inherit;font-size:18px}
+input,select{
+width:100%;
+padding:12px;
+border:1px solid #91a7bd;
+border-radius:8px;
+background:white;
+color:#152b47;
+}
+button{
+background:#1368c4;
+color:white;
+border:0;
+padding:13px 16px;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+}
+button:disabled{opacity:.55;cursor:wait}
+.secondary{
+background:#e9f1fa;
+color:#123c69;
+border:1px solid #9cb4cc;
+}
+.line{display:flex;gap:10px;align-items:center}
+.line>{flex:1}
+.line .eye{flex:0 0 auto}
+.row{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:12px;
+border-top:1px solid #dbe6ef;
+padding:12px 0;
+}
+.row strong{flex:1;overflow-wrap:anywhere}
+.row select{flex:0 0 155px;width:155px}
+.note{
+background:#e9f2fc;
+padding:12px;
+border-radius:9px;
+font-size:16px;
+line-height:1.45;
+}
+.msg{
+margin:14px 0;
+padding:12px;
+border-radius:8px;
+background:#e8f2fc;
+white-space:pre-wrap;
+}
+.msg.error{background:#fff0ed;color:#9e2424}
+[hidden]{display:none!important}
+img{
+max-width:100%;
+border-radius:8px;
+margin-top:12px;
+}
+@media(max-width:490px){
+.row{display:block}
+.row select{width:100%;margin-top:9px}
+h2{font-size:20px}
+}
+</style>
+</head>
+<body>
+<header>
+<h1>UNIVERSO TREINAMENTOS BRASIL</h1>
+<p>Área do instrutor • Turmas, presenças e fotografias</p>
+</header>
+<main>
+<div id="mensagem" class="msg" role="status">
+Acesso restrito a instrutores autorizados.
+</div>
+<section id="loginArea" class="card">
+<h2>Entrar</h2>
+<form id="loginForm">
+<label for="email">E-mail do instrutor</label>
+<input id="email" type="email" autocomplete="username" required>
+<label for="senha">Senha</label>
+<div class="line">
+<input id="senha" type="password" autocomplete="current-password" required>
+<button id="olho" class="secondary eye" type="button" aria-label="Mostrar senha">👁</button>
+</div>
+<button type="submit" style="width:100%;margin-top:18px">
+Entrar nas minhas turmas
+</button>
+</form>
+</section>
+<section id="painel" hidden>
+<div class="card">
+<div class="line">
+<strong id="identidade">Instrutor autorizado</strong>
+<button id="sair" type="button" class="secondary">Sair</button>
+</div>
+<label for="turmas">Turma autorizada</label>
+<select id="turmas">
+<option value="">Selecione uma turma</option>
+</select>
+<p id="detalhes" class="note" hidden></p>
+</div>
+<div id="operacao" hidden>
+<section class="card">
+<h2>1. Chamada</h2>
+<div class="line">
+<div>
+<label for="dataAula">Data da aula</label>
+<input id="dataAula" type="date">
+</div>
+<div>
+<label for="turno">Turno</label>
+<select id="turno">
+<option value="manha">Manhã — 4h</option>
+<option value="tarde">Tarde — 4h</option>
+</select>
+</div>
+</div>
+<div id="lista">Selecione uma turma.</div>
+<button id="salvar" type="button" style="width:100%;margin-top:12px">
+Salvar presenças e faltas
+</button>
+</section>
+<section class="card">
+<h2>2. Fotografia da turma</h2>
+<p class="note">
+Uma fotografia por turno. Use a câmera do celular no dia da aula.
+</p>
+<p id="fotoEstado">Nenhuma fotografia consultada.</p>
+<input id="arquivo" type="file"
+accept="image/jpeg,image/png,image/webp"
+capture="environment" hidden>
+<button id="fotografar" type="button">📷 Fotografar turma</button>
+<button id="verFoto" type="button" class="secondary" hidden>
+Visualizar fotografia
+</button>
+<img id="imagem" alt="Fotografia da turma" hidden>
+</section>
+</div>
+</section>
+</main>
+<script>
+"use strict";
+const BASE = "https://xkxlgmmssvllcmhymibj.supabase.co";
+const KEY = "sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV";
+const BUCKET = "utb-evidencias-turmas";
+const STORAGE_KEY = "utb_instrutor_login_v1";
+const $ = id => document.getElementById(id);
+let sessao = null;
+let usuario = null;
+let turmas = [];
+let turma = null;
+let alunos = [];
+let foto = null;
+let fotoURL = null;
+const hoje = () => {
+const d = new Date();
+return [
+d.getFullYear(),
+String(d.getMonth()+1).padStart(2,"0"),
+String(d.getDate()).padStart(2,"0")
+].join("-");
+};
+const dataBR = s => s ? s.split("-").reverse().join("/") : "—";
+const caminhoSeguro = s => s.split("/").map(encodeURIComponent).join("/");
+function aviso(texto, erro=false) {
+$("mensagem").textContent = texto;
+$("mensagem").className = "msg" + (erro ? " error" : "");
+}
+function guardar(s) {
+sessao = s;
+localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+}
+function liberarImagem() {
+if (fotoURL) URL.revokeObjectURL(fotoURL);
+fotoURL = null;
+$("imagem").hidden = true;
+$("imagem").removeAttribute("src");
+}
+function limpar() {
+sessao = null;
+usuario = null;
+localStorage.removeItem(STORAGE_KEY);
+turmas = [];
+turma = null;
+alunos = [];
+liberarImagem();
+$("painel").hidden = true;
+$("loginArea").hidden = false;
+$("senha").value = "";
+}
+async function jsonResposta(r) {
+const t = await r.text();
+let x = {};
+try { x = t ? JSON.parse(t) : {}; } catch {}
+if (!r.ok) {
+throw Error(
+x.msg || x.message || x.error_description ||
+x.error || "Falha na comunicação (" + r.status + ")."
+);
+}
+return x;
+}
+async function renovar() {
+if (!sessao?.refresh_token) {
+throw Error("Sessão encerrada. Entre novamente.");
+}
+const r = await fetch(BASE+"/auth/v1/token?grant_type=refresh_token",{
+method:"POST",
+headers:{apikey:KEY,"Content-Type":"application/json"},
+body:JSON.stringify({refresh_token:sessao.refresh_token})
+});
+const s = await jsonResposta(r);
+guardar({...s,expires_at:Math.floor(Date.now()/1000)+s.expires_in});
+}
+async function token() {
+if (!sessao?.access_token) throw Error("Faça o login.");
+if ((sessao.expires_at||0)<Date.now()/1000+60) await renovar();
+return sessao.access_token;
+}
+async function rest(path,op={}) {
+const bearer = await token();
+const r = await fetch(BASE+"/rest/v1/"+path,{
+...op,
+headers:{
+apikey:KEY,
+Authorization:"Bearer "+bearer,
+"Content-Type":"application/json",
+...(op.headers||{})
+},
+cache:"no-store"
+});
+return jsonResposta(r);
+}
+async function executar(fn) {
+try { await fn(); }
+catch(e) { aviso(e.message||"Erro na operação.",true); }
+}
+function escolherData() {
+if (!turma) throw Error("Selecione uma turma.");
+const d = $("dataAula").value;
+if (!d) throw Error("Informe a data.");
+if (turma.data_inicio && d<turma.data_inicio)
+throw Error("Data anterior ao início.");
+if (turma.data_fim && d>turma.data_fim)
+throw Error("Data posterior ao término.");
+return d;
+}
+async function entrar(e) {
+e.preventDefault();
+await executar(async()=>{
+const botao = $("loginForm").querySelector("button[type=submit]");
+botao.disabled = true;
+try {
+const r = await fetch(BASE+"/auth/v1/token?grant_type=password",{
+method:"POST",
+headers:{apikey:KEY,"Content-Type":"application/json"},
+body:JSON.stringify({
+email:$("email").value.trim(),
+password:$("senha").value
+})
+});
+const s = await jsonResposta(r);
+guardar({...s,expires_at:Math.floor(Date.now()/1000)+s.expires_in});
+await iniciarPainel();
+} catch(e) {
+limpar();
+throw e;
+} finally {
+botao.disabled = false;
+}
+});
+}
+async function iniciarPainel() {
+const bearer = await token();
+const r = await fetch(BASE+"/auth/v1/user",{
+headers:{apikey:KEY,Authorization:"Bearer "+bearer}
+});
+usuario = await jsonResposta(r);
+$("identidade").textContent = usuario.email||"Instrutor autenticado";
+$("loginArea").hidden = true;
+$("painel").hidden = false;
+await carregarTurmas();
+}
+async function carregarTurmas() {
+turmas = await rest(
+"utb_turmas?select=id,curso_nome,contratante_nome,"+
+"carga_horaria_horas,data_inicio,data_fim"+
+"&order=data_inicio.desc&limit=200"
+);
+const s = $("turmas");
+s.replaceChildren(new Option("Selecione uma turma",""));
+turmas.forEach(t=>s.add(new Option(
+t.curso_nome+" — "+t.contratante_nome+" — "+dataBR(t.data_inicio),t.id
+)));
+$("operacao").hidden = true;
+aviso(turmas.length
+? "Selecione a turma para fazer a chamada."
+: "Nenhuma turma autorizada para esta conta. Solicite o vínculo à administração da UTB.");
+}
+async function escolherTurma() {
+await executar(async()=>{
+turma = turmas.find(t=>t.id===$("turmas").value)||null;
+$("operacao").hidden = !turma;
+$("detalhes").hidden = !turma;
+if (!turma) return;
+$("detalhes").textContent =
+turma.curso_nome+" • "+turma.carga_horaria_horas+"h • "+
+turma.contratante_nome+" • "+dataBR(turma.data_inicio)+
+" a "+dataBR(turma.data_fim);
+$("dataAula").value = hoje();
+$("turno").value = "manha";
+alunos = await rest(
+"utb_alunos?select=id,nome_completo&turma_id=eq."+
+encodeURIComponent(turma.id)+"&order=nome_completo.asc"
+);
+await carregarTurno();
+});
+}
+async function carregarTurno() {
+await executar(async()=>{
+if (!turma) return;
+const d = escolherData();
+const turno = $("turno").value;
+const ids = alunos.map(a=>a.id);
+let registros = [];
+if (ids.length) {
+registros = await rest(
+"utb_presencas?select=aluno_id,presente&data_aula=eq."+
+d+"&turno=eq."+turno+"&aluno_id=in.("+ids.join(",")+")"
+);
+}
+const mapa = new Map(registros.map(r=>[r.aluno_id,r.presente]));
+const caixa = $("lista");
+caixa.replaceChildren();
+if (!alunos.length) {
+caixa.textContent = "Nenhum aluno cadastrado nesta turma.";
+}
+for (const a of alunos) {
+const linha = document.createElement("div");
+linha.className = "row";
+const nome = document.createElement("strong");
+nome.textContent = a.nome_completo;
+const escolha = document.createElement("select");
+escolha.className = "presenca";
+escolha.dataset.id = a.id;
+escolha.add(new Option("Sem registro",""));
+escolha.add(new Option("Presente","true"));
+escolha.add(new Option("Falta","false"));
+escolha.value = mapa.has(a.id) ? String(mapa.get(a.id)) : "";
+linha.append(nome,escolha);
+caixa.append(linha);
+}
+await consultarFoto();
+});
+}
+async function salvarPresencas() {
+await executar(async()=>{
+const d = escolherData();
+const escolhas = [...document.querySelectorAll(".presenca")];
+if (!escolhas.length) throw Error("Nenhum aluno cadastrado.");
+if (escolhas.some(s=>s.value===""))
+throw Error("Marque presente ou falta para todos os alunos.");
+const registros = escolhas.map(s=>({
+aluno_id:s.dataset.id,
+data_aula:d,
+turno:$("turno").value,
+horas_turno:4,
+presente:s.value==="true",
+registrado_por:usuario.id,
+registrado_em:new Date().toISOString()
+}));
+$("salvar").disabled = true;
+try {
+await rest("utb_presencas?on_conflict=aluno_id,data_aula,turno",{
+method:"POST",
+headers:{Prefer:"resolution=merge-duplicates,return=minimal"},
+body:JSON.stringify(registros)
+});
+aviso("Presenças salvas com sucesso.");
+} finally {
+$("salvar").disabled = false;
+}
+});
+}
+async function consultarFoto() {
+foto = null;
+liberarImagem();
+$("verFoto").hidden = true;
+$("fotoEstado").textContent = "Consultando fotografia...";
+if (!turma) return;
+const d = $("dataAula").value;
+const turno = $("turno").value;
+const r = await rest(
+"utb_fotos_turmas?select=id,caminho_arquivo,registrado_em"+
+"&turma_id=eq."+turma.id+"&data_aula=eq."+d+
+"&turno=eq."+turno+"&limit=1"
+);
+foto = r[0]||null;
+$("fotoEstado").textContent = foto
+? "Fotografia registrada neste turno."
+: "Nenhuma fotografia registrada neste turno.";
+$("verFoto").hidden = !foto;
+$("fotografar").disabled = !!foto;
+}
+async function visualizar() {
+await executar(async()=>{
+if (!foto) throw Error("Não há fotografia neste turno.");
+const bearer = await token();
+const r = await fetch(
+BASE+"/storage/v1/object/authenticated/"+
+BUCKET+"/"+caminhoSeguro(foto.caminho_arquivo),{
+headers:{apikey:KEY,Authorization:"Bearer "+bearer}
+}
+);
+if (!r.ok) throw Error("Não foi possível visualizar a fotografia.");
+liberarImagem();
+fotoURL = URL.createObjectURL(await r.blob());
+$("imagem").src = fotoURL;
+$("imagem").hidden = false;
+});
+}
+async function fotografar(arquivo) {
+await executar(async()=>{
+if (!arquivo) return;
+const d = escolherData();
+if (d!==hoje()) throw Error("Fotografe somente na data de hoje.");
+if (foto) throw Error("Já há fotografia deste turno.");
+const tipos = {
+"image/jpeg":"jpg",
+"image/png":"png",
+"image/webp":"webp"
+};
+const ext = tipos[arquivo.type];
+if (!ext) throw Error("Use JPG, PNG ou WEBP.");
+if (arquivo.size>1010241024)
+throw Error("Imagem acima de 10 MB.");
+const turno = $("turno").value;
+const existentes = await rest(
+"utb_fotos_turmas?select=id&turma_id=eq."+turma.id+
+"&data_aula=eq."+d+"&turno=eq."+turno+"&limit=1"
+);
+if (existentes.length) throw Error("Já existe fotografia neste turno.");
+const caminho = turma.id+"/"+d+"/"+turno+"/"+
+crypto.randomUUID()+"."+ext;
+$("fotografar").disabled = true;
+aviso("Enviando fotografia...");
+try {
+const bearer = await token();
+const r = await fetch(
+BASE+"/storage/v1/object/"+BUCKET+"/"+
+caminhoSeguro(caminho),{
+method:"POST",
+headers:{
+apikey:KEY,
+Authorization:"Bearer "+bearer,
+"Content-Type":arquivo.type,
+"x-upsert":"false"
+},
+body:arquivo
+}
+);
+await jsonResposta(r);
+try {
+await rest("utb_fotos_turmas",{
+method:"POST",
+headers:{Prefer:"return=minimal"},
+body:JSON.stringify({
+turma_id:turma.id,
+data_aula:d,
+turno,
+caminho_arquivo:caminho,
+registrado_por:usuario.id
+})
+});
+} catch(e) {
+throw Error("Arquivo enviado, mas o cadastro da foto falhou. Avise a administração: "+e.message);
+}
+await consultarFoto();
+aviso("Fotografia salva com sucesso.");
+} finally {
+$("fotografar").disabled = !!foto;
+$("arquivo").value = "";
+}
+});
+}
+$("loginForm").addEventListener("submit",entrar);
+$("olho").addEventListener("click",()=>{
+const e = $("senha");
+e.type = e.type==="password" ? "text" : "password";
+});
+$("sair").addEventListener("click",()=>{
+limpar();
+aviso("Você saiu da área do instrutor.");
+});
+$("turmas").addEventListener("change",escolherTurma);
+$("dataAula").addEventListener("change",carregarTurno);
+$("turno").addEventListener("change",carregarTurno);
+$("salvar").addEventListener("click",salvarPresencas);
+$("fotografar").addEventListener("click",()=>$("arquivo").click());
+$("arquivo").addEventListener("change",()=>fotografar($("arquivo").files[0]));
+$("verFoto").addEventListener("click",visualizar);
+(async()=>{
+try {
+const s = JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
+if (s?.refresh_token) {
+sessao = s;
+await iniciarPainel();
+}
+} catch {
+limpar();
+aviso("Faça login para acessar suas turmas.");
+}
+})();
+</script>
+</body>
+</html>
