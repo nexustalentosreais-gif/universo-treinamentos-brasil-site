@@ -812,7 +812,7 @@ return s.split("/").map(encodeURIComponent).join("/");
 async function visualizarFoto() {
  if ($("fotoImagem").style.display === "block") {
     $("fotoImagem").style.display = "none";
-    $("verFoto").textContent = "Visualizar fotografia registrada";
+    $("verFoto").textContent = "Visualizar fotografia";
     return;
   }
 await seguro(async () => {
