@@ -109,6 +109,15 @@
 </div>
         <p class="aviso">O cadastro é feito no Supabase. O PDF só é preparado depois da confirmação do registro.</p>
         <form id="form-certificado">
+        <label class="field">
+  Selecionar aluno de turma (opcional)
+  <select id="alunoTurma">
+    <option value="">Preenchimento manual</option>
+  </select>
+</label>
+<p class="aviso" id="infoAlunoTurma">
+  Selecione um aluno aprovado de turma concluída.
+</p>
         <label class="field">Nome do participante<input id="participante" required maxlength="200" autocomplete="off"></label>
         <div class="grid">
         <label class="field">Nome do curso<input id="curso" required maxlength="200"></label>
