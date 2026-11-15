@@ -407,6 +407,11 @@ const CHAVE =
 "sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV";
 const BUCKET = "utb-evidencias-turmas";
 const $ = id => document.getElementById(id);
+const selecionar = $("turmas").closest("section");
+const cadastrar = selecionar.previousElementSibling;
+cadastrar.before(selecionar);
+selecionar.querySelector("h2").textContent = "1. Selecionar turma";
+cadastrar.querySelector("h2").textContent = "2. Cadastrar nova turma";
 let token = sessionStorage.getItem("utb_access_token") || "";
 let usuario = null;
 let turmas = [];
