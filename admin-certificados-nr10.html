@@ -71,6 +71,18 @@ body{background:white;color:#102e57}
 <h2>Emitir certificado NR-10</h2>
 <p class="nota">Página exclusiva para NR-10. Os campos abaixo são registrados juntamente com o certificado, preservando a consulta pública pelo QR Code. Utilize somente dados de treinamentos concluídos.</p>
 <form id="form">
+<div class="grid">
+  <label>Selecionar turma concluída
+    <select id="turmaCert">
+      <option value="">Selecione uma turma</option>
+    </select>
+  </label>
+  <label>Selecionar aluno aprovado
+    <select id="alunoCert" disabled>
+      <option value="">Selecione primeiro a turma</option>
+    </select>
+  </label>
+</div>
 <label>Nome completo do participante<input id="participante" required maxlength="200"></label>
 <div class="grid">
  <label>Modalidade do treinamento
@@ -168,6 +180,85 @@ async function api(caminho,opcoes={}){
  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.message||'Falha no Supabase ('+r.status+').')}
  return r.status===204?null:r.json();
 }
+let turmasCert = [];
+
+async function carregarTurmasCert() {
+  const dados = await api(
+    "utb_turmas?select=*&status=eq.concluida&order=data_inicio.desc"
+  );
+
+  turmasCert = dados.filter(t =>
+    t.curso_nome.startsWith("NR-10") &&
+    t.data_fim && t.data_fim <= hoje()
+  );
+
+  const campo = $("turmaCert");
+  campo.replaceChildren(new Option("Selecione uma turma", ""));
+
+  turmasCert.forEach(t => {
+    campo.add(new Option(
+      t.curso_nome + " — " + t.contratante_nome,
+      t.id
+    ));
+  });
+}
+
+$("turmaCert").addEventListener("change", async () => {
+  const t = turmasCert.find(x => x.id === $("turmaCert").value);
+  const campo = $("alunoCert");
+
+  campo.replaceChildren(new Option("Selecione um aluno", ""));
+  campo.disabled = true;
+  if (!t) return;
+
+  $("empresa").value = t.contratante_nome || "";
+  $("inicio").value = t.data_inicio || "";
+  $("conclusao").value = t.data_fim || "";
+
+  const opcoes = Array.from($("modalidade").options);
+  const indice = opcoes.findIndex(o =>
+    o.value === t.curso_nome &&
+    Number(o.dataset.horas) === Number(t.carga_horaria_horas)
+  );
+
+  if (indice < 1) {
+    aviso("Modalidade da turma não encontrada.", true);
+    return;
+  }
+
+  $("modalidade").selectedIndex = indice;
+  $("modalidade").dispatchEvent(new Event("change"));
+
+  try {
+    const alunos = await api(
+      "utb_alunos?select=id,nome_completo" +
+      "&turma_id=eq." + encodeURIComponent(t.id) +
+      "&resultado=eq.aprovado&order=nome_completo.asc"
+    );
+
+    if ($("turmaCert").value !== t.id) return;
+
+    alunos.forEach(a => {
+      campo.add(new Option(a.nome_completo, a.id));
+    });
+
+    campo.disabled = alunos.length === 0;
+
+    if (!alunos.length) {
+      aviso("Nenhum aluno aprovado nesta turma.");
+    }
+  } catch (erro) {
+    aviso("Erro ao carregar alunos: " + erro.message, true);
+  }
+});
+
+$("alunoCert").addEventListener("change", () => {
+  const campo = $("alunoCert");
+  $("participante").value = campo.value
+    ? campo.selectedOptions[0].textContent
+    : "";
+});
+
 function texto(id,valor){$(id).textContent=valor||''}
 function elemento(tag,conteudo){const e=document.createElement(tag);e.textContent=conteudo;return e}
 function preparar(c){
