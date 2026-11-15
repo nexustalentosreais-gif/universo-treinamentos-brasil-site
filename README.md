@@ -1,29 +1,32 @@
+UNIVERSO TREINAMENTOS BRASIL — UTB
+Site oficial — Versão 1.0
+Site: https://universotreinamentosbrasil.com.br
+Módulos desenvolvidos
 
-# Universo Treinamentos Brasil — site estruturado
+    Site institucional e cursos profissionais
+    Serviços de engenharia elétrica
+    Cadastro e administração de instrutores
+    Solicitações e propostas comerciais
+    Cadastro e administração de turmas
+    Controle de presenças e evidências
+    Biblioteca de apostilas
+    Emissão e validação de certificados
+    Relatórios PDF
+    Política de Privacidade — LGPD
 
-Protótipo estático responsivo do Universo Treinamentos Brasil.
+Tecnologia
 
-## Páginas
-- index.html
-- cursos.html
-- eletrica.html
-- empresas.html
-- instrutores.html
-- formacao-instrutores.html
-- certificados.html
-- depoimentos.html
-- sobre.html
-- contato.html
+    HTML, CSS e JavaScript
+    GitHub
+    Supabase
 
-## Configuração rápida
-Edite `assets/app.js`:
-- whatsapp
-- email
-- cnpj
+Pendências para etapa posterior
 
-## Demonstração de certificado
-Em `certificados.html`, use:
-UT-DEMO-0001
+    Finalização dos cursos hidráulicos
+    Validação da integração automática entre turmas e certificados
+    Revisão operacional final
 
-## Observação
-Esta versão já está visualmente pronta para apresentação e planejamento, mas ainda não possui backend real para cadastro, upload, autenticação ou emissão oficial de certificados.
+Situação
+Versão 1.0 desenvolvida.
+Funcionalidades principais implementadas.
+Validação operacional completa ainda pendente.
