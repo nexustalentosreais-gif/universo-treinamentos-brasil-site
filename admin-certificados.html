@@ -274,6 +274,44 @@ mensagem('Certificado ' + c.codigo + ' pronto para imprimir. Use “Imprimir / S
 }
 $('form-certificado').addEventListener('submit', async evento => {
 evento.preventDefault();
+const alunoId = $("alunoTurma").value;
+if (!alunoId) {
+mensagem("Selecione um aluno aprovado de uma turma.", true);
+return;
+}
+try {
+const registros = await requisicao(
+"utb_alunos?select=id,turma_id,nome_completo,resultado,nota_percentual" +
+"&id=eq." + encodeURIComponent(alunoId)
+);
+const a = registros[0];
+if (!a) throw Error("Aluno não encontrado.");
+const [turmas, frequencias] = await Promise.all([
+requisicao("utb_turmas?select=curso_nome,carga_horaria_horas,data_fim,status" +
+"&id=eq." + encodeURIComponent(a.turma_id)),
+requisicao("utb_frequencias?select=horas_presentes,frequencia_percentual" +
+"&aluno_id=eq." + encodeURIComponent(alunoId))
+]);
+const t = turmas[0];
+const f = frequencias[0];
+if (!t || !f) throw Error("Registros da turma incompletos.");
+const nr10 = /NR\s[-–]?\s10\b|Reciclagem\s+(?:Básico|SEP)\b/i.test(t.curso_nome);
+const presencaOk = nr10
+? Number(f.horas_presentes) >= Number(t.carga_horaria_horas)
+: Number(f.frequencia_percentual) >= 80;
+if (a.resultado !== "aprovado" ||
+Number(a.nota_percentual) < 80 ||
+t.status !== "concluida" || !presencaOk) {
+throw Error("Aluno sem aprovação, nota ou presença suficiente.");
+}
+$("participante").value = a.nome_completo;
+$("curso").value = t.curso_nome;
+$("carga").value = t.carga_horaria_horas;
+$("conclusao").value = t.data_fim || "";
+} catch (erro) {
+mensagem("Emissão bloqueada: " + erro.message, true);
+return;
+}
 const nome = $('participante').value.trim();
 const curso = $('curso').value.trim();
 const carga = Number($('carga').value);
