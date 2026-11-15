@@ -334,6 +334,65 @@ setTimeout(() => { window.location.replace('admin-instrutores.html'); }, 1400);
 }
 }
 iniciar();
+async function carregarAlunosCertificados() {
+  const seletor = $('alunoTurma');
+  const aviso = $('infoAlunoTurma');
+
+  if (!seletor || !aviso) return;
+
+  try {
+    const [turmas, alunos, frequencias] = await Promise.all([
+      requisicao('utb_turmas?select=id,curso_nome,carga_horaria_horas,data_fim&status=eq.concluida&limit=200'),
+      requisicao('utb_alunos?select=id,turma_id,nome_completo&resultado=eq.aprovado&limit=1000'),
+      requisicao('utb_frequencias?select=aluno_id,frequencia_percentual&limit=1000')
+    ]);
+
+    const mapaTurmas = new Map(turmas.map(t => [t.id, t]));
+    const mapaFrequencias = new Map(
+      frequencias.map(f => [f.aluno_id, f.frequencia_percentual])
+    );
+
+    const disponiveis = alunos.filter(a =>
+      mapaTurmas.has(a.turma_id) &&
+      mapaFrequencias.has(a.id)
+    );
+
+    disponiveis.forEach(a => {
+      const t = mapaTurmas.get(a.turma_id);
+      seletor.add(new Option(
+        a.nome_completo + ' — ' + t.curso_nome,
+        a.id
+      ));
+    });
+
+    seletor.addEventListener('change', () => {
+      const a = disponiveis.find(x => x.id === seletor.value);
+      if (!a) {
+        aviso.textContent = 'Preenchimento manual disponível.';
+        return;
+      }
+
+      const t = mapaTurmas.get(a.turma_id);
+      $('participante').value = a.nome_completo;
+      $('curso').value = t.curso_nome;
+      $('carga').value = t.carga_horaria_horas;
+      $('conclusao').value = t.data_fim || '';
+
+      aviso.textContent =
+        'Aluno aprovado. Frequência registrada: ' +
+        mapaFrequencias.get(a.id) + '%.';
+    });
+
+    aviso.textContent =
+      disponiveis.length + ' aluno(s) aprovado(s) disponível(is).';
+
+  } catch (erro) {
+    aviso.textContent =
+      'Consulta de alunos indisponível. Use o preenchimento manual.';
+  }
+}
+
+carregarAlunosCertificados();
 </script>
 </body>
 </html>
