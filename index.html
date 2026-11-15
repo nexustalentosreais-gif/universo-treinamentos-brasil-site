@@ -604,7 +604,7 @@ const testimonialForm=$("#testimonial-form");
 if(testimonialForm){
   testimonialForm.addEventListener("submit",e=>{
     e.preventDefault();
-    alert("Envio estruturado. Todo depoimento seguirá para moderação e autorização antes de ser publicado.");
+    window.location.href = "depoimentos.html#testimonial-form";
   });
 }
 
