@@ -691,20 +691,40 @@ async function salvarResultado(id) {
 await seguro(async () => {
 const a = alunos.find(x => x.id === id);
 if (!a) throw Error("Aluno não encontrado.");
-const resultado = $("resultado_" + id).value;
+const campo = $("nota_" + id).value.trim();
+const nota = campo === "" ? null : Number(campo);
+if (nota !== null &&
+(!Number.isFinite(nota) || nota < 0 || nota > 100)) {
+throw Error("A nota deve estar entre 0 e 100.");
+}
+const f = frequencias.find(x => x.aluno_id === id);
+const horas = Number(f?.horas_presentes || 0);
+const percentual = Number(f?.frequencia_percentual || 0);
+const nr10 = /NR\s[-–]?\s10/i.test(turma.curso_nome);
+const presencaOk = nr10
+? horas >= Number(turma.carga_horaria_horas)
+: percentual >= 80;
+let resultado = "pendente";
+if (nota !== null && nota < 80) {
+resultado = "reprovado";
+} else if (nota !== null && nota >= 80 &&
+presencaOk && turma.status === "concluida") {
+resultado = "aprovado";
+}
 await api("utb_alunos?id=eq." + id, {
 method: "PATCH",
 headers: { Prefer: "return=minimal" },
 body: JSON.stringify({
+nota_percentual: nota,
 resultado,
-avaliado_em: resultado === "pendente"
-? null : new Date().toISOString(),
-avaliado_por: resultado === "pendente"
-? null : usuario.id
+avaliado_em: nota === null ? null : new Date().toISOString(),
+avaliado_por: nota === null ? null : usuario.id
 })
 });
+a.nota_percentual = nota;
 a.resultado = resultado;
-aviso("Resultado salvo.");
+$("resultado_" + id).value = resultado;
+aviso("Avaliação salva. Resultado: " + resultado);
 });
 }
 async function carregarTurno() {
