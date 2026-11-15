@@ -409,11 +409,19 @@
 
         <div class="campo campo-completo">
           <label>Curso / Treinamento *</label>
-          <input
-            id="curso"
-            placeholder="Ex.: NR-10 Básico 40h"
-            required
-          >
+           <input
+  id="curso"
+  list="listaCursos"
+  placeholder="Digite ou selecione o curso"
+  required
+>
+<datalist id="listaCursos">
+  <option value="Água Fria e Potável — PVC Marrom">
+  <option value="Água Quente — CPVC">
+  <option value="Sistema PEX — Água Fria e Quente">
+  <option value="Esgoto Residencial">
+</datalist>
+
         </div>
 
         <div class="campo">
