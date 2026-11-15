@@ -700,7 +700,7 @@ throw Error("A nota deve estar entre 0 e 100.");
 const f = frequencias.find(x => x.aluno_id === id);
 const horas = Number(f?.horas_presentes || 0);
 const percentual = Number(f?.frequencia_percentual || 0);
-const nr10 = /NR\s[-–]?\s10/i.test(turma.curso_nome);
+const nr10 = /NR\s[-–]?\s10|Reciclagem\s+(?:Básico|SEP)/i.test(turma.curso_nome || "");
 const presencaOk = nr10
 ? horas >= Number(turma.carga_horaria_horas)
 : percentual >= 80;
