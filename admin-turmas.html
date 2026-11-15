@@ -962,8 +962,14 @@ const tipo = turma.status === "concluida"
 : "RELATÓRIO PARCIAL";
 $("relatorio").innerHTML = `
 <h1>UNIVERSO TREINAMENTOS BRASIL</h1>
-<p style="text-align:center">
-🇧🇷    Ame o Brasil
+ <p style="display:flex;align-items:center;justify-content:center;gap:8px;margin:8px 0 18px;font-size:17px;font-weight:bold;">
+  <svg width="30" height="21" viewBox="0 0 28 20">
+    <rect width="28" height="20" fill="#229E45"/>
+    <polygon points="14,2 26,10 14,18 2,10" fill="#F8D447"/>
+    <circle cx="14" cy="10" r="5.2" fill="#21468B"/>
+    <path d="M9 9.4 Q14 6.7 19 9.4" stroke="white" stroke-width="1.1" fill="none"/>
+  </svg>
+  <span>Ame o Brasil</span>
 </p>
 <h2>${tipo} DE FREQUÊNCIA</h2>
 <p>
