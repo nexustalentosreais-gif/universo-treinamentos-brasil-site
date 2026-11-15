@@ -603,28 +603,17 @@ if(testimonialForm){
   });
 }
 
-const certForm=$("#cert-form");
-if(certForm){
-  certForm.addEventListener("submit",e=>{
+const certForm = $("#cert-form");
+
+if (certForm) {
+  certForm.addEventListener("submit", e => {
     e.preventDefault();
-    const code=$("#cert-code").value.trim().toUpperCase();
-    const box=$("#cert-result");
-    box.classList.add("show");
-    if(code==="UT-DEMO-0001"){
-      box.className="result show good";
-      box.innerHTML=`
-        <strong>Certificado válido</strong>
-        <p><b>Participante:</b> Exemplo de Aluno</p>
-        <p><b>Curso:</b> Instalações Elétricas de Baixa Tensão</p>
-        <p><b>Carga horária:</b> 32 horas</p>
-        <p><b>Código:</b> UT-DEMO-0001</p>
-        <p><b>Status:</b> válido</p>`;
-    }else{
-      box.className="result show warn";
-      box.innerHTML="<strong>Validação real ainda não conectada.</strong><p>Esta versão é demonstrativa. Para testar a interface, use <b>UT-DEMO-0001</b>.</p>";
-    }
+    const codigo = $("#cert-code").value.trim();
+    window.location.href = "certificados.html" +
+      (codigo ? "?codigo=" + encodeURIComponent(codigo) : "");
   });
 }
+
 
 </script>
 <p style="text-align:center;margin:15px 0;">
