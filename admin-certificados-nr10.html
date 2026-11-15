@@ -480,7 +480,7 @@ window.addEventListener('afterprint', () => {
 
 (async()=>{
  $('emissao').value=hoje();
- try{const a=await api('utb_admins?select=user_id&limit=1');if(!Array.isArray(a)||!a.length)throw Error('Sem autorização');document.documentElement.style.visibility='visible';await listar()}
+ try{const a=await api('utb_admins?select=user_id&limit=1');if(!Array.isArray(a)||!a.length)throw Error('Sem autorização');document.documentElement.style.visibility='visible';await listar();carregarTurmasCert().catch(e=>aviso("Erro ao carregar turmas: "+e.message,true));}
  catch(e){document.documentElement.style.visibility='visible';document.querySelector('main').replaceChildren(elemento('div','Acesso não autorizado ou sessão expirada. Entre novamente no painel administrativo.'));sessionStorage.removeItem('utb_access_token');setTimeout(()=>location.replace('admin-instrutores.html'),1500)}
 })();
 </script>
