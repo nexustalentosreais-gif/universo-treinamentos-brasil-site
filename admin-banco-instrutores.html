@@ -245,7 +245,7 @@
 
     <div class="cabecalho">
 
-      <h2>Pesquisar instrutores ativos</h2>
+      <h2>Pesquisar instrutores cadastrados</h2>
 
       <p>
         Localize profissionais disponíveis para atender
@@ -265,11 +265,16 @@
 
       <div class="filtros-grid">
 
-        <input
-          id="filtroNome"
-          type="text"
-          placeholder="Nome do instrutor"
-        >
+        <div style="grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;">
+  <select id="modoBusca">
+    <option value="nome">Nome do instrutor</option>
+    <option value="todos">Listar todos os instrutores</option>
+  </select>
+
+  <input id="filtroNome" type="text"
+    placeholder="Digite o nome do instrutor">
+</div>
+
 
         <input
           id="filtroCidade"
@@ -455,6 +460,7 @@
         ).value;
       
 const existeFiltro =
+  document.getElementById("modoBusca").value === "todos" ||
   nome ||
   cidade ||
   curso ||
@@ -477,9 +483,8 @@ if(!existeFiltro){
         todosInstrutores.filter(i => {
 
           const nomeOk =
-            normalizar(
-              i.nome_completo
-            ).includes(nome);
+  document.getElementById("modoBusca").value === "todos" ||
+  normalizar(i.nome_completo).includes(nome);
 
           const cidadeOk =
             normalizar(
@@ -583,7 +588,11 @@ if(!existeFiltro){
           <article class="card">
 
             <span class="status">
-              ATIVO
+              ${escapar(({
+  documentacao_pendente: "Documentação pendente",
+  aprovado: "Aprovado",
+  reprovado: "Reprovado"
+})[i.status] || "Status não definido")}
             </span>
 
             <h3>
@@ -689,7 +698,7 @@ if(!existeFiltro){
 
         const resposta =
           await fetch(
-            `${SUPABASE_URL}/functions/v1/listar-instrutores-ativos`,
+             `${SUPABASE_URL}/rest/v1/cadastros_instrutores?select=*&order=criado_em.desc`,
             {
               method:"GET",
 
@@ -736,8 +745,7 @@ if(!existeFiltro){
 
 
         todosInstrutores =
-          dados.instrutores || [];
-
+          Array.isArray(dados) ? dados : [];
 
         renderizar();
 
@@ -755,7 +763,7 @@ if(!existeFiltro){
 
 
     [
-      "filtroNome",
+      "filtroNome", "modoBusca",
       "filtroCidade",
       "filtroCurso",
       "filtroExperiencia",
