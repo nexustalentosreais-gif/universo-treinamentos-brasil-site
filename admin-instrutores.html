@@ -125,7 +125,13 @@
   <div id="painel" class="oculto">
 
 <div class="card">
-  <h1>Cadastros de Instrutores</h1>
+  <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+  <h1 style="margin:0;">Cadastros de Instrutores</h1>
+  <div style="display:flex; gap:10px;">
+    <button type="button" onclick="window.location.href='admin.html'" class="secundario" style="width:auto;">VOLTAR AO PAINEL</button>
+    <button type="button" id="sair" class="secundario" style="width:auto;">SAIR</button>
+  </div>
+</div>
 
   <div>
     <label>Buscar por nome, e-mail ou cidade</label>
@@ -164,9 +170,7 @@
   <button id="filtrar">FILTRAR</button>
   <button id="limparFiltros" class="secundario">LIMPAR FILTROS</button>
   <button id="atualizar">ATUALIZAR LISTA</button>
-  <button onclick="window.location.href='admin.html'" class="secundario">VOLTAR AO PAINEL</button>
-  <button id="sair" class="secundario">SAIR</button>
-</div>
+  </div>
 
     <div id="lista" class="card">
       Carregando...
