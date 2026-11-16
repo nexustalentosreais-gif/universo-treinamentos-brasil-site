@@ -360,6 +360,16 @@ tr:last-child td{border-bottom:none}
 <input id="cert-code" placeholder="Ex.: UT-2027-000145" aria-label="Código do certificado">
 <button class="btn btn-black" type="submit">VALIDAR</button>
 </form>
+<div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+  <button type="button" id="ler-qr-camera" class="btn btn-black">
+    LER QR CODE PELA CÂMERA
+  </button>
+  <button type="button" id="ler-qr-foto" class="btn btn-black">
+    ENVIAR FOTO DO QR CODE
+  </button>
+</div>
+<input type="file" id="arquivo-qr" accept="image/*" hidden>
+<div id="leitor-qr" style="margin-top:15px;max-width:400px"></div>
 <div id="cert-result" class="result"></div>
 </div>
 <div class="soft">
@@ -606,5 +616,120 @@ if (codigoDaUrl) {
 
 </script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+<script>
+let leitorUTB = null;
+let cameraAberta = false;
+let qrProcessando = false;
+
+async function fecharLeitorUTB() {
+  if (leitorUTB) {
+    if (cameraAberta) {
+      cameraAberta = false;
+      await leitorUTB.stop();
+    }
+    leitorUTB.clear();
+    leitorUTB = null;
+  }
+  document.getElementById('ler-qr-camera').textContent =
+    'LER QR CODE PELA CÂMERA';
+}
+
+async function validarQrUTB(texto) {
+  if (qrProcessando) return;
+  qrProcessando = true;
+  try {
+    let codigo = texto.trim();
+
+    if (/^https?:\/\//i.test(codigo)) {
+      const endereco = new URL(codigo);
+      const dominio = endereco.hostname.toLowerCase();
+
+      if (
+        !['universotreinamentosbrasil.com.br',
+          'www.universotreinamentosbrasil.com.br'].includes(dominio) ||
+        endereco.pathname !== '/certificados.html'
+      ) {
+        throw Error('Este QR Code não pertence à UTB.');
+      }
+
+      codigo = endereco.searchParams.get('codigo') || '';
+    }
+
+    if (!codigo) throw Error('Código não encontrado no QR Code.');
+
+    await fecharLeitorUTB();
+
+    document.getElementById('cert-code').value = codigo;
+    document.getElementById('cert-form').requestSubmit();
+
+  } catch (erro) {
+    alert(erro.message);
+  } finally {
+    qrProcessando = false;
+  }
+}
+
+document.getElementById('ler-qr-camera')
+  .addEventListener('click', async () => {
+    try {
+      if (cameraAberta) {
+        await fecharLeitorUTB();
+        return;
+      }
+
+      if (typeof Html5Qrcode === 'undefined') {
+        throw Error('Leitor QR Code não carregado.');
+      }
+
+      await fecharLeitorUTB();
+      leitorUTB = new Html5Qrcode('leitor-qr');
+
+      await leitorUTB.start(
+        { facingMode: 'environment' },
+        { fps: 10, qrbox: 250 },
+        validarQrUTB
+      );
+
+      cameraAberta = true;
+      document.getElementById('ler-qr-camera').textContent =
+        'FECHAR CÂMERA';
+
+    } catch (erro) {
+      alert('Não foi possível abrir a câmera: ' + erro.message);
+      try { await fecharLeitorUTB(); } catch (_) {}
+    }
+  });
+
+document.getElementById('ler-qr-foto')
+  .addEventListener('click', () => {
+    document.getElementById('arquivo-qr').click();
+  });
+
+document.getElementById('arquivo-qr')
+  .addEventListener('change', async (evento) => {
+    const arquivo = evento.target.files[0];
+    if (!arquivo) return;
+
+    try {
+      if (typeof Html5Qrcode === 'undefined') {
+        throw Error('Leitor QR Code não carregado.');
+      }
+
+      await fecharLeitorUTB();
+      leitorUTB = new Html5Qrcode('leitor-qr');
+
+      const texto = await leitorUTB.scanFile(arquivo, true);
+      await validarQrUTB(texto);
+
+    } catch (erro) {
+      alert('Não foi possível ler a imagem: ' + erro.message);
+      try { await fecharLeitorUTB(); } catch (_) {}
+    } finally {
+      evento.target.value = '';
+    }
+  });
+</script>
+  
 </body>
 </html>
