@@ -136,12 +136,9 @@
     <label>Status do cadastro</label>
     <select id="filtroStatus">
     <option value="">Todos</option>
-<option value="pendente">Pendente</option>
+ <option value="documentacao_pendente">Documentação pendente</option>
 <option value="aprovado">Aprovado</option>
-<option value="documentacao_pendente">Documentação pendente</option>
-<option value="ativo">Ativo</option>
-<option value="inativo">Inativo</option>
-<option value="reprovado">Reprovado</option> 
+<option value="reprovado">Reprovado</option>
     </select>
   </div>
 
@@ -149,15 +146,11 @@
     <label>Formação UTB</label>
     <select id="filtroFormacao">
       <option value="">Todas</option>
-      <option value="nao_avaliado">Não avaliado</option>
-      <option value="nao_necessaria">Não necessária</option>
-      <option value="convidado">Convidado</option>
-      <option value="em_formacao">Em formação</option>
-      <option value="aprovado_na_formacao">Aprovado na formação</option>
-      <option value="reprovado_na_formacao">Reprovado na formação</option>
+      <option value="nao_necessaria">Não necessário</option>
+<option value="aprovado_na_formacao">Aprovado na formação</option>
+<option value="reprovado_na_formacao">Reprovado na formação</option>
     </select>
   </div>
-
   <div style="margin-top:12px;">
     <label>Data inicial</label>
     <input id="filtroDataInicial" type="date">
@@ -408,24 +401,17 @@ return;
           <div>
             <label><strong>Status do cadastro</strong></label>
             <select id="status_${c.id}">
-              <option value="pendente">Pendente</option>
+              <option value="documentacao_pendente">Documentação pendente</option>
 <option value="aprovado">Aprovado</option>
-<option value="documentacao_pendente">Documentação pendente</option>
-<option value="ativo">Ativo</option>
-<option value="inativo">Inativo</option>
 <option value="reprovado">Reprovado</option>
             </select>
           </div>
-
           <div>
             <label><strong>Formação UTB</strong></label>
             <select id="formacao_${c.id}">
-              <option value="nao_avaliado">Não avaliado</option>
-              <option value="nao_necessaria">Não necessária</option>
-              <option value="convidado">Convidado</option>
-              <option value="em_formacao">Em formação</option>
-              <option value="aprovado_na_formacao">Aprovado na formação</option>
-              <option value="reprovado_na_formacao">Reprovado na formação</option>
+            <option value="nao_necessaria">Não necessário</option>
+<option value="aprovado_na_formacao">Aprovado na formação</option>
+<option value="reprovado_na_formacao">Reprovado na formação</option>
             </select>
           </div>
 
@@ -445,10 +431,10 @@ return;
       lista.appendChild(bloco);
 
       document.getElementById(`status_${c.id}`).value =
-        c.status || "pendente";
+        c.status || "documentacao_pendente";
 
       document.getElementById(`formacao_${c.id}`).value =
-        c.formacao_utb_status || "nao_avaliado";
+        c.formacao_utb_status || "nao_necessaria";
 
     });
 
