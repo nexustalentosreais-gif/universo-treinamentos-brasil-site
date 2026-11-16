@@ -329,6 +329,7 @@ const criados = await requisicao('certificados?select=id,codigo,participante_nom
 method: 'POST',
 headers: { Prefer: 'return=representation' },
 body: JSON.stringify({
+aluno_id: alunold,
 participante_nome: nome,
 curso_nome: curso,
 carga_horaria: carga,
