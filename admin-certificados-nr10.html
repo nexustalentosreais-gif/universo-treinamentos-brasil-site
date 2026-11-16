@@ -394,7 +394,7 @@ if (!alunoId) {
  const detalhes={modalidade,empresa:valor('empresa'),local:valor('local'),inicio:valor('inicio'),conteudo:valor('conteudo'),instrutores:valor('instrutores'),tecnico:valor('tecnico'),qualificacao:valor('qualificacao'),registro:valor('registro')};
  $('salvar').disabled=true;aviso('Registrando no Supabase...');
  try{
-  const criados=await api('certificados?select=id,codigo,participante_nome,curso_nome,carga_horaria,data_conclusao,data_emissao,status,nr10_dados,criado_em',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify({participante_nome:valor('participante'),curso_nome:modalidade,carga_horaria:carga,data_conclusao:valor('conclusao'),data_emissao:valor('emissao'),status:'valido',nr10_dados:detalhes})});
+  const criados=await api('certificados?select=id,codigo,participante_nome,curso_nome,carga_horaria,data_conclusao,data_emissao,status,nr10_dados,criado_em',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify({aluno_id:alunold,participante_nome:valor('participante'),curso_nome:modalidade,carga_horaria:carga,data_conclusao:valor('conclusao'),data_emissao:valor('emissao'),status:'valido',nr10_dados:detalhes})});
   const c=criados&&criados[0];if(!c||!c.codigo)throw new Error('Cadastro sem retorno de código; confira a lista antes de tentar novamente.');
   $('form').reset();$('emissao').value=hoje();await listar();preparar(c);
  }catch(err){aviso('Não foi possível registrar: '+err.message,true)}finally{$('salvar').disabled=false}
