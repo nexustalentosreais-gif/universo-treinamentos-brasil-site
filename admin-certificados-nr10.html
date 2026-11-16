@@ -394,6 +394,32 @@ if (!alunoId) {
  const detalhes={modalidade,empresa:valor('empresa'),local:valor('local'),inicio:valor('inicio'),conteudo:valor('conteudo'),instrutores:valor('instrutores'),tecnico:valor('tecnico'),qualificacao:valor('qualificacao'),registro:valor('registro')};
  $('salvar').disabled=true;aviso('Registrando no Supabase...');
  try{
+  const alunos = await api(
+  'utb_alunos?select=id,turma_id,resultado,nota_percentual&id=eq.' +
+  encodeURIComponent(alunoId)
+);
+const a = alunos[0];
+
+if (!a || a.resultado !== 'aprovado' ||
+    !Number.isFinite(Number(a.nota_percentual)) ||
+    Number(a.nota_percentual) < 80) {
+  throw Error('Aluno sem aprovação ou nota mínima de 80%.');
+}
+
+const [turmas, frequencias] = await Promise.all([
+  api('utb_turmas?select=curso_nome,carga_horaria_horas,status&id=eq.' +
+      encodeURIComponent(a.turma_id)),
+  api('utb_frequencias?select=horas_presentes&aluno_id=eq.' +
+      encodeURIComponent(alunoId))
+]);
+
+const t = turmas[0];
+const f = frequencias[0];
+
+if (!t || !f || t.status !== 'concluida' ||
+    Number(f.horas_presentes) < Number(t.carga_horaria_horas)) {
+  throw Error('NR-10 exige turma concluída e 100% da carga horária.');
+} 
   const criados=await api('certificados?select=id,codigo,participante_nome,curso_nome,carga_horaria,data_conclusao,data_emissao,status,nr10_dados,criado_em',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify({aluno_id:alunold,participante_nome:valor('participante'),curso_nome:modalidade,carga_horaria:carga,data_conclusao:valor('conclusao'),data_emissao:valor('emissao'),status:'valido',nr10_dados:detalhes})});
   const c=criados&&criados[0];if(!c||!c.codigo)throw new Error('Cadastro sem retorno de código; confira a lista antes de tentar novamente.');
   $('form').reset();$('emissao').value=hoje();await listar();preparar(c);
