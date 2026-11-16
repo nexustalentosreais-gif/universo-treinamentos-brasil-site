@@ -381,6 +381,10 @@ async function listar(){
 $('form').addEventListener('submit',async e=>{
  e.preventDefault();
  const valor=id=>$(id).value.trim();
+ const alunoId = valor('alunoCert');
+if (!alunoId) {
+  return aviso('Selecione um aluno aprovado.', true);
+}
  const modalidade=valor('modalidade'),carga=Number(valor('carga'));
  if(!modalidade||!Number.isInteger(carga)||carga<1)return aviso('Informe uma modalidade e carga horária válida.',true);
  if((modalidade==='NR-10 Básico'||modalidade==='NR-10 SEP')&&carga<40)return aviso('Para curso inicial Básico ou SEP, informe ao menos 40 horas.',true);
