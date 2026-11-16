@@ -232,7 +232,7 @@ async function entrar(){
 
     accessToken = dados.access_token;
     sessionStorage.setItem("utb_access_token", accessToken);
-  window.location.href = "admin-instrutores.html";
+  window.location.href = "admin.html";
 return;
   }catch(erro){
     loginMsg.innerHTML = `<p class="erro">${erro.message}</p>`;
