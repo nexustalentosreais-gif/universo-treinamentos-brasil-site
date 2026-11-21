@@ -357,9 +357,14 @@ tr:last-child td{border-bottom:none}
 <p>Relatos e fotos reais de participantes, publicados somente após autorização e moderação.</p>
 </div></section>
 
-<section class="section" style="padding:30px 0 35px;">
+<section class="section" style="padding:12px 0 35px;margin-top:-12px;">
   <div class="container">
-    <div class="soft">
+
+    <div id="depoimentos-aprovados"
+         aria-live="polite">
+    </div>
+
+    <div id="aviso-depoimentos" class="soft">
       <h2 style="margin:0 0 10px;color:#103e6a;">
         Depoimentos em análise
       </h2>
@@ -371,9 +376,10 @@ tr:last-child td{border-bottom:none}
         de serem publicados nesta página.
       </p>
     </div>
+
   </div>
 </section>
-  
+
 <section class="section white"><div class="container split">
 <form class="form" id="testimonial-form" enctype="multipart/form-data">
 <h2 style="margin-top:0">Quero enviar meu depoimento</h2>
