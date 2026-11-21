@@ -723,7 +723,118 @@ if (testimonialForm) {
   });
 }
 
-/* UTB - EXIBICAO PUBLICA DE DEPOIMENTOS APROVADOS */ async function carregarDepoimentosPublicos() { const lista = document.getElementById("depoimentos-aprovados"); const aviso = document.getElementById("aviso-depoimentos"); if (!lista || !aviso) return; try { const resposta = await fetch( "https://xkxlgmmssvllcmhymibj.supabase.co/functions/v1/listar-depoimentos-publicos", { method: "GET", cache: "no-store" } ); if (!resposta.ok) { throw new Error("Falha ao consultar depoimentos"); } const dados = await resposta.json(); if (!dados.sucesso || !Array.isArray(dados.depoimentos)) { throw new Error("Resposta invalida"); } if (dados.depoimentos.length === 0) { lista.replaceChildren(); aviso.hidden = false; return; } const titulo = document.createElement("h2"); titulo.textContent = "Depoimentos de nossos alunos"; titulo.style.color = "#103e6a"; titulo.style.marginBottom = "20px"; const grade = document.createElement("div"); grade.className = "grid-3"; dados.depoimentos.forEach(d => { const card = document.createElement("article"); card.className = "card"; const nome = document.createElement("h3"); nome.textContent = d.nome_publico || "Anônimo"; const curso = document.createElement("p"); curso.textContent = [d.curso, d.cidade] .filter(Boolean) .join(" • "); const relato = document.createElement("p"); relato.textContent = d.relato || ""; relato.style.color = "#263746"; relato.style.fontSize = "1.1rem"; relato.style.whiteSpace = "pre-line"; card.append(nome, curso, relato); grade.appendChild(card); }); lista.replaceChildren(titulo, grade); aviso.hidden = true; } catch (erro) { console.error("UTB - Depoimentos:", erro); aviso.hidden = false; } } carregarDepoimentosPublicos();
+async function carregarDepoimentosPublicos() {
+  const lista = document.getElementById("depoimentos-aprovados");
+  const aviso = document.getElementById("aviso-depoimentos");
+
+  if (!lista || !aviso) return;
+
+  const base = "https://xkxlgmmssvllcmhymibj.supabase.co/functions/v1/";
+
+  const endpoints = [
+    "listar-depoimentos-com-fotos",
+    "listar-depoimentos-publicos"
+  ];
+
+  try {
+    let dados = null;
+
+    for (const endpoint of endpoints) {
+      try {
+        const resposta = await fetch(base + endpoint, {
+          method: "GET",
+          cache: "no-store"
+        });
+
+        if (!resposta.ok) continue;
+
+        const resultado = await resposta.json();
+
+        if (resultado.sucesso &&
+            Array.isArray(resultado.depoimentos)) {
+          dados = resultado.depoimentos;
+          break;
+        }
+      } catch (erro) {
+        console.warn("Consulta indisponível:", endpoint);
+      }
+    }
+
+    if (!dados) {
+      throw new Error("Consulta pública indisponível");
+    }
+
+    if (dados.length === 0) {
+      lista.replaceChildren();
+      aviso.hidden = false;
+      return;
+    }
+
+    const titulo = document.createElement("h2");
+    titulo.textContent = "Depoimentos de nossos alunos";
+    titulo.style.color = "#103e6a";
+
+    const grade = document.createElement("div");
+    grade.className = "grid-3";
+
+    dados.forEach(d => {
+      const card = document.createElement("article");
+      card.className = "card";
+
+      const nome = document.createElement("h3");
+      nome.textContent = d.nome_publico || "Anônimo";
+
+      const curso = document.createElement("p");
+      curso.textContent = [d.curso, d.cidade]
+        .filter(Boolean).join(" • ");
+
+      const relato = document.createElement("p");
+      relato.textContent = d.relato || "";
+      relato.style.whiteSpace = "pre-line";
+
+      card.append(nome, curso, relato);
+
+      if (Array.isArray(d.fotos) && d.fotos.length > 0) {
+        const galeria = document.createElement("div");
+
+        galeria.style.display = "flex";
+        galeria.style.flexWrap = "wrap";
+        galeria.style.gap = "10px";
+        galeria.style.marginTop = "15px";
+
+        d.fotos.forEach(url => {
+          if (typeof url !== "string" ||
+              !url.startsWith("https://")) return;
+
+          const foto = document.createElement("img");
+
+          foto.src = url;
+          foto.alt = "Fotografia autorizada do curso";
+          foto.loading = "lazy";
+          foto.style.width = "160px";
+          foto.style.height = "120px";
+          foto.style.objectFit = "cover";
+          foto.style.borderRadius = "12px";
+
+          galeria.appendChild(foto);
+        });
+
+        card.appendChild(galeria);
+      }
+
+      grade.appendChild(card);
+    });
+
+    lista.replaceChildren(titulo, grade);
+    aviso.hidden = true;
+
+  } catch (erro) {
+    console.error("UTB:", erro);
+    aviso.hidden = false;
+  }
+}
+
+carregarDepoimentosPublicos();
 const certForm=$("#cert-form");
 if(certForm){
   certForm.addEventListener("submit",e=>{
