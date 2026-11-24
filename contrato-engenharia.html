@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contrato de Engenharia | UTB</title>
+<style>
+{box-sizing:border-box}
+body{margin:0;background:#eef3f8;color:#123b70;font-family:Arial,sans-serif}
+header{background:#123b70;color:white;text-align:center;padding:20px}
+main{max-width:1100px;margin:auto;padding:15px}
+section{background:white;padding:22px;border:1px solid #ccd9e6;border-radius:10px;margin:20px 0}
+h2{text-align:center;font-size:21px}
+h3{background:#e6eef8;padding:10px;font-size:17px;border-left:4px solid #1764b5}
+p{font-size:16px;line-height:1.7;margin:7px 0}
+input,textarea,select{font:inherit;color:#123b70;background:#f7fbff;border:1px solid #9bb0c8;border-radius:5px;padding:8px;margin:4px;max-width:100%}
+input[type=text]{width:230px}
+input[type=date]{width:165px}
+input[type=number]{width:90px}
+input[type=checkbox]{width:20px;height:20px;vertical-align:middle;accent-color:#1764b5}
+textarea{display:block;width:98%;min-height:60px;resize:vertical}
+label{display:inline-block;margin-right:10px;cursor:pointer}
+button,a.botao{display:inline-block;background:#1764b5;color:white;padding:13px 18px;font-size:16px;font-weight:bold;border:0;border-radius:6px;text-decoration:none;cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
+.verde{background:#187348}
+.vermelho{background:#b91c1c}
+.cinza{background:#526780}
+.acoes{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:20px 0}
+#msg{text-align:center;padding:12px;font-weight:bold;white-space:pre-wrap}
+#documento{white-space:pre-wrap;overflow-wrap:anywhere;color:black;font-size:15px;line-height:1.4}
+[hidden]{display:none!important}
+@page{size:A4;margin:15mm}
+@media print{
+body{background:white}
+header,#editor,#msg,#voltar,.acoes,#titulo{display:none!important}
+main{max-width:none;margin:0;padding:0}
+section{border:0;margin:0;padding:0}
+#documento{font-size:11pt;line-height:1.15}
+}
+</style>
+</head>
+<body>
+<header>
+<h1>UNIVERSO TREINAMENTOS BRASIL</h1>
+CONTRATOS DE ENGENHARIA ELÉTRICA
+</header>
+<div id="msg">Verificando acesso administrativo...</div>
+<main id="painel" hidden>
+<a id="voltar" class="botao cinza" href="admin-contratos.html">VOLTAR AOS CONTRATOS</a>
+<section id="editor">
+<form id="formulario">
+<div id="campos"></div>
+<div class="acoes">
+<button type="button" id="visualizar">VISUALIZAR</button>
+<button type="button" id="excluir" class="vermelho">EXCLUIR</button>
+</div>
+</form>
+</section>
+<section id="preview" hidden>
+<h2 id="titulo">VISUALIZAÇÃO DO CONTRATO</h2>
+<div id="documento"></div>
+<div class="acoes">
+<button id="editar" class="cinza">VOLTAR E EDITAR</button>
+<button id="aprovar" class="verde">APROVAR E SALVAR</button>
+<button id="imprimir" disabled>IMPRIMIR</button>
+<button id="descartar" class="vermelho">EXCLUIR</button>
+<button id="novo" hidden>NOVO CONTRATO</button>
+</div>
+</section>
+</main>
+<script>
+"use strict";
+const URL="https://xkxlgmmssvllcmhymibj.supabase.co";
+const KEY="sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV";
+const TOKEN=sessionStorage.getItem("utb_access_token");
+const $=id=>document.getElementById(id);
+const headers={
+"apikey":KEY,
+"Authorization":"Bearer "+TOKEN,
+"Content-Type":"application/json"
+};
+let dados=null;
+let registro=null;
+let idEmissao=null;
+let enviando=false;
+let iniciado=false;
+const modelo=`UNIVERSO TREINAMENTOS BRASIL
+CONTRATO PARTICULAR DE PRESTAÇÃO DE SERVIÇOS TÉCNICOS DE ENGENHARIA ELÉTRICA
+CONTRATO Nº: [[NUMERO_CONTRATO]] DATA: {{data_contrato|D}}
+IDENTIFICAÇÃO DAS PARTES
+CONTRATADA:
+Razão social: {{empresa|T}}
+Nome comercial: {{nome_comercial|T}}
+CNPJ: {{cnpj_empresa|T}}
+Endereço: {{endereco_empresa|A}}
+Telefone: {{telefone_empresa|T}} E-mail: {{email_empresa|T}}
+Representante: {{representante_empresa|T}}
+Profissão: {{profissao_empresa|T}} CREA: {{crea_empresa|T}}
+CONTRATANTE:
+Nome/Razão social: {{contratante|T}}
+CPF/CNPJ: {{cpf_cnpj|T}}
+Endereço: {{endereco_cliente|A}}
+Representante legal: {{representante_cliente|T}}
+CPF do representante: {{cpf_representante|T}}
+Telefone: {{telefone_cliente|T}} E-mail: {{email_cliente|T}}
+CLÁUSULA 1ª — OBJETO E TIPO DE SERVIÇO
+1.1. O presente contrato tem por objeto exclusivamente os serviços técnicos de engenharia elétrica e/ou de execução de instalações elétricas descritos na proposta e no Anexo I — Escopo e Orçamento, ambos aceitos pelas partes.
+1.2. Atividades contratadas:
+{{projeto|C|Projeto elétrico}} {{laudo|C|Laudo ou parecer técnico}} {{vistoria|C|Vistoria/inspeção}}
+{{diagnostico|C|Análise e diagnóstico de falhas}} {{execucao|C|Execução/reforma de instalação elétrica}}
+{{manutencao|C|Manutenção}} {{adequacao|C|Adequação de segurança}}
+{{outro|C|Outros}} {{outro_descricao|T}}
+1.3. Local da prestação: {{local_servico|A}}
+O serviço não inclui atividades não descritas no Anexo I, mesmo que sejam relacionadas ao sistema elétrico vistoriado.
+CLÁUSULA 2ª — ESCOPO, ENTREGÁVEIS E LIMITES TÉCNICOS
+2.1. O Anexo I especificará etapas, circuitos/ambientes/equipamentos abrangidos, quantidades, características técnicas, documentos de entrada, entregáveis, exclusões e critérios de aceite.
+2.2. Projetos, laudos, diagnósticos e vistorias refletirão as condições constatadas, documentos disponíveis e medições efetuadas na data do serviço. Não constituem garantia de inexistência de problemas ocultos ou posteriores fora do escopo.
+2.3. Serviços de execução somente compreenderão os materiais, pontos e intervenções expressamente contratados. Alterações de projeto, ampliações e correção de defeitos preexistentes dependerão de aprovação adicional.
+CLÁUSULA 3ª — HABILITAÇÃO, ART E REGULARIDADE
+3.1. A execução de serviços técnicos ficará condicionada à habilitação profissional e à regularidade cadastral da pessoa jurídica perante os órgãos competentes, inclusive CREA, quando exigida.
+3.2. A Anotação de Responsabilidade Técnica (ART) aplicável será registrada e quitada antes do início da atividade técnica, nos termos das normas do Sistema Confea/Crea.
+Responsável técnico: {{responsavel_tecnico|T}}
+Profissão: {{profissao_tecnico|T}} CREA: {{crea_tecnico|T}}
+Desde que o serviço se enquadre em suas atribuições profissionais.
+3.3. Taxa da ART: {{taxa_art|S|Incluída no valor~Paga pela contratante no valor informado previamente~Não aplicável quando legalmente dispensada}}
+Número da ART, após emissão: {{numero_art|T}}
+O contrato não substitui a ART.
+CLÁUSULA 4ª — PREÇO E PAGAMENTO
+4.1. Valor total dos serviços: R$ {{valor_total|T}}
+Por extenso: {{valor_extenso|T}}
+4.2. Entrada: R$ {{entrada|T}} Data: {{data_entrada|D}}
+Quantidade de parcelas: {{parcelas|N}} Valor por parcela: R$ {{valor_parcela|T}}
+Vencimentos: {{vencimentos|T}}
+Saldo na entrega/medição aprovada: R$ {{saldo|T}} Data: {{data_saldo|D}}
+Condições adicionais: {{pagamento_adicional|A}}
+4.3. Em caso de atraso, incidirão, se legalmente cabíveis, multa moratória de 2% sobre a parcela vencida e juros simples de 1% ao mês, pro rata die, observadas as normas de proteção ao consumidor.
+4.4. A contratada emitirá o documento fiscal correspondente ao serviço efetivamente prestado, conforme a legislação aplicável.
+CLÁUSULA 5ª — MATERIAIS, EQUIPAMENTOS E DESPESAS
+5.1. Fornecimento de materiais: {{fornecimento|S|Pela CONTRATADA~Pela CONTRATANTE~Compartilhado conforme Anexo I~Não se aplica}}
+Marcas, quantidades, preços e responsabilidades por aquisição serão detalhados no orçamento.
+5.2. Materiais/equipamentos de terceiros não abrangidos pelo orçamento, adequações civis, energia, andaimes/plataformas, deslocamentos, taxas, desligamentos e recomposições de alvenaria somente serão incluídos se expressamente previstos.
+5.3. A contratada poderá recusar material inadequado ou sem condições de segurança, justificando tecnicamente e apresentando alternativa para aprovação.
+CLÁUSULA 6ª — PRAZOS E CONDIÇÕES DE EXECUÇÃO
+6.1. Início previsto: {{inicio|D}} Conclusão prevista: {{conclusao|D}}
+Prazo de execução: {{prazo|T}}
+Dias e horários autorizados: {{horarios|T}}
+6.2. O cronograma pressupõe acesso ao local, informações técnicas, energia/desligamentos programados, materiais e autorizações disponibilizados pela contratante.
+6.3. Atrasos por impedimentos de acesso, interrupções exigidas por segurança, eventos fortuitos ou mudanças aprovadas poderão justificar reprogramação por escrito, sem afastar responsabilidades legais.
+CLÁUSULA 7ª — OBRIGAÇÕES DA CONTRATADA
+7.1. Executar o serviço contratado com diligência técnica, observando as normas ABNT aplicáveis, a NR-10 vigente na data da execução quando pertinente, os requisitos de segurança, os limites das atribuições profissionais e as condições pactuadas.
+7.2. Comunicar achados relevantes, riscos graves identificados, necessidade de intervenções adicionais, impedimentos e alterações de prazo ou preço antes de executá-las.
+7.3. Apresentar os entregáveis contratados e, quando aplicável, relatório de conclusão, testes e ART. Manter as condições de segurança sob sua responsabilidade.
+CLÁUSULA 8ª — OBRIGAÇÕES DA CONTRATANTE
+8.1. Fornecer documentos, informações, desenhos, cargas, histórico de falhas e acesso seguro às instalações; designar representante para acompanhar os serviços; informar riscos existentes e garantir as autorizações necessárias.
+8.2. Providenciar desligamentos, isolamento de áreas, permissões de trabalho, interfaces com a concessionária e condições de operação que lhe couberem segundo o Anexo I.
+8.3. Efetuar os pagamentos pactuados, preservar instalações e não alterar projetos ou sistemas entregues sem análise técnica apropriada.
+CLÁUSULA 9ª — SEGURANÇA E SUSPENSÃO DE ATIVIDADES
+9.1. As partes observarão as medidas de prevenção e proteção cabíveis. Na presença de risco grave e iminente, a contratada poderá paralisar a atividade afetada, registrar a ocorrência e exigir condições seguras para retomada.
+9.2. Trabalhos energizados somente serão realizados se tecnicamente justificados, permitidos e acompanhados das medidas de controle exigidas pela regulamentação aplicável.
+9.3. Falhas ou anomalias existentes fora do escopo poderão ser comunicadas em relatório; sua correção dependerá de contratação específica, exceto medidas emergenciais legalmente indispensáveis.
+CLÁUSULA 10ª — MODIFICAÇÕES, SERVIÇOS EXTRAS E SUBCONTRATAÇÃO
+10.1. Toda mudança de escopo, materiais, preço ou prazo será objeto de proposta complementar e aprovação escrita antes da execução.
+10.2. A subcontratação de atividades técnicas, quando admitida, observará as exigências legais, de habilitação, ART e responsabilidade; não afasta os deveres contratuais da CONTRATADA.
+CLÁUSULA 11ª — ENTREGA, VISTORIA E ACEITE
+11.1. Ao final, a contratada comunicará a conclusão e entregará, conforme o serviço contratado: projeto e memorial, laudo assinado, relatório de diagnóstico, registros de ensaio, relação de serviços executados e/ou ART.
+11.2. A contratante terá {{dias_vistoria|N}} dias úteis para vistoriar e comunicar, por escrito, eventuais inconformidades objetivas em relação ao escopo, sem prejuízo dos direitos legais relativos a vícios ocultos.
+11.3. Apontadas inconformidades de responsabilidade da contratada, as partes ajustarão prazo razoável para correção. O aceite não elimina garantias nem responsabilidades impostas por lei.
+CLÁUSULA 12ª — GARANTIAS E RESPONSABILIDADE CIVIL
+12.1. A contratada responderá por falhas comprovadamente decorrentes de erro de projeto, diagnóstico, material fornecido ou execução que lhe sejam legalmente imputáveis, observada a natureza e a extensão dos serviços contratados.
+12.2. Permanecem integralmente assegurados os direitos e prazos de garantia previstos no Código de Defesa do Consumidor, quando aplicável, e no Código Civil, inclusive disposições específicas de empreitada quando preenchidos seus requisitos.
+12.3. Não se consideram automaticamente compreendidos na garantia danos causados exclusivamente por intervenção de terceiros, uso indevido, falta de manutenção ou defeitos alheios à área efetivamente atendida, sem prejuízo da apuração de responsabilidade conforme a lei.
+CLÁUSULA 13ª — RESCISÃO, CANCELAMENTO E ACERTOS
+13.1. O contrato poderá ser rescindido por acordo escrito, descumprimento relevante, impossibilidade de execução ou nos demais casos previstos em lei.
+13.2. Em caso de encerramento antecipado, serão apurados os serviços efetivamente executados, materiais já adquiridos com autorização e despesas comprovadas não recuperáveis, com restituições ou pagamentos devidos, conforme a lei.
+13.3. Os direitos de arrependimento do consumidor, quando legalmente aplicáveis, prevalecerão sobre disposições contratuais incompatíveis.
+CLÁUSULA 14ª — CONFIDENCIALIDADE E PROTEÇÃO DE DADOS
+14.1. As partes protegerão informações técnicas e empresariais confidenciais obtidas em razão do serviço, ressalvadas obrigações legais, fiscalizatórias e de segurança.
+14.2. Os dados pessoais serão utilizados apenas para fins legítimos de contratação, execução, faturamento, ART e comprovação dos serviços, observada a LGPD.
+CLÁUSULA 15ª — NATUREZA DO CONTRATO E COMUNICAÇÕES
+15.1. Trata-se de contrato civil de prestação de serviços técnicos e, quando houver execução material de obra, as regras pertinentes da empreitada também poderão ser aplicáveis.
+15.2. Este instrumento não constitui vínculo de emprego entre a contratante e os profissionais da contratada. Comunicações contratuais deverão ocorrer por e-mail, mensagem documentável ou outro meio escrito acordado.
+15.3. Integram este contrato a proposta aprovada, o Anexo I e os aditivos assinados. Havendo divergência, prevalecerá o ajuste escrito mais específico quanto ao serviço.
+CLÁUSULA 16ª — SOLUÇÃO DE CONTROVÉRSIAS E FORO
+16.1. As partes buscarão inicialmente a solução amigável de divergências relativas ao presente contrato.
+16.2. Fica eleito, quando juridicamente cabível, o Foro da Comarca de {{comarca|T}}, em razão da vinculação territorial da CONTRATADA à região de {{regiao|T}}, ressalvados os casos de competência legal obrigatória, as regras do art. 63 do Código de Processo Civil e os direitos do consumidor.
+E, por estarem de acordo, firmam este instrumento e seus anexos.
+Local: {{local_assinatura|T}} Data: {{data_assinatura|D}}
+ASSINATURAS
+________________________________________
+CONTRATADA
+Nome: {{assinante_empresa|T}}
+Profissão: {{assinante_profissao|T}}
+CREA: {{assinante_crea|T}} CPF: {{assinante_cpf|T}}
+________________________________________
+CONTRATANTE
+Nome: {{assinante_cliente|T}}
+CPF/CNPJ: {{assinante_cliente_cpf|T}}
+Representante: {{assinante_representante|T}}
+TESTEMUNHA 1
+Nome: {{testemunha1|T}} CPF: {{cpf_testemunha1|T}}
+Assinatura: ______________________________
+TESTEMUNHA 2
+Nome: {{testemunha2|T}} CPF: {{cpf_testemunha2|T}}
+Assinatura: ______________________________
+ANEXO I — ESCOPO TÉCNICO E ORÇAMENTO
+Serviço contratado / objetivo: {{objetivo|A}}
+Local e instalações abrangidas: {{instalacoes|A}}
+Etapas, quantidades e atividades: {{etapas|A}}
+Normas/referências técnicas específicas: {{normas|A}}
+Entregáveis previstos: {{entregaveis|A}}
+Materiais e responsável pelo fornecimento: {{materiais_anexo|A}}
+Exclusões expressas: {{exclusoes|A}}
+Preço, etapas de pagamento e critérios de medição: {{preco_anexo|A}}
+Prazo, condições de acesso e desligamentos: {{acesso|A}}
+Condições e critérios de aceite: {{criterios_aceite|A}}
+Assinaturas de concordância:
+CONTRATADA ______________________________
+CONTRATANTE _____________________________
+`;
+const obrigatorios=new Set(
+"data_contrato empresa cnpj_empresa endereco_empresa representante_empresa contratante cpf_cnpj endereco_cliente local_servico responsavel_tecnico profissao_tecnico crea_tecnico taxa_art valor_total valor_extenso fornecimento inicio conclusao dias_vistoria comarca regiao local_assinatura data_assinatura assinante_empresa assinante_cliente objetivo instalacoes etapas normas entregaveis materiais_anexo exclusoes preco_anexo acesso criterios_aceite".split(" ")
+);
+const atividades="projeto laudo vistoria diagnostico execucao manutencao adequacao outro".split(" ");
+const padrao=()=>/{{([^|}]+)|([^|}]+)(?:|([^}]+))?}}/g;
+function mensagem(t){
+$("msg").hidden=false;
+$("msg").textContent=t;
+}
+async function api(caminho,opcoes={}){
+const r=await fetch(URL+"/rest/v1/"+caminho,{
+...opcoes,headers,cache:"no-store"
+});
+const d=await r.json().catch(()=>null);
+if(!r.ok)throw new Error(d?.message||"HTTP "+r.status);
+return d;
+}
+function campo(id,tipo,opcoes){
+const e=document.createElement(tipo==="A"?"textarea":tipo==="S"?"select":"input");
+e.id=id;
+e.name=id;
+e.required=obrigatorios.has(id);
+e.setAttribute("aria-label",id.replaceAll("_"," "));
+if(tipo==="S"){
+e.append(new Option("Selecione",""));
+opcoes.split("~").forEach(x=>e.append(new Option(x,x)));
+}else if(tipo!=="A"){
+e.type=({D:"date",N:"number",C:"checkbox"})[tipo]||"text";
+if(tipo==="N"){e.min="0";e.step="1"}
+}
+if(tipo==="C"){
+const l=document.createElement("label");
+l.append(e,document.createTextNode(" "+opcoes));
+return l;
+}
+return e;
+}
+function montar(){
+$("campos").replaceChildren();
+modelo.split("
+").forEach(linha=>{
+if(!linha.trim())return;
+if(linha.startsWith("# ")){
+const h=document.createElement("h3");
+h.textContent=linha.slice(2);
+$("campos").append(h);
+return;
+}
+linha=linha.replace("[[NUMERO_CONTRATO]]","AUTOMÁTICO APÓS APROVAÇÃO");
+const p=document.createElement("p");
+let pos=0;
+const re=padrao();
+let m;
+while((m=re.exec(linha))!==null){
+p.append(document.createTextNode(linha.slice(pos,m.index)));
+p.append(campo(m[1],m[2],m[3]));
+pos=re.lastIndex;
+}
+p.append(document.createTextNode(linha.slice(pos)));
+$("campos").append(p);
+});
+}
+function coletar(){
+const d={};
+$("formulario").querySelectorAll("input,textarea,select").forEach(e=>{
+d[e.name]=e.type==="checkbox"?e.checked:e.value.trim();
+});
+return d;
+}
+function documento(d){
+return modelo.replace(padrao(),(_,id,tipo,rotulo)=>{
+const v=d[id];
+if(tipo==="C")return "["+(v?"X":" ")+"] "+rotulo;
+if(tipo==="D"&&v)return v.split("-").reverse().join("/");
+return v||"________________";
+}).replace(/^# /gm,"");
+}
+function visualizar(){
+if(iniciado||registro)return;
+if(!$("formulario").reportValidity())return;
+const d=coletar();
+for(const id of obrigatorios){
+if(!d[id]){
+alert("Preencha os campos obrigatórios.");
+$(id).focus();
+return;
+}
+}
+if(!atividades.some(a=>d[a])){
+alert("Selecione pelo menos uma atividade.");
+return;
+}
+if(d.outro&&!d.outro_descricao){
+alert("Descreva os outros serviços.");
+$("outro_descricao").focus();
+return;
+}
+if(d.conclusao<d.inicio){
+alert("A data de conclusão é anterior ao início.");
+return;
+}
+if(!d.entrada&&!d.valor_parcela&&!d.saldo&&!d.pagamento_adicional){
+alert("Informe as condições de pagamento.");
+return;
+}
+if(Object.values(d).some(v=>typeof v==="string"&&v.includes("[[NUMERO_CONTRATO]]"))){
+alert("Texto reservado inválido.");
+return;
+}
+dados=d;
+$("documento").textContent=documento(d).replace("[[NUMERO_CONTRATO]]","PENDENTE DE APROVAÇÃO");
+$("editor").hidden=true;
+$("preview").hidden=false;
+$("msg").hidden=true;
+window.scrollTo(0,0);
+}
+function editar(){
+if(iniciado||registro)return;
+$("preview").hidden=true;
+$("editor").hidden=false;
+dados=null;
+window.scrollTo(0,0);
+}
+function excluir(){
+if(iniciado||registro)return;
+if(!confirm("Excluir todo o preenchimento?"))return;
+$("formulario").reset();
+$("documento").textContent="";
+dados=null;
+$("preview").hidden=true;
+$("editor").hidden=false;
+mensagem("Preenchimento excluído.");
+window.scrollTo(0,0);
+}
+async function aprovar(){
+if(enviando||registro||!dados)return;
+if(!iniciado&&!confirm("Aprovar e registrar definitivamente este contrato?"))return;
+if(!idEmissao)idEmissao=crypto.randomUUID();
+iniciado=true;
+enviando=true;
+$("aprovar").disabled=true;
+$("editar").disabled=true;
+$("descartar").disabled=true;
+mensagem("Registrando contrato...");
+try{
+const r=await api("rpc/utb_contratos_emitir",{
+method:"POST",
+body:JSON.stringify({
+p_id:idEmissao,
+p_tipo:"ENGENHARIA",
+p_data:dados.data_contrato,
+p_contratante:dados.contratante,
+p_cpf_cnpj:dados.cpf_cnpj,
+p_dados:dados,
+p_documento:documento(dados),
+p_versao:1
+})
+});
+const c=Array.isArray(r)?r[0]:r;
+if(!c?.numero||!c.documento_texto){
+throw new Error("Registro não confirmado.");
+}
+registro=c;
+$("documento").textContent=c.documento_texto;
+$("titulo").textContent="CONTRATO Nº "+c.numero;
+$("aprovar").hidden=true;
+$("editar").hidden=true;
+$("descartar").hidden=true;
+$("imprimir").disabled=false;
+$("novo").hidden=false;
+mensagem("SUCESSO! Contrato "+c.numero+" registrado.");
+alert("Contrato registrado com sucesso: "+c.numero);
+}catch(e){
+mensagem("Erro: "+e.message+"
+Tente salvar novamente nesta mesma tela.");
+$("aprovar").disabled=false;
+$("aprovar").textContent="TENTAR SALVAR NOVAMENTE";
+}finally{
+enviando=false;
+}
+}
+async function iniciar(){
+if(!TOKEN){
+location.replace("admin-instrutores.html");
+return;
+}
+try{
+const permitido=await api("rpc/utb_contratos_eh_admin",{
+method:"POST",body:"{}"
+});
+if(permitido!==true){
+mensagem("Acesso não autorizado.");
+return;
+}
+montar();
+$("painel").hidden=false;
+$("msg").hidden=true;
+}catch(e){
+mensagem("Erro de acesso: "+e.message);
+}
+}
+$("formulario").onsubmit=e=>e.preventDefault();
+$("visualizar").onclick=visualizar;
+$("editar").onclick=editar;
+$("excluir").onclick=excluir;
+$("descartar").onclick=excluir;
+$("aprovar").onclick=aprovar;
+$("imprimir").onclick=()=>{if(registro)window.print()};
+$("novo").onclick=()=>{location.reload()};
+window.addEventListener("beforeunload",e=>{
+if(iniciado&&!registro){
+e.preventDefault();
+e.returnValue="";
+}
+});
+iniciar();
+</script>
+</body>
+</html>
