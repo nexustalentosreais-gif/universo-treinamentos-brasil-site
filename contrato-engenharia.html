@@ -221,7 +221,7 @@ const obrigatorios=new Set(
 "data_contrato empresa cnpj_empresa endereco_empresa representante_empresa contratante cpf_cnpj endereco_cliente local_servico responsavel_tecnico profissao_tecnico crea_tecnico taxa_art valor_total valor_extenso fornecimento inicio conclusao dias_vistoria comarca regiao local_assinatura data_assinatura assinante_empresa assinante_cliente objetivo instalacoes etapas normas entregaveis materiais_anexo exclusoes preco_anexo acesso criterios_aceite".split(" ")
 );
 const atividades="projeto laudo vistoria diagnostico execucao manutencao adequacao outro".split(" ");
-const padrao=()=>/{{([^|}]+)|([^|}]+)(?:|([^}]+))?}}/g;
+const padrao=()=>/[{][{]([^|}]+)[|]([^|}]+)(?:[|]([^}]+))?[}][}]/g;
 function mensagem(t){
 $("msg").hidden=false;
 $("msg").textContent=t;
@@ -389,8 +389,7 @@ $("novo").hidden=false;
 mensagem("SUCESSO! Contrato "+c.numero+" registrado.");
 alert("Contrato registrado com sucesso: "+c.numero);
 }catch(e){
-mensagem("Erro: "+e.message+"
-Tente salvar novamente nesta mesma tela.");
+mensagem("Erro: "+e.message+". Tente salvar novamente nesta mesma tela.");
 $("aprovar").disabled=false;
 $("aprovar").textContent="TENTAR SALVAR NOVAMENTE";
 }finally{
