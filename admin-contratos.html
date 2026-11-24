@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Central de Contratos | UTB</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f1f5f9;
+    color:#172c48;
+}
+
+header{
+    background:#123b70;
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+
+header h1{
+    margin:0 0 10px;
+    font-size:28px;
+}
+
+main{
+    max-width:1150px;
+    margin:auto;
+    padding:25px 18px;
+}
+
+h2{
+    color:#123b70;
+    font-size:23px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border:1px solid #d5e0ec;
+    border-radius:12px;
+    box-shadow:0 3px 12px #00000009;
+}
+
+.card h3{
+    font-size:21px;
+    color:#123b70;
+}
+
+.card p{
+    line-height:1.6;
+    font-size:16px;
+}
+
+.icone{
+    font-size:42px;
+}
+
+button,.botao{
+    display:inline-block;
+    background:#1764b5;
+    color:white;
+    border:none;
+    border-radius:7px;
+    padding:14px 20px;
+    font-size:16px;
+    font-weight:bold;
+    text-decoration:none;
+    text-align:center;
+    cursor:pointer;
+}
+
+button:hover,.botao:hover{
+    background:#123b70;
+}
+
+.card .botao{
+    width:100%;
+}
+
+.secundario{
+    background:#526780;
+}
+
+.vermelho{
+    background:#b91c1c;
+}
+
+.acoes{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    border:1px solid #a9bbcf;
+    border-radius:6px;
+    font-size:18px;
+    color:#172c48;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.consulta{
+    margin-top:30px;
+}
+
+.busca{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:end;
+}
+
+.campo{
+    flex:1;
+    min-width:220px;
+}
+
+.tabela{
+    overflow-x:auto;
+    margin-top:20px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    padding:13px;
+    border-bottom:1px solid #dce4ed;
+    text-align:left;
+}
+
+th{
+    background:#e6eef8;
+    color:#123b70;
+}
+
+.status{
+    font-weight:bold;
+    color:#187348;
+}
+
+.cancelado{
+    color:#b91c1c;
+}
+
+#mensagem{
+    padding:15px;
+    text-align:center;
+    font-weight:bold;
+}
+
+#visualizacao{
+    margin-top:25px;
+}
+
+#documento{
+    background:white;
+    color:black;
+    padding:30px;
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
+    font-family:Arial,sans-serif;
+    font-size:15px;
+    line-height:1.65;
+    border:1px solid #d5e0ec;
+}
+
+[hidden]{
+    display:none!important;
+}
+
+footer{
+    text-align:center;
+    padding:25px;
+    color:#526780;
+}
+
+@page{
+    size:A4;
+    margin:18mm;
+}
+
+@media print{
+    body{
+        background:white;
+    }
+
+    header,footer,#navegacao,
+    #modelos,#consulta,#mensagem,
+    .nao-imprimir{
+        display:none!important;
+    }
+
+    main{
+        max-width:none;
+        padding:0;
+        margin:0;
+    }
+
+    #visualizacao{
+        margin:0;
+        padding:0;
+        border:0;
+        box-shadow:none;
+    }
+
+    #documento{
+        padding:0;
+        margin:0;
+        border:0;
+        font-size:11pt;
+        line-height:1.5;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>UNIVERSO TREINAMENTOS BRASIL</h1>
+    CENTRAL ADMINISTRATIVA DE CONTRATOS
+</header>
+
+<div id="mensagem">
+    Verificando acesso administrativo...
+</div>
+
+<main id="painel" hidden>
+
+    <div id="navegacao">
+        <a class="botao secundario" href="admin.html">
+            VOLTAR À ADMINISTRAÇÃO
+        </a>
+    </div>
+
+    <section id="modelos">
+
+        <h2>Elaborar novo contrato</h2>
+
+        <div class="grid">
+
+            <article class="card">
+                <div class="icone">⚡</div>
+
+                <h3>Serviços Técnicos de Engenharia Elétrica</h3>
+
+                <p>
+                    Projetos, laudos, vistorias, diagnósticos,
+                    instalações, manutenção e obras elétricas.
+                </p>
+
+                <a class="botao"
+                   href="contrato-engenharia.html">
+                    ABRIR CONTRATO DE ENGENHARIA
+                </a>
+            </article>
+
+            <article class="card">
+                <div class="icone">🎓</div>
+
+                <h3>Treinamento e Capacitação Profissional</h3>
+
+                <p>
+                    Cursos, treinamentos profissionais,
+                    capacitações e reciclagens.
+                </p>
+
+                <a class="botao"
+                   href="contrato-treinamento.html">
+                    ABRIR CONTRATO DE CURSOS
+                </a>
+            </article>
+
+            <!--
+            ESPAÇO RESERVADO PARA INCLUSÃO
+            DE NOVOS MODELOS DE CONTRATOS UTB.
+
+            Inserir novos cartões independentes aqui.
+            -->
+
+        </div>
+
+    </section>
+
+    <section id="consulta" class="card consulta">
+
+        <h2>Consultar contratos registrados</h2>
+
+        <div class="busca">
+
+            <div class="campo">
+                <label for="numero">
+                    Número do contrato
+                </label>
+
+                <input id="numero"
+                       type="text"
+                       placeholder="Número/ano">
+            </div>
+
+            <button id="buscar">
+                PESQUISAR
+            </button>
+
+            <button id="listar" class="secundario">
+                CONTRATOS RECENTES
+            </button>
+
+        </div>
+
+        <p id="resultado" aria-live="polite"></p>
+
+        <div class="tabela">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Número</th>
+                        <th>Contratante</th>
+                        <th>Tipo</th>
+                        <th>Data</th>
+                        <th>Situação</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+
+                <tbody id="registros"></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <section id="visualizacao" class="card" hidden>
+
+        <div class="nao-imprimir">
+
+            <h2>Visualização do contrato registrado</h2>
+
+            <div class="acoes">
+
+                <button id="imprimir">
+                    IMPRIMIR CONTRATO
+                </button>
+
+                <button id="fechar" class="vermelho">
+                    FECHAR VISUALIZAÇÃO
+                </button>
+
+            </div>
+
+            <br>
+
+        </div>
+
+        <div id="documento"></div>
+
+    </section>
+
+</main>
+
+<footer>
+    Universo Treinamentos Brasil |
+    Administração de Contratos
+</footer>
+
+<script>
+"use strict";
+
+const SUPABASE_URL =
+    "https://xkxlgmmssvllcmhymibj.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV";
+
+const token =
+    sessionStorage.getItem("utb_access_token");
+
+const $ = id => document.getElementById(id);
+
+const headers = {
+    "apikey": SUPABASE_KEY,
+    "Authorization": "Bearer " + token,
+    "Content-Type": "application/json"
+};
+
+let consultaAtual = 0;
+
+function mensagem(texto){
+    $("mensagem").textContent = texto;
+}
+
+async function requisicao(caminho,opcoes={}){
+
+    const resposta = await fetch(
+        SUPABASE_URL + "/rest/v1/" + caminho,
+        {
+            ...opcoes,
+            headers:headers,
+            cache:"no-store"
+        }
+    );
+
+    if(!resposta.ok){
+
+        if(resposta.status === 401){
+            sessionStorage.removeItem("utb_access_token");
+            location.replace("admin-instrutores.html");
+        }
+
+        throw new Error(
+            "Falha na consulta: HTTP " + resposta.status
+        );
+    }
+
+    return resposta.json();
+}
+
+async function iniciar(){
+
+    if(!token){
+        location.replace("admin-instrutores.html");
+        return;
+    }
+
+    try{
+
+        const autorizado = await requisicao(
+            "rpc/utb_contratos_eh_admin",
+            {
+                method:"POST",
+                body:"{}"
+            }
+        );
+
+        if(autorizado !== true){
+            mensagem("Acesso administrativo não autorizado.");
+            return;
+        }
+
+        $("painel").hidden = false;
+        $("mensagem").hidden = true;
+
+        await consultar(false);
+
+    }catch(erro){
+
+        mensagem(
+            "Não foi possível validar o acesso. " +
+            erro.message
+        );
+    }
+}
+
+function formatarData(data){
+
+    if(!data) return "";
+
+    return data.split("-").reverse().join("/");
+}
+
+function nomeTipo(tipo){
+
+    const tipos = {
+        ENGENHARIA:"Engenharia Elétrica",
+        TREINAMENTO:"Cursos e Treinamentos"
+    };
+
+    return tipos[tipo] || tipo;
+}
+
+function celula(linha,valor){
+
+    const td = document.createElement("td");
+
+    td.textContent = valor || "";
+
+    linha.appendChild(td);
+
+    return td;
+}
+
+async function consultar(exata){
+
+    const numero = $("numero").value.trim();
+
+    if(exata && !numero){
+        $("resultado").textContent =
+            "Informe o número do contrato.";
+        return;
+    }
+
+    const identificador = ++consultaAtual;
+
+    $("resultado").textContent = "Consultando...";
+
+    $("registros").replaceChildren();
+
+    $("visualizacao").hidden = true;
+
+    $("documento").textContent = "";
+
+    const parametros = new URLSearchParams({
+
+        select:"id,numero,tipo,data_contrato,contratante,status",
+
+        order:"criado_em.desc",
+
+        limit:exata ? "1" : "30"
+
+    });
+
+    if(exata){
+        parametros.set("numero","eq." + numero);
+    }
+
+    try{
+
+        const dados = await requisicao(
+            "utb_contratos?" + parametros.toString()
+        );
+
+        if(identificador !== consultaAtual) return;
+
+        if(!dados.length){
+
+            $("resultado").textContent =
+                "Nenhum contrato registrado encontrado.";
+
+            return;
+        }
+
+        $("resultado").textContent =
+            dados.length + " contrato(s) encontrado(s).";
+
+        dados.forEach(contrato => {
+
+            const linha = document.createElement("tr");
+
+            celula(linha,contrato.numero);
+
+            celula(linha,contrato.contratante);
+
+            celula(linha,nomeTipo(contrato.tipo));
+
+            celula(linha,formatarData(
+                contrato.data_contrato
+            ));
+
+            const situacao = celula(
+                linha,contrato.status
+            );
+
+            situacao.className =
+                contrato.status === "CANCELADO"
+                ? "status cancelado"
+                : "status";
+
+            const td = document.createElement("td");
+
+            const botao = document.createElement("button");
+
+            botao.textContent = "ABRIR";
+
+            botao.addEventListener("click",()=>{
+
+                visualizar(contrato.id);
+
+            });
+
+            td.appendChild(botao);
+
+            linha.appendChild(td);
+
+            $("registros").appendChild(linha);
+
+        });
+
+    }catch(erro){
+
+        if(identificador !== consultaAtual) return;
+
+        $("resultado").textContent =
+            "Erro: " + erro.message;
+    }
+}
+
+async function visualizar(id){
+
+    const identificador = ++consultaAtual;
+
+    $("resultado").textContent = "Abrindo contrato...";
+
+    $("visualizacao").hidden = true;
+
+    $("documento").textContent = "";
+
+    const parametros = new URLSearchParams({
+
+        id:"eq." + id,
+
+        select:"numero,status,documento_texto",
+
+        limit:"1"
+
+    });
+
+    try{
+
+        const dados = await requisicao(
+            "utb_contratos?" + parametros.toString()
+        );
+
+        if(identificador !== consultaAtual) return;
+
+        if(!dados.length){
+            throw new Error("Contrato não encontrado.");
+        }
+
+        const contrato = dados[0];
+
+        const aviso =
+            contrato.status === "CANCELADO"
+            ? "CONTRATO CANCELADO\n\n"
+            : "";
+
+        $("documento").textContent =
+            aviso + contrato.documento_texto;
+
+        $("visualizacao").hidden = false;
+
+        $("resultado").textContent =
+            "Contrato " + contrato.numero + " localizado.";
+
+        $("visualizacao").scrollIntoView({
+            behavior:"smooth"
+        });
+
+    }catch(erro){
+
+        if(identificador !== consultaAtual) return;
+
+        $("resultado").textContent =
+            "Erro: " + erro.message;
+    }
+}
+
+$("buscar").addEventListener("click",()=>{
+
+    consultar(true);
+
+});
+
+$("listar").addEventListener("click",()=>{
+
+    $("numero").value = "";
+
+    consultar(false);
+
+});
+
+$("numero").addEventListener("keydown",evento=>{
+
+    if(evento.key === "Enter"){
+        consultar(true);
+    }
+
+});
+
+$("imprimir").addEventListener("click",()=>{
+
+    if(!$("visualizacao").hidden &&
+       $("documento").textContent.trim()){
+
+        window.print();
+
+    }
+
+});
+
+$("fechar").addEventListener("click",()=>{
+
+    consultaAtual++;
+
+    $("visualizacao").hidden = true;
+
+    $("documento").textContent = "";
+
+});
+
+iniciar();
+
+</script>
+
+</body>
+</html>
