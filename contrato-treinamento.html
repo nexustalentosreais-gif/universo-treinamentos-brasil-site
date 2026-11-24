@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contrato de Treinamento | UTB</title>
+<style>
+{box-sizing:border-box}
+body{margin:0;background:#eef3f8;color:#123b70;font-family:Arial,sans-serif}
+header{background:#123b70;color:white;text-align:center;padding:20px}
+main{max-width:1100px;margin:auto;padding:15px}
+section{background:white;padding:22px;border:1px solid #ccd9e6;border-radius:10px;margin:20px 0}
+h2{text-align:center;font-size:21px}
+h3{background:#e6eef8;padding:10px;font-size:17px;border-left:4px solid #1764b5}
+p{font-size:16px;line-height:1.7;margin:7px 0}
+input,textarea,select{font:inherit;color:#123b70;background:#f7fbff;border:1px solid #9bb0c8;border-radius:5px;padding:8px;margin:4px;max-width:100%}
+input[type=text]{width:240px}
+input[type=date]{width:165px}
+input[type=number]{width:100px}
+textarea{display:block;width:98%;min-height:65px;resize:vertical}
+button,a.botao{display:inline-block;background:#1764b5;color:white;padding:13px 18px;font-size:16px;font-weight:bold;border:0;border-radius:6px;text-decoration:none;cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
+.verde{background:#187348}
+.vermelho{background:#b91c1c}
+.cinza{background:#526780}
+.acoes{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:20px 0}
+#msg{text-align:center;padding:12px;font-weight:bold;white-space:pre-wrap}
+#documento{white-space:pre-wrap;overflow-wrap:anywhere;color:black;font-size:15px;line-height:1.4}
+.curso{background:#f4f8fc;border:1px solid #aac1da;border-radius:8px;padding:15px;margin:12px 0}
+.curso label{display:block;font-weight:bold;margin-top:8px}
+.curso input,.curso select{width:100%;margin-left:0}
+.grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+[hidden]{display:none!important}
+@page{size:A4;margin:15mm}
+@media print{
+body{background:white}
+header,#editor,#msg,#voltar,.acoes,#titulo{display:none!important}
+main{max-width:none;margin:0;padding:0}
+section{border:0;margin:0;padding:0}
+#documento{font-size:11pt;line-height:1.15}
+}
+</style>
+</head>
+<body>
+<header>
+<h1>UNIVERSO TREINAMENTOS BRASIL</h1>
+CONTRATOS DE TREINAMENTO E CAPACITAÇÃO
+</header>
+<div id="msg">Verificando acesso administrativo...</div>
+<main id="painel" hidden>
+<a id="voltar" class="botao cinza" href="admin-contratos.html">VOLTAR AOS CONTRATOS</a>
+<section id="editor">
+<form id="formulario">
+<div id="campos"></div>
+<div class="acoes">
+<button type="button" id="visualizar">VISUALIZAR</button>
+<button type="button" id="excluir" class="vermelho">EXCLUIR</button>
+</div>
+</form>
+</section>
+<section id="preview" hidden>
+<h2 id="titulo">VISUALIZAÇÃO DO CONTRATO</h2>
+<div id="documento"></div>
+<div class="acoes">
+<button id="editar" class="cinza">VOLTAR E EDITAR</button>
+<button id="aprovar" class="verde">APROVAR E SALVAR</button>
+<button id="imprimir" disabled>IMPRIMIR</button>
+<button id="descartar" class="vermelho">EXCLUIR</button>
+<button id="novo" hidden>NOVO CONTRATO</button>
+</div>
+</section>
+</main>
+<script>
+"use strict";
+const URL="https://xkxlgmmssvllcmhymibj.supabase.co";
+const KEY="sb_publishable_JUkjhi5SCPNUF1NlazBpCQ_EKd3GBxV";
+const TOKEN=sessionStorage.getItem("utb_access_token");
+const $=id=>document.getElementById(id);
+const headers={
+"apikey":KEY,
+"Authorization":"Bearer "+TOKEN,
+"Content-Type":"application/json"
+};
+let dados=null;
+let registro=null;
+let idEmissao=null;
+let enviando=false;
+let iniciado=false;
+/*
+MODELO CONTRATUAL UTB
+T = Texto
+D = Data
+N = Número inteiro
+A = Texto ampliado
+S = Seleção de opções
+/
+const modelo=`UNIVERSO TREINAMENTOS BRASIL
+CONTRATO PARTICULAR DE PRESTAÇÃO DE SERVIÇOS DE TREINAMENTO E CAPACITAÇÃO PROFISSIONAL
+CONTRATO Nº: [[NUMERO_CONTRATO]] DATA: {{data_contrato|D}}
+1. IDENTIFICAÇÃO DAS PARTES
+CONTRATADA — PRESTADORA DOS SERVIÇOS
+Razão social: {{empresa|T}}
+Nome comercial: {{nome_comercial|T}}
+CNPJ: {{cnpj_empresa|T}}
+Endereço: {{endereco_empresa|A}}
+Representante: {{representante_empresa|T}}
+CPF do representante: {{cpf_empresa|T}}
+Telefone: {{telefone_empresa|T}} E-mail: {{email_empresa|T}}
+CONTRATANTE — CLIENTE
+Nome/Razão social: {{contratante|T}}
+CNPJ/CPF: {{cpf_cnpj|T}}
+Endereço: {{endereco_cliente|A}}
+Representante legal, quando aplicável: {{representante_cliente|T}}
+CPF do representante: {{cpf_representante|T}}
+Telefone: {{telefone_cliente|T}} E-mail: {{email_cliente|T}}
+As partes acima identificadas celebram este contrato mediante as cláusulas seguintes, observada a legislação brasileira aplicável.
+CLÁUSULA 1ª — DO OBJETO
+1.1. O presente contrato tem por objeto a prestação de serviços de treinamento e capacitação profissional pela CONTRATADA em favor dos participantes indicados pela CONTRATANTE.
+1.2. Os treinamentos contratados possuem as seguintes características:
+[[CURSOS_CONTRATADOS]]
+Instrutor: profissional designado pela CONTRATADA, com qualificação compatível.
+1.3. O conteúdo programático observará as exigências legais e regulamentares aplicáveis ao treinamento e integrará este contrato como Anexo I.
+1.4. Qualquer serviço adicional dependerá de prévio ajuste escrito entre as partes.
+CLÁUSULA 2ª — DO VALOR CONTRATADO
+2.1. Pela execução integral dos serviços, a CONTRATANTE pagará à CONTRATADA o valor total de R$ {{valor_total|T}} ({{valor_extenso|T}}).
+2.2. O valor compreende a preparação e a execução do treinamento, material didático digital, avaliações, registros de frequência e certificados dos participantes que atenderem aos critérios exigidos.
+2.3. Despesas extraordinárias não previstas somente poderão ser cobradas mediante autorização prévia e expressa da CONTRATANTE.
+CLÁUSULA 3ª — DAS CONDIÇÕES DE PAGAMENTO
+3.1. O pagamento ocorrerá nas seguintes condições:
+Quantidade de parcelas: {{parcelas|N}}
+Primeiro pagamento:
+Percentual: {{percentual_entrada|T}} %
+Valor: R$ {{valor_entrada|T}}
+Vencimento: {{data_entrada|D}}
+Demais pagamentos, respectivos valores e vencimentos:
+{{demais_pagamentos|A}}
+3.2. Os pagamentos poderão ocorrer por Pix, boleto ou outro meio previamente acordado.
+Meio de pagamento acordado: {{meio_pagamento|S|Pix~Boleto~Cartão de crédito~Cartão de débito~Transferência bancária~Outro meio acordado}}
+Condições complementares: {{condicoes_pagamento|A}}
+3.3. Em caso de atraso, poderão incidir multa moratória de 2% sobre o valor vencido e juros simples de 1% ao mês, proporcionais aos dias de atraso, respeitada a legislação aplicável.
+3.4. A CONTRATADA emitirá o respectivo documento fiscal conforme a legislação tributária.
+CLÁUSULA 4ª — DAS OBRIGAÇÕES DA CONTRATADA
+4.1. Compete à CONTRATADA: (I) ministrar o treinamento conforme carga horária, conteúdo e condições contratadas; (II) disponibilizar instrutores qualificados; (III) empregar metodologia adequada às atividades teóricas e práticas; (IV) fornecer os materiais didáticos previstos; (V) controlar frequência e realizar avaliações; (VI) emitir certificados aos participantes aptos; (VII) comunicar dificuldades relevantes à CONTRATANTE; e (VIII) cumprir as normas de segurança referentes às atividades sob sua responsabilidade.
+CLÁUSULA 5ª — DAS OBRIGAÇÕES DA CONTRATANTE
+5.1. Compete à CONTRATANTE: (I) pagar pontualmente; (II) fornecer previamente os dados necessários dos participantes; (III) disponibilizar instalações adequadas quando o curso ocorrer em suas dependências; (IV) providenciar os recursos e as condições de segurança sob sua responsabilidade; (V) assegurar a disponibilidade dos alunos; (VI) informar os riscos existentes no local; e (VII) não exigir atividades estranhas ao objeto sem prévio acordo.
+CLÁUSULA 6ª — DA FREQUÊNCIA, AVALIAÇÃO E CERTIFICAÇÃO
+6.1. A presença dos participantes será registrada durante o treinamento.
+6.2. A emissão dos certificados dependerá do cumprimento da carga horária, dos critérios de frequência, das avaliações e dos demais requisitos aplicáveis ao curso.
+6.3. A ausência ou reprovação individual não caracteriza, por si só, descumprimento da CONTRATADA, desde que o treinamento tenha sido regularmente oferecido e executado.
+6.4. Os certificados serão emitidos em formato digital, com as informações exigidas para a modalidade.
+6.5. Quando contratado, o curso de NR-10 não substitui as demais obrigações legais do empregador relativas à autorização e à segurança dos trabalhadores.
+CLÁUSULA 7ª — DA ALTERAÇÃO DE DATAS E CONDIÇÕES
+7.1. Mudanças de datas, horários, local ou participantes dependerão de acordo escrito entre as partes.
+7.2. Alterações não poderão comprometer a carga horária ou os requisitos obrigatórios.
+7.3. Custos adicionais decorrentes de alterações solicitadas pela CONTRATANTE deverão ser previamente apresentados e aceitos.
+CLÁUSULA 8ª — DO CANCELAMENTO E DA RESCISÃO
+8.1. O contrato poderá ser encerrado por acordo, descumprimento, impossibilidade de execução ou outras hipóteses legais.
+8.2. O cancelamento deverá ser comunicado por escrito, preferencialmente com antecedência mínima de sete dias do início.
+8.3. Em caso de cancelamento injustificado pela CONTRATANTE, fora das hipóteses de arrependimento legal, serão apurados os serviços realizados e as despesas comprovadas, necessárias e não recuperáveis, observados os limites legais.
+8.4. Em caso de cancelamento injustificado pela CONTRATADA, os valores referentes aos serviços não executados serão restituídos, sem prejuízo dos direitos legalmente assegurados.
+8.5. Quando aplicável, será respeitado o direito de arrependimento previsto no art. 49 do Código de Defesa do Consumidor.
+8.6. Em caso de descumprimento, a parte prejudicada poderá notificar a outra para regularização em prazo razoável, salvo hipótese que justifique rescisão imediata.
+CLÁUSULA 9ª — DOS IMPREVISTOS E DA FORÇA MAIOR
+9.1. Eventos imprevisíveis ou inevitáveis que impeçam temporariamente o curso ensejarão tentativa de reagendamento.
+9.2. Na impossibilidade definitiva de execução, serão apurados os serviços realizados, os pagamentos e as restituições devidas.
+9.3. Esta cláusula não afasta responsabilidade por negligência ou descumprimento imputável a uma das partes.
+CLÁUSULA 10ª — DA RESPONSABILIDADE E DA SEGURANÇA
+10.1. Cada parte responderá pelos deveres e danos legalmente atribuíveis aos seus atos ou omissões.
+10.2. As atividades práticas ocorrerão em condições adequadas de segurança e sob supervisão compatível.
+10.3. A CONTRATADA poderá interromper atividades práticas diante de risco grave, comunicando a CONTRATANTE.
+10.4. A interrupção por segurança não afasta o dever de buscar solução para o adequado cumprimento do contrato.
+CLÁUSULA 11ª — DA PROTEÇÃO DE DADOS PESSOAIS
+11.1. As partes observarão a Lei Geral de Proteção de Dados Pessoais (LGPD).
+11.2. Dados dos participantes serão tratados para identificação, registro de frequência, avaliações, certificados e obrigações legais.
+11.3. O acesso será restrito a pessoas autorizadas, com medidas de segurança adequadas.
+11.4. Imagens dos participantes para publicidade dependerão de autorização apropriada, quando necessária.
+CLÁUSULA 12ª — DOS MATERIAIS DIDÁTICOS
+12.1. Os materiais didáticos destinam-se ao uso educacional dos participantes.
+12.2. Fica vedada a reprodução ou comercialização não autorizada de conteúdos protegidos, ressalvados usos permitidos por lei.
+CLÁUSULA 13ª — DA NATUREZA JURÍDICA
+13.1. Este instrumento possui natureza civil de prestação de serviços.
+13.2. O contrato não estabelece sociedade, representação comercial ou vínculo empregatício entre CONTRATANTE e CONTRATADA.
+13.3. Permanecem preservadas as responsabilidades de cada parte perante empregados, prepostos, colaboradores e terceiros.
+CLÁUSULA 14ª — DAS COMUNICAÇÕES E DISPOSIÇÕES GERAIS
+14.1. As notificações poderão ocorrer por e-mail ou outro meio escrito que permita comprovar envio e recebimento.
+14.2. Integram este instrumento a proposta aceita, o conteúdo programático e os aditivos expressamente aprovados.
+14.3. Alterações contratuais deverão ser formalizadas por escrito e aceitas por ambas as partes.
+14.4. Este contrato entra em vigor na assinatura e vigora até o cumprimento das obrigações, preservadas as que devam subsistir ao encerramento.
+CLÁUSULA 15ª — DO FORO
+15.1. As partes buscarão inicialmente uma solução amigável para divergências.
+15.2. Para controvérsias deste instrumento, fica eleito, quando juridicamente cabível, o Foro da Comarca de {{comarca|T}}, Estado de {{estado|T}}, por sua vinculação territorial ao domicílio da CONTRATADA, ressalvadas as hipóteses de competência legal obrigatória e de proteção do consumidor, quando aplicável.
+15.3. Esta cláusula não impede o exercício dos direitos legalmente assegurados às partes ou o acesso ao Poder Judiciário competente.
+ASSINATURAS
+E, por estarem justas e contratadas, as partes assinam o presente instrumento, juntamente com duas testemunhas.
+Local: {{local_assinatura|T}} Data: {{data_assinatura|D}}
+
+________________________________________
+CONTRATADA
+Razão social: {{assinante_empresa|T}}
+Representante: {{assinante_representante_empresa|T}}
+CPF: {{assinante_cpf_empresa|T}}
+
+________________________________________
+CONTRATANTE
+Nome/Razão social: {{assinante_cliente|T}}
+Representante: {{assinante_representante_cliente|T}}
+CPF/CNPJ: {{assinante_cpf_cliente|T}}
+TESTEMUNHA 1
+Nome: {{testemunha1|T}} CPF: {{cpf_testemunha1|T}}
+Assinatura: ______________________________
+TESTEMUNHA 2
+Nome: {{testemunha2|T}} CPF: {{cpf_testemunha2|T}}
+Assinatura: ______________________________
+ANEXO I — CONTEÚDO PROGRAMÁTICO
+Objetivos dos cursos: {{objetivos|A}}
+Conteúdo programático: {{conteudo|A}}
+Distribuição da carga horária: {{distribuicao_horas|A}}
+Metodologia: {{metodologia|A}}
+Atividades práticas: {{atividades_praticas|A}}
+Recursos necessários: {{recursos|A}}
+Critérios de frequência, avaliação e certificação: {{criterios|A}}
+ANEXO II — RELAÇÃO DE PARTICIPANTES
+Relação de alunos fornecida pela CONTRATANTE, contendo somente os dados necessários à organização e documentação do treinamento:
+{{participantes|A}}
+Assinaturas de concordância:
+CONTRATADA _____________________________
+CONTRATANTE ____________________________
+`;
+const obrigatorios=new Set(
+"data_contrato empresa cnpj_empresa endereco_empresa representante_empresa contratante cpf_cnpj endereco_cliente valor_total valor_extenso parcelas percentual_entrada valor_entrada data_entrada meio_pagamento comarca estado local_assinatura data_assinatura assinante_empresa assinante_representante_empresa assinante_cliente objetivos conteudo distribuicao_horas metodologia atividades_praticas recursos criterios".split(" ")
+);
+const padrao=()=>/{{([^|}]+)|([^|}]+)(?:|([^}]+))?}}/g;
+function mensagem(t){
+$("msg").hidden=false;
+$("msg").textContent=t;
+}
+async function api(caminho,opcoes={}){
+const r=await fetch(URL+"/rest/v1/"+caminho,{
+...opcoes,headers,cache:"no-store"
+});
+const d=await r.json().catch(()=>null);
+if(!r.ok)throw new Error(d?.message||"HTTP "+r.status);
+return d;
+}
+function campo(id,tipo,opcoes){
+const e=document.createElement(tipo==="A"?"textarea":tipo==="S"?"select":"input");
+e.id=id;
+e.name=id;
+e.required=obrigatorios.has(id);
+e.setAttribute("aria-label",id.replaceAll("_"," "));
+if(tipo==="S"){
+e.append(new Option("Selecione",""));
+opcoes.split("~").forEach(x=>e.append(new Option(x,x)));
+}else if(tipo!=="A"){
+e.type=({D:"date",N:"number"})[tipo]||"text";
+if(tipo==="N"){
+e.min="1";
+e.step="1";
+}
+}
+return e;
+}
+function adicionarCurso(){
+const div=document.createElement("div");
+div.className="curso";
+div.innerHTML=`
+<h3 class="numero-curso">CURSO</h3>
+<label>Nome do curso</label>
+<input data-campo="nome" type="text" required>
+<div class="grade">
+<div>
+<label>Carga horária (horas)</label>
+<input data-campo="horas" type="number" min="1" required>
+</div>
+<div>
+<label>Quantidade de participantes</label>
+<input data-campo="alunos" type="number" min="1" required>
+</div>
+<div>
+<label>Modalidade</label>
+<select data-campo="modalidade" required>
+<option value="">Selecione</option>
+<option>Presencial</option>
+<option>Online</option>
+<option>Semipresencial</option>
+</select>
+</div>
+<div>
+<label>Data de início</label>
+<input data-campo="inicio" type="date" required>
+</div>
+<div>
+<label>Data de conclusão</label>
+<input data-campo="conclusao" type="date" required>
+</div>
+<div>
+<label>Horários</label>
+<input data-campo="horarios" type="text" required>
+</div>
+</div>
+<label>Local do treinamento ou plataforma</label>
+<input data-campo="local" type="text" required>
+<button type="button" class="vermelho remover">
+REMOVER CURSO
+</button>
+`;
+div.querySelector(".remover").onclick=()=>{
+if($("lista-cursos").children.length===1){
+alert("É necessário manter pelo menos um curso.");
+return;
+}
+if(confirm("Remover este curso?")){
+div.remove();
+numerarCursos();
+}
+};
+$("lista-cursos").append(div);
+numerarCursos();
+}
+function numerarCursos(){
+document.querySelectorAll(".numero-curso").forEach((e,i)=>{
+e.textContent="CURSO "+(i+1);
+});
+}
+function montar(){
+$("campos").replaceChildren();
+modelo.split("
+").forEach(linha=>{
+if(!linha.trim())return;
+if(linha==="[[CURSOS_CONTRATADOS]]"){
+const div=document.createElement("div");
+div.id="lista-cursos";
+const botao=document.createElement("button");
+botao.type="button";
+botao.textContent="+ ADICIONAR OUTRO CURSO";
+botao.onclick=adicionarCurso;
+$("campos").append(div,botao);
+adicionarCurso();
+return;
+}
+if(linha.startsWith("# ")){
+const h=document.createElement("h3");
+h.textContent=linha.slice(2);
+$("campos").append(h);
+return;
+}
+linha=linha.replace("[[NUMERO_CONTRATO]]","AUTOMÁTICO APÓS APROVAÇÃO");
+const p=document.createElement("p");
+let pos=0;
+const re=padrao();
+let m;
+while((m=re.exec(linha))!==null){
+p.append(document.createTextNode(linha.slice(pos,m.index)));
+p.append(campo(m[1],m[2],m[3]));
+pos=re.lastIndex;
+}
+p.append(document.createTextNode(linha.slice(pos)));
+$("campos").append(p);
+});
+}
+function coletar(){
+const d={};
+$("formulario").querySelectorAll("[name]").forEach(e=>{
+d[e.name]=e.value.trim();
+});
+d.cursos=Array.from(document.querySelectorAll(".curso")).map(div=>{
+const curso={};
+div.querySelectorAll("[data-campo]").forEach(e=>{
+curso[e.dataset.campo]=e.value.trim();
+});
+return curso;
+});
+return d;
+}
+function dataBR(d){
+return d?d.split("-").reverse().join("/"):"________________";
+}
+function documento(d){
+const cursos=d.cursos.map((c,i)=>
+"CURSO "+(i+1)+": "+c.nome+"
+"+
+"Carga horária: "+c.horas+" horas. "+
+"Participantes: "+c.alunos+". "+
+"Modalidade: "+c.modalidade+".
+"+
+"Início: "+dataBR(c.inicio)+
+". Conclusão: "+dataBR(c.conclusao)+
+". Horários: "+c.horarios+".
+"+
+"Local: "+c.local+"."
+).join("
+");
+return modelo.replace(padrao(),(_,id,tipo)=>{
+const v=d[id];
+if(tipo==="D")return dataBR(v);
+return v||"________________";
+}).replace(/^# /gm,"")
+.replace("[[CURSOS_CONTRATADOS]]",()=>cursos);
+}
+function validar(d){
+if(!$("formulario").reportValidity())return false;
+for(const id of obrigatorios){
+if(!d[id]){
+alert("Preencha todos os campos obrigatórios.");
+$(id).focus();
+return false;
+}
+}
+for(const c of d.cursos){
+if(Object.values(c).some(v=>!v)){
+alert("Complete os dados de todos os cursos.");
+return false;
+}
+if(c.conclusao<c.inicio){
+alert("A conclusão do curso não pode ser anterior ao início.");
+return false;
+}
+}
+const percentual=Number(d.percentual_entrada.replace(",","."));
+if(!Number.isFinite(percentual)||percentual<0||percentual>100){
+alert("Informe um percentual entre 0 e 100.");
+return false;
+}
+if(Number(d.parcelas)>1&&!d.demais_pagamentos){
+alert("Informe os valores e vencimentos das demais parcelas.");
+return false;
+}
+if(d.meio_pagamento==="Outro meio acordado"&&!d.condicoes_pagamento){
+alert("Descreva o meio de pagamento acordado.");
+return false;
+}
+if(JSON.stringify(d).includes("[[NUMERO_CONTRATO]]")||
+JSON.stringify(d).includes("[[CURSOS_CONTRATADOS]]")){
+alert("Texto reservado inválido.");
+return false;
+}
+return true;
+}
+function visualizar(){
+if(iniciado||registro)return;
+const d=coletar();
+if(!validar(d))return;
+dados=d;
+$("documento").textContent=documento(d).replace(
+"[[NUMERO_CONTRATO]]","PENDENTE DE APROVAÇÃO"
+);
+$("editor").hidden=true;
+$("preview").hidden=false;
+$("msg").hidden=true;
+window.scrollTo(0,0);
+}
+function editar(){
+if(iniciado||registro)return;
+$("preview").hidden=true;
+$("editor").hidden=false;
+$("msg").hidden=true;
+dados=null;
+window.scrollTo(0,0);
+}
+function excluir(){
+if(iniciado||registro)return;
+if(!confirm("Excluir todo o preenchimento deste contrato?"))return;
+montar();
+dados=null;
+$("documento").textContent="";
+$("preview").hidden=true;
+$("editor").hidden=false;
+mensagem("Preenchimento excluído.");
+window.scrollTo(0,0);
+}
+async function aprovar(){
+if(enviando||registro||!dados)return;
+if(!iniciado&&!confirm("Aprovar e registrar definitivamente este contrato?"))return;
+if(!idEmissao)idEmissao=crypto.randomUUID();
+iniciado=true;
+enviando=true;
+$("aprovar").disabled=true;
+$("editar").disabled=true;
+$("descartar").disabled=true;
+mensagem("Registrando contrato no Supabase...");
+try{
+const r=await api("rpc/utb_contratos_emitir",{
+method:"POST",
+body:JSON.stringify({
+p_id:idEmissao,
+p_tipo:"TREINAMENTO",
+p_data:dados.data_contrato,
+p_contratante:dados.contratante,
+p_cpf_cnpj:dados.cpf_cnpj,
+p_dados:dados,
+p_documento:documento(dados),
+p_versao:1
+})
+});
+const c=Array.isArray(r)?r[0]:r;
+if(!c?.numero||!c.documento_texto){
+throw new Error("Registro não confirmado.");
+}
+registro=c;
+$("documento").textContent=c.documento_texto;
+$("titulo").textContent="CONTRATO Nº "+c.numero;
+$("aprovar").hidden=true;
+$("editar").hidden=true;
+$("descartar").hidden=true;
+$("imprimir").disabled=false;
+$("novo").hidden=false;
+mensagem("SUCESSO! Contrato "+c.numero+" registrado.");
+alert("Contrato registrado com sucesso: "+c.numero);
+}catch(e){
+mensagem("Erro: "+e.message+"
+Tente salvar novamente nesta mesma tela. Consulte o histórico antes de emitir outro contrato.");
+$("aprovar").disabled=false;
+$("aprovar").textContent="TENTAR SALVAR NOVAMENTE";
+}finally{
+enviando=false;
+}
+}
+async function iniciar(){
+if(!TOKEN){
+location.replace("admin-instrutores.html");
+return;
+}
+try{
+const permitido=await api("rpc/utb_contratos_eh_admin",{
+method:"POST",
+body:"{}"
+});
+if(permitido!==true){
+mensagem("Acesso administrativo não autorizado.");
+return;
+}
+montar();
+$("painel").hidden=false;
+$("msg").hidden=true;
+}catch(e){
+mensagem("Erro de acesso: "+e.message);
+}
+}
+$("formulario").onsubmit=e=>e.preventDefault();
+$("visualizar").onclick=visualizar;
+$("editar").onclick=editar;
+$("excluir").onclick=excluir;
+$("descartar").onclick=excluir;
+$("aprovar").onclick=aprovar;
+$("imprimir").onclick=()=>{if(registro)window.print()};
+$("novo").onclick=()=>location.reload();
+window.addEventListener("beforeunload",e=>{
+if(iniciado&&!registro){
+e.preventDefault();
+e.returnValue="";
+}
+});
+iniciar();
+</script>
+</body>
+</html>
