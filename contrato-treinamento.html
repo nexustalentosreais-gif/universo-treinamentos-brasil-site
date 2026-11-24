@@ -229,7 +229,7 @@ CONTRATANTE ____________________________
 const obrigatorios=new Set(
 "data_contrato empresa cnpj_empresa endereco_empresa representante_empresa contratante cpf_cnpj endereco_cliente valor_total valor_extenso parcelas percentual_entrada valor_entrada data_entrada meio_pagamento comarca estado local_assinatura data_assinatura assinante_empresa assinante_representante_empresa assinante_cliente objetivos conteudo distribuicao_horas metodologia atividades_praticas recursos criterios".split(" ")
 );
-const padrao=()=>/{{([^|}]+)|([^|}]+)(?:|([^}]+))?}}/g;
+const padrao=()=>/[{][{]([^|}]+)[|]([^|}]+)(?:[|]([^}]+))?[}][}]/g;
 function mensagem(t){
 $("msg").hidden=false;
 $("msg").textContent=t;
@@ -324,8 +324,7 @@ e.textContent="CURSO "+(i+1);
 }
 function montar(){
 $("campos").replaceChildren();
-modelo.split("
-").forEach(linha=>{
+modelo.split(String.fromCharCode(10)).forEach(linha=>{
 if(!linha.trim())return;
 if(linha==="[[CURSOS_CONTRATADOS]]"){
 const div=document.createElement("div");
@@ -376,20 +375,12 @@ function dataBR(d){
 return d?d.split("-").reverse().join("/"):"________________";
 }
 function documento(d){
-const cursos=d.cursos.map((c,i)=>
-"CURSO "+(i+1)+": "+c.nome+"
-"+
-"Carga horária: "+c.horas+" horas. "+
-"Participantes: "+c.alunos+". "+
-"Modalidade: "+c.modalidade+".
-"+
-"Início: "+dataBR(c.inicio)+
-". Conclusão: "+dataBR(c.conclusao)+
-". Horários: "+c.horarios+".
-"+
+const cursos=d.cursos.map((c,i)=>[
+"CURSO "+(i+1)+": "+c.nome,
+"Carga horária: "+c.horas+" horas. Participantes: "+c.alunos+". Modalidade: "+c.modalidade+".",
+"Início: "+dataBR(c.inicio)+". Conclusão: "+dataBR(c.conclusao)+". Horários: "+c.horarios+".",
 "Local: "+c.local+"."
-).join("
-");
+].join(String.fromCharCode(10))).join(String.fromCharCode(10,10));
 return modelo.replace(padrao(),(_,id,tipo)=>{
 const v=d[id];
 if(tipo==="D")return dataBR(v);
@@ -506,8 +497,7 @@ $("imprimir").disabled=false;
 $("novo").hidden=false;
 mensagem("SUCESSO! Contrato "+c.numero+" registrado.");
 alert("Contrato registrado com sucesso: "+c.numero);
-}catch(e){
-mensagem("Erro: "+e.message+"
+mensagem("Erro: "+e.message+". Tente salvar novamente nesta mesma tela. Consulte o histórico antes de emitir outro contrato.");
 Tente salvar novamente nesta mesma tela. Consulte o histórico antes de emitir outro contrato.");
 $("aprovar").disabled=false;
 $("aprovar").textContent="TENTAR SALVAR NOVAMENTE";
