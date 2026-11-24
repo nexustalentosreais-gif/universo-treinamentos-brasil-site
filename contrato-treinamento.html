@@ -497,8 +497,8 @@ $("imprimir").disabled=false;
 $("novo").hidden=false;
 mensagem("SUCESSO! Contrato "+c.numero+" registrado.");
 alert("Contrato registrado com sucesso: "+c.numero);
-mensagem("Erro: "+e.message+". Tente salvar novamente nesta mesma tela. Consulte o histórico antes de emitir outro contrato.");
-Tente salvar novamente nesta mesma tela. Consulte o histórico antes de emitir outro contrato.");
+}catch(e){
+mensagem("Erro: "+e.message+". Tente salvar novamente nesta mesma tela.");
 $("aprovar").disabled=false;
 $("aprovar").textContent="TENTAR SALVAR NOVAMENTE";
 }finally{
