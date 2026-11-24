@@ -256,8 +256,7 @@ return e;
 }
 function montar(){
 $("campos").replaceChildren();
-modelo.split("
-").forEach(linha=>{
+modelo.split(String.fromCharCode(10)).forEach(linha=>{
 if(!linha.trim())return;
 if(linha.startsWith("# ")){
 const h=document.createElement("h3");
