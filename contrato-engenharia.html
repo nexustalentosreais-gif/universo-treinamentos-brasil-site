@@ -431,6 +431,127 @@ e.returnValue="";
 }
 });
 iniciar();
+(function(){
+
+const formulario=document.getElementById("formulario");
+const campos=document.getElementById("campos");
+
+const visualizarOriginal=visualizar;
+const aprovarOriginal=aprovar;
+
+const legenda=document.createElement("div");
+
+legenda.style.cssText="background:#eef5ff;border:1px solid #aac1da;border-radius:8px;padding:15px;margin-bottom:20px;font-size:16px;line-height:1.6";
+
+legenda.innerHTML='<strong style="color:#c00000">* Campo obrigatório</strong><br>Campos sem asterisco são opcionais, salvo condições específicas.<br>Selecione pelo menos uma atividade contratada.<br>Informe as condições de pagamento.<br>Você pode visualizar o contrato mesmo sem concluir o preenchimento.';
+
+formulario.insertBefore(legenda,campos);
+
+function marcarObrigatorios(){
+
+const outro=document.getElementById("outro");
+const descricao=document.getElementById("outro_descricao");
+
+if(outro&&descricao){
+descricao.required=outro.checked;
+}
+
+formulario.querySelectorAll("input,textarea,select").forEach(campo=>{
+
+const anterior=campo.previousElementSibling;
+const existe=anterior&&anterior.dataset.marcaObrigatorio==="sim";
+
+if(campo.required&&!existe){
+
+const estrela=document.createElement("span");
+
+estrela.dataset.marcaObrigatorio="sim";
+estrela.textContent=" * ";
+estrela.title="Campo obrigatório";
+estrela.style.cssText="color:#c00000;font-size:21px;font-weight:bold";
+
+campo.before(estrela);
+
+}else if(!campo.required&&existe){
+
+anterior.remove();
+
+}
+
+});
+
+}
+
+const observador=new MutationObserver(marcarObrigatorios);
+
+observador.observe(campos,{
+childList:true,
+subtree:true
+});
+
+formulario.addEventListener("input",marcarObrigatorios);
+formulario.addEventListener("change",marcarObrigatorios);
+
+document.getElementById("visualizar").onclick=function(){
+
+if(iniciado||registro)return;
+
+const rascunho=coletar();
+
+document.getElementById("documento").textContent=
+documento(rascunho).replace(
+"[[NUMERO_CONTRATO]]",
+"PENDENTE DE APROVAÇÃO"
+);
+
+document.getElementById("editor").hidden=true;
+document.getElementById("preview").hidden=false;
+document.getElementById("msg").hidden=true;
+
+window.scrollTo(0,0);
+
+};
+
+document.getElementById("aprovar").onclick=function(){
+
+if(registro)return;
+
+if(iniciado){
+aprovarOriginal();
+return;
+}
+
+document.getElementById("preview").hidden=true;
+document.getElementById("editor").hidden=false;
+
+marcarObrigatorios();
+
+const faltantes=Array.from(
+formulario.querySelectorAll("[required]")
+).filter(campo=>!campo.value.trim());
+
+if(faltantes.length){
+
+mensagem("Existem "+faltantes.length+" campos obrigatórios ainda não preenchidos.");
+
+faltantes[0].focus();
+formulario.reportValidity();
+
+return;
+
+}
+
+visualizarOriginal();
+
+if(document.getElementById("editor").hidden){
+aprovarOriginal();
+}
+
+};
+
+marcarObrigatorios();
+
+})();
 </script>
 </body>
 </html>
